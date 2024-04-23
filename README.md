@@ -61,6 +61,7 @@ npm ci
 ```bash
 # copy .env file to .env.local
 cp .env .env.local
+# get necessary data from `commercetools.com/<project>/settings/developer/api-clients` (or your project manager)
 ```
 
 ```yml
