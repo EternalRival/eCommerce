@@ -1,0 +1,61 @@
+{
+  "compilerOptions": {
+    // General
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "jsx": "preserve",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+
+    // Emit
+    "removeComments": true,
+
+    // Interop Constraints
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "esModuleInterop": true,
+
+    // Type Checking
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+
+    // Modules
+    "allowImportingTsExtensions": false,
+
+    // Language and Environment
+
+    // Projects
+
+    // Backwards Compatibility
+
+    // Misc
+    "allowJs": false,
+
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "noEmit": true,
+
+    "resolveJsonModule": true,
+    "incremental": true,
+
+    "moduleDetection": "force",
+    "useDefineForClassFields": true,
+
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "plugins": [{ "name": "next" }]
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "jest.config.js"],
+  "exclude": ["node_modules"]
+}

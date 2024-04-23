@@ -1,0 +1,2 @@
+echo "📌 commit-msg"
+npm run commitlint ${1}
