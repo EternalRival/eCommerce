@@ -196,24 +196,3 @@ export default tsESLint.config(
     ...baseSettings,
   }
 );
-
-/* [
-  js.configs.recommended,
-  ...compat.extends('airbnb'),
-  {
-    languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-    },
-    linterOptions: {
-      noInlineConfig: true,
-      reportUnusedDisableDirectives: 'error',
-    },
-  },
-  {
-    files: ['eslint.config.mjs'],
-    rules: {
-      'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
-    },
-  },
-]; */

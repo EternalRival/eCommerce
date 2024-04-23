@@ -1,40 +1,119 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# eCommerce app
 
-## Getting Started
+## Table of Contents
 
-First, run the development server:
+- [eCommerce app](#ecommerce-app)
+  - [Table of Contents](#table-of-contents)
+  - [Stack](#stack)
+  - [Getting started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Git & NodeJS](#git--nodejs)
+      - [Notes](#notes)
+      - [Downloading](#downloading)
+      - [Installing NPM modules](#installing-npm-modules)
+      - [Setting environment variables](#setting-environment-variables)
+      - [Run](#run)
+  - [Scripts](#scripts)
+
+## Stack
+
+- TypeScript
+- React
+- NextJS
+- Feature Sliced Design
+- Tanstack/Query
+- Jest (jsdom, @testing-library/jest-dom, @testing-library/react)
+- ESLint (airbnb, typescript, next, react, @stylistic/ts, jest)
+- Stylelint (standard, clean-order)
+- Husky (commitlint, lint-staged)
+- Tailwindcss (postcss)
+- Prettier
+
+## Getting started
+
+### Prerequisites
+
+- Git - [Download & Install Git](https://git-scm.com/downloads).
+- Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
+  - (optional) Download & Install some `node version manager` (e.g. `nvm`, `n`, etc.)
+
+### Git & NodeJS
+
+#### Notes
+
+> v20.11.0 version of Node.js is used
+
+#### Downloading
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <project_url>
+cd <project_dir>
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### Installing NPM modules
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```bash
+npm ci
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+#### Setting environment variables
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```bash
+# copy .env file to .env.local
+cp .env .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```yml
+# .env notes
+TBD=TBD
+```
 
-## Learn More
+#### Run
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# for dev
+npm run dev
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# for prod
+npm run build
+npm run start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Scripts
 
-## Deploy on Vercel
+```bash
+# Development Server
+npm run dev
+npm run dev:4000
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Build project
+npm run build
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+# Project preview
+npm run start
+
+# Scripts for lint-staged package (linting/formatting)
+npm run ci:lint
+npm run ci:format
+npm run ci:stylelint
+
+# Scripts for manual linting-formatting
+npm run lint
+npm run format
+npm run stylelint
+
+# Combined `fix all` script
+npm run fix
+
+# Script for linting commit names via husky
+npm run commitlint
+
+# Script for `staged files only` linter/formatter checks
+npm run lint-staged
+
+# Launch tests
+npm run test
+
+# Script for Husky package init
+npm run prepare
+```
