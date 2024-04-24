@@ -27,6 +27,7 @@
 - Stylelint (standard, clean-order)
 - Husky (commitlint, lint-staged)
 - Tailwindcss (postcss)
+- Ant Design
 - Prettier
 
 ## Getting started
