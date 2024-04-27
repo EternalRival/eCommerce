@@ -1,1 +1,2 @@
-export { App } from './ui/app';
+export { MuiProvider, ThemeProvider } from './ui';
+export { theme } from './model';
