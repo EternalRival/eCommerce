@@ -1,6 +1,6 @@
 import { Box, Container, Typography } from '@mui/material';
 
-import { SignInForm } from '@/features/sign-in-form';
+import { SignInForm } from '~/features/auth';
 
 import type { ReactNode } from 'react';
 

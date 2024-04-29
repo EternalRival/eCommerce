@@ -1,12 +1,21 @@
 import { DocumentHeadTags, documentGetInitialProps } from '@mui/material-nextjs/v14-pagesRouter';
 import { Head, Html, Main, NextScript } from 'next/document';
 
-import { roboto, theme } from '@/_app/model/theme';
-import { metadata } from '@/shared/model/constants';
+import { roboto, theme } from '~/_app/model/theme';
+import { authorGithubUrl, deployUrl, siteTitle } from '~/shared/model/constants';
 
 import type { DocumentHeadTagsProps } from '@mui/material-nextjs/v14-pagesRouter';
 import type { DocumentContext, DocumentProps } from 'next/document';
 import type { ReactNode } from 'react';
+
+const description = `eCommerce app by ${authorGithubUrl}`;
+const metadata = [
+  { name: 'description', content: description },
+  { name: 'og:title', content: siteTitle },
+  { name: 'og:description', content: description },
+  { name: 'og:type', content: 'website' },
+  { name: 'og:image', content: `${deployUrl}/opengraph-image.png` },
+];
 
 function createIconLinkTags(relList: string[]): ReactNode {
   return relList.map((rel) => (
