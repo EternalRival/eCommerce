@@ -19,10 +19,11 @@ export function ControlledDatePicker<T extends Dict<unknown>>({
       control={control}
       render={({ field, fieldState: { error, invalid } }) => (
         <DatePicker
+          {...field}
+          closeOnSelect
           slotProps={{
             textField: {
               ...props,
-              ...field,
               error: invalid,
               helperText: error?.message ?? ' ',
             },
