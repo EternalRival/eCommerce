@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 
 import type { ComponentProps, ReactNode } from 'react';
 
-type Props = Pick<ComponentProps<'form'>, 'onSubmit' | 'children'>;
+type Props = Readonly<Pick<ComponentProps<'form'>, 'onSubmit' | 'children'>>;
 
 export function AuthForm({ children, onSubmit }: Props): ReactNode {
   return (
@@ -10,7 +10,7 @@ export function AuthForm({ children, onSubmit }: Props): ReactNode {
       component="form"
       autoComplete="off"
       noValidate
-      className="max-w-md"
+      className="max-w-sm"
       onSubmit={onSubmit}
     >
       {children}

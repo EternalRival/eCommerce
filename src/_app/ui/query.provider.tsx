@@ -6,7 +6,7 @@ import type { DehydratedState, QueryClientConfig } from '@tanstack/react-query';
 
 type Props = Readonly<{
   children: ReactNode;
-  dehydratedState: Optional<DehydratedState>;
+  dehydratedState?: DehydratedState;
 }>;
 
 const queryClientConfig: QueryClientConfig = {
