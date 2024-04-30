@@ -32,6 +32,7 @@
 - ![Husky](https://img.shields.io/badge/husky-ccc?style=for-the-badge&label=🐶&labelColor=ccc) ![Commitlint](https://img.shields.io/badge/commitlint-5672cd?style=for-the-badge&logoColor=fff&logo=commitlint) ![lint-staged](https://img.shields.io/badge/lint--staged-ccc?style=for-the-badge&label=🚫💩&labelColor=ccc)
 - ![TailwindCSS](https://img.shields.io/badge/tailwindcss-0f172a?style=for-the-badge&logoColor=fff&logo=tailwindcss)
 - ![Material UI](https://img.shields.io/badge/material_ui-006bd6?style=for-the-badge&logoColor=fff&logo=mui)
+- ![Commercetools](https://img.shields.io/badge/commercetools-006bd6?style=for-the-badge&logoColor=fff&logo=commercetools)
 
 ## Getting started
 
@@ -86,39 +87,25 @@ npm run start
 
 ## Scripts
 
-```bash
-# Development Server
-npm run dev
-npm run dev:4000
-
-# Build project
-npm run build
-
-# Project preview
-npm run start
-
-# Scripts for lint-staged package (linting/formatting)
-npm run ci:lint
-npm run ci:format
-npm run ci:stylelint
-
-# Scripts for manual linting-formatting
-npm run lint
-npm run format
-npm run stylelint
-
-# Combined `fix all` script
-npm run fix
-
-# Script for linting commit messages via husky
-npm run commitlint
-
-# Script for `staged files only` linter/formatter checks
-npm run lint-staged
-
-# Launch tests
-npm run test
-
-# Script for Husky package init
-npm run prepare
-```
+| cmd                    | Description                                              |
+| ---------------------- | -------------------------------------------------------- |
+| `npm run dev`          | Development Server at 3000 port                          |
+| `npm run dev:4000`     | Development Server at 4000 port                          |
+|                        |                                                          |
+| `npm run build`        | Build project                                            |
+| `npm run start`        | Project preview                                          |
+|                        |                                                          |
+| `npm run test`         | Launch tests                                             |
+|                        |                                                          |
+| `npm run ci:lint`      | Linting TS _\*(for lint-staged package only)_            |
+| `npm run ci:format`    | Formatting codebase _\*(for lint-staged package only)_   |
+| `npm run ci:stylelint` | Linting css _\*(for lint-staged package only)_           |
+|                        |                                                          |
+| `npm run lint`         | Linting TS _\*(for manual use)_                          |
+| `npm run format`       | Formatting codebase _\*(for manual use)_                 |
+| `npm run stylelint`    | Linting css _\*(for manual use)_                         |
+| `npm run fix`          | Combined **fix all** script                              |
+|                        |                                                          |
+| `npm run lint-staged`  | Script for **staged files only** linter/formatter checks |
+| `npm run commitlint`   | Linting commit messages _\*(for husky only)_             |
+| `npm run prepare`      | Script for Husky package init                            |
