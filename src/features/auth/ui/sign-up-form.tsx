@@ -1,66 +1,69 @@
-import { TextField } from '@mui/material';
+import dayjs from 'dayjs';
 
+import { ALLOWED_COUNTRIES } from '~/shared/api/commercetools/allowed-countries';
 import { Route } from '~/shared/model/route.enum';
 
 import { useSignUp } from '../model';
+import { AuthForm } from './auth-form';
+import { ControlledTextField } from './controlled-text-field';
 import { ChangeFormLink } from './change-form-link';
-import { EmailTextField } from './email-text-field';
+import { ControlledDatePicker } from './controlled-date-picker';
+import { ControlledStringAutocomplete } from './controlled-string-autocomplete';
 import { PasswordTextField } from './password-text-field';
 import { SubmitButton } from './submit-button';
-import { AuthForm } from './auth-form';
-import { baseTextFieldProps } from '../model/base-text-field-props';
 
-import type { TextFieldProps } from '../model/base-text-field-props';
 import type { ReactNode } from 'react';
+import type { SignUpDto } from '~/shared/api/commercetools';
+import type { CreatePropsFnFactory, InputsData } from '../model';
 
-/** 
-email
-password
-firstName
-lastName
-dateOfBirth
-address
-  street
-  city
-  postalCode
-  country
-*/
+export const inputsData: InputsData<SignUpDto> = {
+  props: {
+    email: { autoFocus: true, label: 'E-mail', placeholder: 'user@example.com' },
+    password: { label: 'Password', placeholder: 'aaAA11##' },
+    firstName: { label: 'First name' },
+    lastName: { label: 'Last name' },
+    dateOfBirth: { label: 'Date of birth' },
+    street: { label: 'Street' },
+    city: { label: 'City' },
+    postalCode: { label: 'Postal Code' },
+    country: { label: 'Country' },
+  },
+  defaultValues: {
+    email: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+    dateOfBirth: dayjs(),
+    street: '',
+    city: '',
+    postalCode: '',
+    country: '',
+  },
+};
 
-function CustomTextField({ errorText, registerProps }: TextFieldProps): ReactNode {
-  return (
-    <TextField
-      autoFocus
-      {...baseTextFieldProps}
-      {...registerProps}
-      label="E-mail"
-      placeholder="user@example.com"
-      error={Boolean(errorText)}
-      helperText={errorText ?? ' '}
-    />
-  );
-} // todo стандартизировать и заполнять из объекта
+const createInputPropsFactory: CreatePropsFnFactory<SignUpDto> =
+  ({ control }) =>
+  (name) => ({
+    name,
+    control,
+    textFieldProps: inputsData.props[name],
+  });
 
 export function SignUpForm(): ReactNode {
-  const { register, handleSubmit, errors } = useSignUp();
+  const { control, handleSubmit } = useSignUp(inputsData.defaultValues);
+  const createInputProps = createInputPropsFactory({ control });
 
   return (
     <AuthForm onSubmit={handleSubmit}>
-      <EmailTextField
-        errorText={errors.email?.message}
-        registerProps={register('email')}
-      />
-      <PasswordTextField
-        errorText={errors.password?.message}
-        registerProps={register('password')}
-      />
-      <CustomTextField
-        errorText={errors.firstName?.message}
-        registerProps={register('firstName')}
-      />
-      <CustomTextField
-        errorText={errors.lastName?.message}
-        registerProps={register('lastName')}
-      />
+      <ControlledTextField {...createInputProps('email')} />
+      <PasswordTextField {...createInputProps('password')} />
+      <ControlledTextField {...createInputProps('firstName')} />
+      <ControlledTextField {...createInputProps('lastName')} />
+      <ControlledDatePicker {...createInputProps('dateOfBirth')} />
+      <ControlledStringAutocomplete {...{ ...createInputProps('country'), options: ALLOWED_COUNTRIES }} />
+      <ControlledTextField {...createInputProps('city')} />
+      <ControlledTextField {...createInputProps('postalCode')} />
+      <ControlledTextField {...createInputProps('street')} />
       <SubmitButton />
       <ChangeFormLink href={Route.AUTH_SIGN_IN}>Already have an account? Sign in</ChangeFormLink>
     </AuthForm>

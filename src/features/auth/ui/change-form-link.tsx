@@ -3,13 +3,9 @@ import Link from '@mui/material/Link';
 import NextLink from 'next/link';
 
 import type { LinkProps } from 'next/link';
-import type { ReactNode } from 'react';
+import type { PropsWithChildren, ReactNode } from 'react';
 
-type Props = Readonly<
-  {
-    children: ReactNode;
-  } & Pick<LinkProps, 'href'>
->;
+type Props = PropsWithChildren<Pick<LinkProps, 'href'>>;
 
 export function ChangeFormLink({ href, children }: Props): ReactNode {
   return (

@@ -1,28 +1,28 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { isAxiosError } from 'axios';
+import { useForm } from 'react-hook-form';
 
 import { /* signIn,  */ signInDtoSchema } from '~/shared/api/commercetools';
 
+import type { Control, FieldErrors, UseFormHandleSubmit } from 'react-hook-form';
 import type { SignInDto } from '~/shared/api/commercetools';
-import type { FieldErrors, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form';
 
-type UseSignInReturn<T extends Record<string, unknown>> = {
-  register: UseFormRegister<T>;
+type UseSignInReturn<T extends Dict<unknown>> = {
+  control: Control<T>;
   handleSubmit: ReturnType<UseFormHandleSubmit<T>>;
   errors: FieldErrors<T>;
 };
 
-export function useSignIn(): UseSignInReturn<SignInDto> {
+export function useSignIn(defaultValues: SignInDto): UseSignInReturn<SignInDto> {
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<SignInDto>({ resolver: zodResolver(signInDtoSchema), mode: 'onChange' });
+  } = useForm<SignInDto>({ defaultValues, resolver: zodResolver(signInDtoSchema), mode: 'onChange' });
 
   return {
-    register,
+    control,
     handleSubmit: handleSubmit(async (/* data */) => {
       try {
         // const kek = await signIn(data);

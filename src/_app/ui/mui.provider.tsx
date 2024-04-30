@@ -1,4 +1,6 @@
 import { AppCacheProvider } from '@mui/material-nextjs/v14-pagesRouter';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import type { ReactNode } from 'react';
 
@@ -8,5 +10,9 @@ type Props<T> = Readonly<{
 }>;
 
 export function MuiProvider<T>({ children, appProps }: Props<T>): ReactNode {
-  return <AppCacheProvider {...appProps}>{children}</AppCacheProvider>;
+  return (
+    <AppCacheProvider {...appProps}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>{children}</LocalizationProvider>
+    </AppCacheProvider>
+  );
 }

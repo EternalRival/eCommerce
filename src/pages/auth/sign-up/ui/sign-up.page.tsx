@@ -11,6 +11,7 @@ export function SignUpPage(): ReactNode {
         <Typography
           component="h1"
           variant="h5"
+          className="p-2"
         >
           Sign up
         </Typography>

@@ -11,6 +11,7 @@ export function SignInPage(): ReactNode {
         <Typography
           component="h1"
           variant="h5"
+          className="p-2"
         >
           Sign in
         </Typography>
