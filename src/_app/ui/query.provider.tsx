@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import { HydrationBoundary, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useState } from 'react';
 
-import type { ReactNode } from 'react';
 import type { DehydratedState, QueryClientConfig } from '@tanstack/react-query';
+import type { ReactNode } from 'react';
 
 type Props = Readonly<{
   children: ReactNode;

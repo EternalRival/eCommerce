@@ -1,5 +1,5 @@
+import Link from '@mui/material/Link';
 import NextLink from 'next/link';
-import { Link } from '@mui/material';
 
 import { Route } from '~/shared/model/route.enum';
 

@@ -1,14 +1,14 @@
 import dayjs from 'dayjs';
 
-import { ALLOWED_COUNTRIES } from '~/shared/api/commercetools/allowed-countries';
+import { ALLOWED_COUNTRIES } from '~/shared/api/commercetools';
 import { Route } from '~/shared/model/route.enum';
 
 import { useSignUp } from '../model';
 import { AuthForm } from './auth-form';
-import { ControlledTextField } from './controlled-text-field';
 import { ChangeFormLink } from './change-form-link';
 import { ControlledDatePicker } from './controlled-date-picker';
 import { ControlledStringAutocomplete } from './controlled-string-autocomplete';
+import { ControlledTextField } from './controlled-text-field';
 import { PasswordTextField } from './password-text-field';
 import { SubmitButton } from './submit-button';
 

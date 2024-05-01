@@ -1,4 +1,10 @@
-const eslintCmd = `npm run ci:lint`;
+import { ESLint } from 'eslint';
+
+async function eslintCmd(files) {
+  const eslint = new ESLint();
+  const isPathIgnoredList = await Promise.all(files.map((file) => eslint.isPathIgnored(file)));
+  return `npm run ci:lint ${files.filter((_, i) => !isPathIgnoredList[i]).join(' ')}`;
+}
 
 const formatCmd = 'npm run ci:format';
 

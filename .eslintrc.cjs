@@ -1,89 +1,46 @@
 // @ts-check
-import { FlatCompat } from '@eslint/eslintrc';
-import eslint from '@eslint/js';
-import prettier from 'eslint-config-prettier';
-import tsESLint from 'typescript-eslint';
-import stylisticTsESLint from '@stylistic/eslint-plugin-ts';
-import jestESLint from 'eslint-plugin-jest';
-
-const tsFiles = '{app,pages,src}/**/*.{ts,tsx}';
-const tsTestFiles = '{app,pages,src}/**/*,{spec,test}.{ts,tsx}';
-
-/** @type {import('typescript-eslint').ConfigWithExtends} */
-const baseSettings = {
-  files: [tsFiles],
-  languageOptions: {
-    ecmaVersion: 'latest',
-    parserOptions: { project: true },
-  },
-  linterOptions: {
-    noInlineConfig: true,
-    reportUnusedDisableDirectives: 'error',
-  },
+const files = {
+  configs: '**/*{rc,.config}.{js,cjs,mjs,ts,cts,mts}',
+  test: '{app,pages,src}/**/*.{spec,test}.{js,jsx,ts,tsx}',
+  js: '**/*.{js,cjs,mjs}',
+  tsSrc: 'src/**/*.{ts,tsx}',
+  tsRouter: '{app,pages}/**/*.{ts,tsx}',
+  ts: '{src,app,pages}/**/*.{ts,tsx}',
 };
 
-const compat = new FlatCompat({ baseDirectory: import.meta.dirname });
-
-export default tsESLint.config(
+/** @type {import('eslint').Linter.ConfigOverride[]} */
+const overrides = [
+  /** airbnb rules override */
   {
-    name: 'recommended/strict rules',
-    files: [tsFiles],
-    extends: [
-      eslint.configs.recommended,
-      ...tsESLint.configs.strictTypeChecked,
-      ...tsESLint.configs.stylisticTypeChecked,
-      ...compat.extends('airbnb', 'airbnb/hooks', 'airbnb-typescript'),
-    ],
-  },
-  {
-    name: 'import rules',
-    files: [tsFiles],
-    extends: [...compat.extends('plugin:import/recommended', 'plugin:import/react', 'plugin:import/typescript')],
-  },
-  {
-    name: 'tanstack/query rules',
-    files: [tsFiles],
-    extends: [...compat.extends('plugin:@tanstack/eslint-plugin-query/recommended')],
-  },
-  /* {
-    name: 'fsd rules', // broken `Error: Key "languageOptions": Key "ecmaVersion": Expected a number or "latest".`
-    files: [tsFiles],
-    extends: [...compat.extends('@feature-sliced')],
-  }, */
-  {
-    name: 'jest rules',
-    files: [tsTestFiles],
-    ...jestESLint.configs['flat/recommended'],
-  },
-  {
-    name: 'nextjs rules',
-    files: [tsFiles],
-    extends: [...compat.extends('next/core-web-vitals')],
-  },
-  {
-    name: 'disable formatting rules',
-    files: [tsFiles],
-    extends: [prettier],
-  },
-  {
-    name: 'airbnb rules override',
-    files: [tsFiles],
+    files: files.ts,
     rules: {
       'import/prefer-default-export': 'off',
+      'no-underscore-dangle': 'off',
     },
   },
+
+  /** enable void usage for lambdas, promises, etc. */
   {
-    name: 'enable void usage for lambdas, promises, etc.',
-    files: [tsFiles],
+    files: files.ts,
     rules: {
       'no-void': 'off',
       '@typescript-eslint/no-meaningless-void-operator': 'off',
       '@typescript-eslint/no-confusing-void-expression': ['error', { ignoreVoidOperator: true }],
     },
   },
+
+  /** allow nextjs pages router to import from fsd pages and _app */
   {
-    name: 'some custom rules',
-    files: [tsFiles],
+    files: files.tsRouter,
+    rules: {
+      'boundaries/element-types': 'off',
+      'import/no-internal-modules': 'off', // fsd linter banned `~/src/_app` imports
+    },
+  },
+
+  /** some custom rules */
+  {
+    files: files.ts,
     rules: {
       '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'never' }],
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
@@ -99,10 +56,10 @@ export default tsESLint.config(
       'jsx-a11y/label-has-associated-control': 'off', // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/966
     },
   },
+
+  /** some thor's rules */
   {
-    name: "some thor's rules",
-    files: [tsFiles],
-    plugins: { '@stylistic/ts': stylisticTsESLint },
+    files: files.ts,
     rules: {
       'complexity': ['error', 10],
       'max-depth': ['error', 4],
@@ -185,14 +142,54 @@ export default tsESLint.config(
       ],
     },
   },
+
+  /** disable some rules for test files */
   {
-    files: [tsTestFiles],
+    files: files.test,
     rules: {
       'max-statements': ['error', 10, { ignoreTopLevelFunctions: true }],
     },
   },
+
+  /** disable specific rules for config files */
   {
-    name: 'settings',
-    ...baseSettings,
-  }
-);
+    files: files.configs,
+    rules: {
+      'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    },
+  },
+
+  /** disable type-aware linting for js files */
+  {
+    files: files.js,
+    extends: ['plugin:@typescript-eslint/disable-type-checked'],
+  },
+];
+
+/** @type {import('eslint').Linter.Config} */
+const config = {
+  noInlineConfig: true,
+  reportUnusedDisableDirectives: true,
+  parser: '@typescript-eslint/parser',
+  parserOptions: { project: true },
+  processor: '@feature-sliced/messages/fs',
+  plugins: ['@feature-sliced/eslint-plugin-messages', '@stylistic/ts'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/strict-type-checked',
+    'plugin:@typescript-eslint/stylistic-type-checked',
+    'airbnb',
+    'airbnb/hooks',
+    'airbnb-typescript',
+    'plugin:import/recommended',
+    'plugin:import/react',
+    'plugin:import/typescript',
+    'plugin:@tanstack/eslint-plugin-query/recommended',
+    '@feature-sliced',
+    'next/core-web-vitals',
+    'prettier',
+  ],
+  overrides,
+};
+
+module.exports = config;

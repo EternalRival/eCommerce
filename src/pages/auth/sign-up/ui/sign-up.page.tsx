@@ -1,6 +1,8 @@
-import { Box, Container, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 
-import { SignUpForm } from '~/features/auth/ui';
+import { SignUpForm } from '~/features/auth';
 
 import type { ReactNode } from 'react';
 

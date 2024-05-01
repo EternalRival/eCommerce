@@ -3,8 +3,8 @@ import { Controller } from 'react-hook-form';
 
 import { baseTextFieldProps } from '../model';
 
-import type { ControlledTextFieldProps } from '../model';
 import type { ReactNode } from 'react';
+import type { ControlledTextFieldProps } from '../model';
 
 export function ControlledTextField<T extends Dict<unknown>>({
   name,
