@@ -1,6 +1,6 @@
+import '~/_app/globals.css';
 import CssBaseline from '@mui/material/CssBaseline';
 import Head from 'next/head';
-import '~/_app/globals.css';
 
 import { MuiProvider, QueryProvider, ThemeProvider, theme } from '~/_app';
 import { siteTitle } from '~/shared/model/constants';

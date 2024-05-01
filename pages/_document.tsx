@@ -1,7 +1,7 @@
 import { DocumentHeadTags, documentGetInitialProps } from '@mui/material-nextjs/v14-pagesRouter';
 import { Head, Html, Main, NextScript } from 'next/document';
 
-import { roboto, theme } from '~/_app/model/theme';
+import { roboto, theme } from '~/_app';
 import { authorGithubUrl, deployUrl, siteTitle } from '~/shared/model/constants';
 
 import type { DocumentHeadTagsProps } from '@mui/material-nextjs/v14-pagesRouter';
