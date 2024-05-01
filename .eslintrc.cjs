@@ -1,5 +1,5 @@
 // @ts-check
-const files = {
+const FILES = {
   configs: '**/*{rc,.config}.{js,cjs,mjs,ts,cts,mts}',
   test: '{app,pages,src}/**/*.{spec,test}.{js,jsx,ts,tsx}',
   js: '**/*.{js,cjs,mjs}',
@@ -8,11 +8,40 @@ const files = {
   ts: '{src,app,pages}/**/*.{ts,tsx}',
 };
 
+const shared = {
+  plugins: [
+    'import',
+    '@typescript-eslint',
+    '@feature-sliced/eslint-plugin-messages',
+    '@stylistic/ts',
+    'vitest',
+    'testing-library',
+    'jest-dom',
+  ],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/strict-type-checked',
+    'plugin:@typescript-eslint/stylistic-type-checked',
+    'airbnb',
+    'airbnb/hooks',
+    'airbnb-typescript',
+    'plugin:import/recommended',
+    'plugin:import/react',
+    'plugin:import/typescript',
+    'plugin:@tanstack/eslint-plugin-query/recommended',
+    '@feature-sliced',
+    'plugin:testing-library/react',
+    'plugin:jest-dom/recommended',
+    'next/core-web-vitals',
+    'prettier',
+  ],
+};
+
 /** @type {import('eslint').Linter.ConfigOverride[]} */
 const overrides = [
   /** airbnb rules override */
   {
-    files: files.ts,
+    files: FILES.ts,
     rules: {
       'import/prefer-default-export': 'off',
       'no-underscore-dangle': 'off',
@@ -21,7 +50,7 @@ const overrides = [
 
   /** enable void usage for lambdas, promises, etc. */
   {
-    files: files.ts,
+    files: FILES.ts,
     rules: {
       'no-void': 'off',
       '@typescript-eslint/no-meaningless-void-operator': 'off',
@@ -31,7 +60,7 @@ const overrides = [
 
   /** allow nextjs pages router to import from fsd pages and _app */
   {
-    files: files.tsRouter,
+    files: FILES.tsRouter,
     rules: {
       'boundaries/element-types': 'off',
       'import/no-internal-modules': 'off', // fsd linter banned `~/src/_app` imports
@@ -40,7 +69,7 @@ const overrides = [
 
   /** some custom rules */
   {
-    files: files.ts,
+    files: FILES.ts,
     rules: {
       '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'never' }],
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
@@ -59,7 +88,7 @@ const overrides = [
 
   /** some thor's rules */
   {
-    files: files.ts,
+    files: FILES.ts,
     rules: {
       'complexity': ['error', 10],
       'max-depth': ['error', 4],
@@ -145,7 +174,7 @@ const overrides = [
 
   /** disable some rules for test files */
   {
-    files: files.test,
+    files: FILES.test,
     rules: {
       'max-statements': ['error', 10, { ignoreTopLevelFunctions: true }],
     },
@@ -153,7 +182,7 @@ const overrides = [
 
   /** disable specific rules for config files */
   {
-    files: files.configs,
+    files: FILES.configs,
     rules: {
       'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     },
@@ -161,7 +190,7 @@ const overrides = [
 
   /** disable type-aware linting for js files */
   {
-    files: files.js,
+    files: FILES.js,
     extends: ['plugin:@typescript-eslint/disable-type-checked'],
   },
 ];
@@ -173,32 +202,7 @@ const config = {
   parser: '@typescript-eslint/parser',
   parserOptions: { project: true },
   processor: '@feature-sliced/messages/fs',
-  plugins: [
-    'import',
-    '@typescript-eslint',
-    '@feature-sliced/eslint-plugin-messages',
-    '@stylistic/ts',
-    'vitest',
-    'testing-library',
-    'jest-dom',
-  ],
-  extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/strict-type-checked',
-    'plugin:@typescript-eslint/stylistic-type-checked',
-    'airbnb',
-    'airbnb/hooks',
-    'airbnb-typescript',
-    'plugin:import/recommended',
-    'plugin:import/react',
-    'plugin:import/typescript',
-    'plugin:@tanstack/eslint-plugin-query/recommended',
-    '@feature-sliced',
-    'plugin:testing-library/react',
-    'plugin:jest-dom/recommended',
-    'next/core-web-vitals',
-    'prettier',
-  ],
+  ...shared,
   overrides,
 };
 
