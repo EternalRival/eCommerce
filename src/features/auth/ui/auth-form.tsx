@@ -1,8 +1,9 @@
 import Box from '@mui/material/Box';
 
 import type { ComponentProps, ReactNode } from 'react';
+import type { FCProps } from '~/shared/model/types';
 
-type Props = Readonly<Pick<ComponentProps<'form'>, 'onSubmit' | 'children'>>;
+type Props = FCProps<Pick<ComponentProps<'form'>, 'onSubmit' | 'children'>>;
 
 export function AuthForm({ children, onSubmit }: Props): ReactNode {
   return (

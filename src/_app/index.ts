@@ -1,2 +1,3 @@
 export { theme, roboto } from './model';
-export { MuiProvider, QueryProvider, ThemeProvider } from './ui';
+export { MuiProvider, QueryProvider, Providers } from './ui';
+export type { DehydratedStateProps } from './ui';

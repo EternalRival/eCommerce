@@ -5,14 +5,17 @@ import { Controller } from 'react-hook-form';
 import { baseTextFieldProps } from '../model';
 
 import type { ReactNode } from 'react';
+import type { FCProps } from '~/shared/model/types';
 import type { ControlledTextFieldProps } from '../model';
+
+type Props<T extends Dict<unknown>> = FCProps<{ options: string[] } & ControlledTextFieldProps<T>>;
 
 export function ControlledStringAutocomplete<T extends Dict<unknown>>({
   name,
   control,
   options,
   textFieldProps,
-}: Readonly<{ options: string[] } & ControlledTextFieldProps<T>>): ReactNode {
+}: Props<T>): ReactNode {
   const props = { ...baseTextFieldProps, ...textFieldProps };
 
   return (
