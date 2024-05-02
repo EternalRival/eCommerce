@@ -54,8 +54,7 @@
     "paths": {
       "~/*": ["./src/*"]
     },
-    "plugins": [{ "name": "next" }],
-    "types": ["vitest/globals"]
+    "plugins": [{ "name": "next" }]
   },
   "include": [
     "**/*.ts",

@@ -1,23 +1,18 @@
-import '~/_app/globals.css';
-import CssBaseline from '@mui/material/CssBaseline';
 import Head from 'next/head';
+import '~/_app/globals.css';
 
-import { MuiProvider, QueryProvider, ThemeProvider, theme } from '~/_app';
+import { Providers } from '~/_app';
 import { siteTitle } from '~/shared/model/constants';
 
-import type { DehydratedState } from '@tanstack/react-query';
 import type { AppProps } from 'next/app';
 import type { ReactNode } from 'react';
+import type { DehydratedStateProps } from '~/_app';
 
-type PageProps = {
-  dehydratedState?: DehydratedState;
-};
-
-export default function App<T extends PageProps>(props: AppProps<T>): ReactNode {
-  const { Component, pageProps } = props;
+export default function App<T>(appProps: AppProps<T & DehydratedStateProps>): ReactNode {
+  const { Component, pageProps } = appProps;
 
   return (
-    <MuiProvider appProps={props}>
+    <Providers appProps={appProps}>
       <Head>
         <meta
           name="viewport"
@@ -25,12 +20,7 @@ export default function App<T extends PageProps>(props: AppProps<T>): ReactNode 
         />
         <title>{siteTitle}</title>
       </Head>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <QueryProvider dehydratedState={pageProps.dehydratedState}>
-          <Component {...pageProps} />
-        </QueryProvider>
-      </ThemeProvider>
-    </MuiProvider>
+      <Component {...pageProps} />
+    </Providers>
   );
 }

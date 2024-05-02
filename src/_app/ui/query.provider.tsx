@@ -3,13 +3,13 @@ import { useState } from 'react';
 
 import type { DehydratedState, QueryClientConfig } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
+import type { FCPropsWC } from '~/shared/model/types';
 
-type Props = Readonly<{
-  children: ReactNode;
-  dehydratedState?: DehydratedState;
-}>;
+export type DehydratedStateProps = { dehydratedState?: DehydratedState };
 
-const queryClientConfig: QueryClientConfig = {
+type Props = FCPropsWC<DehydratedStateProps>;
+
+const QUERY_CLIENT_CONFIG: QueryClientConfig = {
   defaultOptions: {
     queries: {
       staleTime: 60 * 1000,
@@ -18,7 +18,7 @@ const queryClientConfig: QueryClientConfig = {
 };
 
 export function QueryProvider({ children, dehydratedState }: Props): ReactNode {
-  const [queryClient] = useState(() => new QueryClient(queryClientConfig));
+  const [queryClient] = useState(() => new QueryClient(QUERY_CLIENT_CONFIG));
 
   return (
     <QueryClientProvider client={queryClient}>
