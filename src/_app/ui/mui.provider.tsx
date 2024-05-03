@@ -1,8 +1,8 @@
 import { AppCacheProvider } from '@mui/material-nextjs/v14-pagesRouter';
 import CssBaseline from '@mui/material/CssBaseline';
-import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { ThemeProvider } from '@mui/material/styles';
 
 import type { ThemeProviderProps } from '@mui/material/styles/ThemeProvider';
 import type { AppProps } from 'next/app';
