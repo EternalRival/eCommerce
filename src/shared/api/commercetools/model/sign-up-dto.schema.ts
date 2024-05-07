@@ -1,7 +1,7 @@
 import dayjs, { isDayjs } from 'dayjs';
 import { z } from 'zod';
 
-import { assertPostCode, isAllowedCountry } from './allowed-countries';
+import { ALLOWED_COUNTRIES, ALLOWED_COUNTRY_POSTCODES } from './allowed-countries';
 import { signInDtoSchema } from './sign-in-dto.schema';
 
 import type { Dayjs } from 'dayjs';
@@ -11,6 +11,28 @@ const nameSchema = z
   .min(1 /* , 'Must contain at least one character' */)
   .regex(/[^!@#$%^&*]/, 'No special characters allowed')
   .regex(/\D/, 'No numbers allowed');
+
+type PostCodeEntity = (typeof ALLOWED_COUNTRY_POSTCODES)[number];
+
+function findPostCodeEntityByName(name: string): Nullable<PostCodeEntity> {
+  return ALLOWED_COUNTRY_POSTCODES.find((postCodeEnt) => postCodeEnt.name === name) ?? null;
+}
+
+function assertPostCode(country: string, postCode: string): void {
+  const postCodeEntity = findPostCodeEntityByName(country);
+
+  if (!postCodeEntity) {
+    throw new Error('Country not found');
+  }
+
+  if (!postCodeEntity.regex.test(postCode)) {
+    throw new Error(`Post code must follow ${postCodeEntity.example} format`);
+  }
+}
+
+function isAllowedCountry(country: string): boolean {
+  return ALLOWED_COUNTRIES.includes(country);
+}
 
 export const signUpDtoSchema = signInDtoSchema
   .pick({

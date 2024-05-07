@@ -1,14 +1,17 @@
 import { createStore } from 'zustand';
+import { devtools } from 'zustand/middleware';
 
-import { INITIAL_STATE } from '../model';
+import { INITIAL_STATE, updateDtoSchema } from '../model';
 
-import type { AuthStore, AuthToken } from '../model';
 import type { StoreApi } from 'zustand';
+import type { AuthStore, UpdateDto } from '../model';
 
 export function createAuthStore(initialState = INITIAL_STATE): StoreApi<AuthStore> {
-  return createStore<AuthStore>()((set) => ({
-    ...initialState,
-    update: (token: AuthToken): void => void set({ token }),
-    delete: (): void => void set(initialState),
-  }));
+  return createStore<AuthStore>()(
+    devtools((set) => ({
+      ...initialState,
+      update: (state: UpdateDto): void => void set((prevState) => ({ ...prevState, ...updateDtoSchema.parse(state) })),
+      delete: (): void => void set(initialState),
+    }))
+  );
 }

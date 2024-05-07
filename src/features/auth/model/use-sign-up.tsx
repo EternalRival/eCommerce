@@ -18,7 +18,11 @@ export function useSignUp(defaultValues: SignUpDto): UseSignUpReturn<SignUpDto> 
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<SignUpDto>({ defaultValues, resolver: zodResolver(signUpDtoSchema), mode: 'onChange' });
+  } = useForm<SignUpDto>({
+    defaultValues,
+    resolver: zodResolver(signUpDtoSchema),
+    mode: 'onChange',
+  });
 
   return {
     control,

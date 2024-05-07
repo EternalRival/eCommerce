@@ -18,4 +18,9 @@ const apiConfig = z
     CTP_SCOPES: process.env['NEXT_PUBLIC_CTP_SCOPES'],
   } as const);
 
-export const { CTP_PROJECT_KEY, CTP_CLIENT_SECRET, CTP_CLIENT_ID, CTP_AUTH_URL, CTP_API_URL, CTP_SCOPES } = apiConfig;
+export const { CTP_PROJECT_KEY, CTP_AUTH_URL, CTP_API_URL, CTP_SCOPES } = apiConfig;
+
+export const CTP_BASIC_AUTH = {
+  username: apiConfig.CTP_CLIENT_ID,
+  password: apiConfig.CTP_CLIENT_SECRET,
+};
