@@ -1,9 +1,15 @@
 export type AuthToken = Nullable<string>;
+export type RefreshToken = Nullable<string>;
+export type ExpiresIn = Nullable<number>;
 
-export type AuthState = { token: AuthToken };
+export type AuthState = {
+  access_token: AuthToken;
+  refresh_token: RefreshToken;
+  expires_in: ExpiresIn;
+};
 
 type AuthActions = {
-  update: (token: AuthToken) => void;
+  update: (state: Partial<AuthState>) => void;
   delete: () => void;
 };
 
