@@ -1,4 +1,5 @@
 import { AuthStoreProvider } from '~/entities/auth-store';
+import { CustomerStoreProvider } from '~/entities/customer-store';
 
 import { theme } from '../model';
 import { MuiProvider } from './mui.provider';
@@ -17,7 +18,9 @@ export function Providers({ children, appProps }: Props): ReactNode {
   return (
     <QueryProvider dehydratedState={pageProps.dehydratedState}>
       <AuthStoreProvider>
-        <MuiProvider {...{ appProps, theme }}>{children}</MuiProvider>
+        <CustomerStoreProvider>
+          <MuiProvider {...{ appProps, theme }}>{children}</MuiProvider>
+        </CustomerStoreProvider>
       </AuthStoreProvider>
     </QueryProvider>
   );
