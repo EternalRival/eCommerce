@@ -1,2 +1,1 @@
-export { useAuthStore } from './lib';
-export { AuthStoreProvider } from './ui';
+export { AuthStoreProvider, useAuthStore } from './store';
