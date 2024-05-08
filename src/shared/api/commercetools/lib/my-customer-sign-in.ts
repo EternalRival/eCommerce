@@ -3,6 +3,7 @@ import { createContentTypeHeader } from './create-content-type-header';
 
 import type { CustomerSignInResult, SignInDto, TokenInfo } from '../model';
 
+// https://docs.commercetools.com/api/projects/me-profile#authenticate-sign-in-customer
 export async function myCustomerSignIn(
   token: TokenInfo['access_token'],
   { email, password }: SignInDto
