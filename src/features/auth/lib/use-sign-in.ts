@@ -1,9 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAxiosError } from 'axios';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 
 import { useAuthStore } from '~/entities/auth-store';
 import { getTokenInfoByCredentials, myCustomerSignIn, signInDtoSchema } from '~/shared/api/commercetools';
+import { Route } from '~/shared/model/route.enum';
+import { useCustomerStore } from '~/entities/customer-store';
 
 import type { Control, FieldErrors, UseFormHandleSubmit } from 'react-hook-form';
 import type { SignInDto } from '~/shared/api/commercetools';
@@ -26,7 +29,10 @@ export function useSignIn(defaultValues: SignInDto): UseSignInReturn<SignInDto> 
     mode: 'onChange',
   });
 
-  const { update } = useAuthStore((store) => store);
+  const authStore = useAuthStore((store) => store);
+  const customerStore = useCustomerStore((store) => store);
+
+  const router = useRouter();
 
   return {
     control,
@@ -34,28 +40,18 @@ export function useSignIn(defaultValues: SignInDto): UseSignInReturn<SignInDto> 
       try {
         const tokenInfo = await getTokenInfoByCredentials(signInDto);
 
-        // console.log(tokenInfo);
-
-        update(tokenInfo);
+        authStore.update(tokenInfo);
 
         const signInData = await myCustomerSignIn(tokenInfo.access_token, signInDto);
 
-        void signInData; // ! убрать
-        // TODO сделать редиректы или типа того
+        customerStore.update(signInData.customer);
 
-        // console.log(signInData);
-
-        // const kek = await signIn(data);
-        // console.log(kek);
-        /*    const res = await ctSignIn(data);
-         console.log(res); */
+        await router.push(Route.ROOT);
       } catch (error) {
         if (!isAxiosError(error)) {
           throw error;
         }
 
-        // console.log(error);
-        // console.log(error.response);
         setError('root', { message: error.message });
       }
     }),

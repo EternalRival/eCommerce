@@ -1,6 +1,6 @@
 import { Route } from '~/shared/model/route.enum';
 
-import { useSignIn } from '../model';
+import { useSignIn } from '../lib';
 import { AuthForm } from './auth-form';
 import { ChangeFormLink } from './change-form-link';
 import { ControlledTextField } from './controlled-text-field';
