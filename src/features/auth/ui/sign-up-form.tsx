@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { ALLOWED_COUNTRIES } from '~/shared/api/commercetools';
 import { Route } from '~/shared/model/route.enum';
 
-import { useSignUp } from '../model';
+import { useSignUp } from '../lib';
 import { AuthForm } from './auth-form';
 import { ChangeFormLink } from './change-form-link';
 import { ControlledDatePicker } from './controlled-date-picker';
