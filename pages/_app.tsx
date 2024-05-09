@@ -3,6 +3,7 @@ import '~/_app/globals.css';
 
 import { Providers } from '~/_app';
 import { siteTitle } from '~/shared/model/constants';
+import { StorePreview } from '~/features/store-preview';
 
 import type { AppProps } from 'next/app';
 import type { ReactNode } from 'react';
@@ -20,6 +21,7 @@ export default function App<T>(appProps: AppProps<T & DehydratedStateProps>): Re
         />
         <title>{siteTitle}</title>
       </Head>
+      <StorePreview />
       <Component {...pageProps} />
     </Providers>
   );
