@@ -4,6 +4,8 @@ export {
   ALLOWED_COUNTRY_POSTCODES,
   signInDtoSchema,
   signUpDtoSchema,
+  type CustomerSignInResult,
   type SignInDto,
   type SignUpDto,
+  type TokenInfo,
 } from './model';
