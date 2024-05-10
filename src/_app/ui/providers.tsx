@@ -4,6 +4,7 @@ import { CustomerStoreProvider } from '~/entities/customer-store';
 import { theme } from '../model';
 import { MuiProvider } from './mui.provider';
 import { QueryProvider } from './query.provider';
+import { ToastProvider } from './toast.provider';
 
 import type { AppProps } from 'next/app';
 import type { ReactNode } from 'react';
@@ -19,7 +20,9 @@ export function Providers({ children, appProps }: Props): ReactNode {
     <QueryProvider dehydratedState={pageProps.dehydratedState}>
       <AuthStoreProvider>
         <CustomerStoreProvider>
-          <MuiProvider {...{ appProps, theme }}>{children}</MuiProvider>
+          <MuiProvider {...{ appProps, theme }}>
+            <ToastProvider>{children}</ToastProvider>
+          </MuiProvider>
         </CustomerStoreProvider>
       </AuthStoreProvider>
     </QueryProvider>

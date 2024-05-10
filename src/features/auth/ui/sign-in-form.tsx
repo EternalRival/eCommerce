@@ -5,7 +5,6 @@ import { AuthForm } from './auth-form';
 import { ChangeFormLink } from './change-form-link';
 import { ControlledTextField } from './controlled-text-field';
 import { PasswordTextField } from './password-text-field';
-import { RootErrorAlert } from './root-error-alert';
 import { SubmitButton } from './submit-button';
 
 import type { ReactNode } from 'react';
@@ -18,8 +17,8 @@ const inputsData: InputsData<SignInDto> = {
     password: { label: 'Password', placeholder: 'aaAA11##' },
   },
   defaultValues: {
-    email: '',
-    password: '',
+    email: 'qwe@qwe.qwe',
+    password: '!Q1qqqqq',
   },
 };
 
@@ -32,14 +31,13 @@ const createInputPropsFactory: CreatePropsFnFactory<SignInDto> =
   });
 
 export function SignInForm(): ReactNode {
-  const { control, handleSubmit, isPending, errorMessage, clearErrorMessage } = useSignIn(inputsData.defaultValues);
+  const { control, handleSubmit, isPending } = useSignIn(inputsData.defaultValues);
   const createInputProps = createInputPropsFactory({ control });
 
   return (
     <AuthForm onSubmit={handleSubmit}>
       <ControlledTextField {...createInputProps('email')} />
       <PasswordTextField {...createInputProps('password')} />
-      <RootErrorAlert {...{ errorMessage, clearErrorMessage }} />
       <SubmitButton isPending={isPending} />
       <ChangeFormLink href={Route.AUTH_SIGN_UP}>Don&apos;t have an account? Sign Up</ChangeFormLink>
     </AuthForm>
