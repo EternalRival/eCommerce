@@ -1,9 +1,10 @@
 import Head from 'next/head';
+import 'react-toastify/dist/ReactToastify.min.css';
 import '~/_app/globals.css';
 
 import { Providers } from '~/_app';
-import { siteTitle } from '~/shared/model/constants';
 import { StorePreview } from '~/features/store-preview';
+import { siteTitle } from '~/shared/model/constants';
 
 import type { AppProps } from 'next/app';
 import type { ReactNode } from 'react';
