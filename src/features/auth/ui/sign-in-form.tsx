@@ -32,15 +32,15 @@ const createInputPropsFactory: CreatePropsFnFactory<SignInDto> =
   });
 
 export function SignInForm(): ReactNode {
-  const { control, handleSubmit, errors } = useSignIn(inputsData.defaultValues);
+  const { control, handleSubmit, isPending, errorMessage, clearErrorMessage } = useSignIn(inputsData.defaultValues);
   const createInputProps = createInputPropsFactory({ control });
 
   return (
     <AuthForm onSubmit={handleSubmit}>
       <ControlledTextField {...createInputProps('email')} />
       <PasswordTextField {...createInputProps('password')} />
-      <RootErrorAlert message={errors.root?.message} />
-      <SubmitButton />
+      <RootErrorAlert {...{ errorMessage, clearErrorMessage }} />
+      <SubmitButton isPending={isPending} />
       <ChangeFormLink href={Route.AUTH_SIGN_UP}>Don&apos;t have an account? Sign Up</ChangeFormLink>
     </AuthForm>
   );
