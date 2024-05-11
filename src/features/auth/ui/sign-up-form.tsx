@@ -64,7 +64,7 @@ export function SignUpForm(): ReactNode {
       <ControlledTextField {...createInputProps('city')} />
       <ControlledTextField {...createInputProps('postalCode')} />
       <ControlledTextField {...createInputProps('street')} />
-      <SubmitButton />
+      <SubmitButton isPending={false} />
       <ChangeFormLink href={Route.AUTH_SIGN_IN}>Already have an account? Sign in</ChangeFormLink>
     </AuthForm>
   );
