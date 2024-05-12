@@ -11,7 +11,8 @@ import { getTokenInfoByCredentials, myCustomerSignIn, signInDtoSchema } from '~/
 import { Route } from '~/shared/model/route.enum';
 
 import type { Control, UseFormHandleSubmit } from 'react-hook-form';
-import type { CustomerSignInResult, CustomerTokenInfo, SignInDto } from '~/shared/api/commercetools';
+import type { CustomerSignInResult, SignInDto } from '~/shared/api/commercetools';
+import type { AuthStateByType } from '~/entities/auth-store/store';
 
 type UseSignInReturn = {
   control: Control<SignInDto>;
@@ -30,13 +31,15 @@ export function useSignIn(defaultValues: SignInDto): UseSignInReturn {
     mode: 'onChange',
   });
 
-  const { isPending, mutate: signIn } = useMutation<[CustomerTokenInfo, CustomerSignInResult], Error, SignInDto>({
+  type MutationFnReturn = [Omit<AuthStateByType<'customer'>, 'type'>, CustomerSignInResult];
+
+  const { isPending, mutate: signIn } = useMutation<MutationFnReturn, Error, SignInDto>({
     async mutationFn(signInDto) {
-      const tokenInfo = await getTokenInfoByCredentials(signInDto);
+      const customerToken = authStore.type === 'customer' ? authStore : await getTokenInfoByCredentials(signInDto);
 
-      const signInData = await myCustomerSignIn(tokenInfo.access_token, signInDto);
+      const signInData = await myCustomerSignIn(customerToken.access_token, signInDto);
 
-      return [tokenInfo, signInData];
+      return [customerToken, signInData];
     },
 
     onError(error) {
@@ -47,10 +50,10 @@ export function useSignIn(defaultValues: SignInDto): UseSignInReturn {
       toast.error(error.message);
     },
 
-    async onSuccess([tokenInfo, customerSignInResult]) {
-      authStore.updateCustomerToken(tokenInfo);
-      customerStore.update(customerSignInResult.customer);
+    async onSuccess([customerToken, customerSignInResult]) {
       toast.success('Successful sign in');
+      authStore.update({ ...customerToken, type: 'customer' });
+      customerStore.update(customerSignInResult.customer);
       await router.push(Route.ROOT);
     },
   });

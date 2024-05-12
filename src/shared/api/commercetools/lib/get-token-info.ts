@@ -1,16 +1,25 @@
-import { CTP_AUTH_URL, CTP_BASIC_AUTH, anonTokenInfoSchema, httpClient } from '../model';
+import { z } from 'zod';
+
+import { CTP_BASIC_AUTH, httpClient } from '../model';
 import { createContentTypeHeader } from './create-content-type-header';
 import { createScope } from './create-scope';
 
-import type { AnonTokenInfo } from '../model';
+const anonTokenInfoSchema = z.object({
+  access_token: z.string(),
+  token_type: z.string(),
+  expires_in: z.number(),
+  scope: z.string(),
+});
+
+type AnonTokenInfo = z.infer<typeof anonTokenInfoSchema>;
 
 export async function getTokenInfo(): Promise<AnonTokenInfo> {
-  return httpClient.api
+  return httpClient.auth
     .post(
-      new URL(`/oauth/token`, CTP_AUTH_URL).toString(),
+      `/oauth/token`,
       {
         grant_type: 'client_credentials',
-        scope: createScope([]),
+        scope: createScope(['manage_my_profile']), // TODO добавить необходимое, убрать лишее
       },
       {
         headers: createContentTypeHeader('urlencoded'),
