@@ -1,8 +1,10 @@
 import { createContext, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
 import { createStore } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
+import { getTokenInfo } from '~/shared/api/commercetools';
 import { wrapStorageKey } from '~/shared/lib/local-storage';
 import { createZustandStore } from '~/shared/lib/zustand';
 
@@ -10,44 +12,26 @@ import type { ComponentProps, ReactNode } from 'react';
 import type { StoreApi } from 'zustand';
 import type { FCPropsWC } from '~/shared/model/types';
 
-const anonTokenSchema = z
-  .object({
-    access_token: z.string(),
-  })
-  .strip()
-  .nullable();
-
-const customerTokenSchema = z
-  .object({
-    access_token: z.string(),
-    refresh_token: z.string(),
-  })
-  .strip()
-  .nullable();
-
-const stateSchema = z.object({
-  anonToken: anonTokenSchema,
-  customerToken: customerTokenSchema,
-});
-
-type AnonToken = z.infer<typeof anonTokenSchema>;
-
-type CustomerToken = z.infer<typeof customerTokenSchema>;
+const stateSchema = z.discriminatedUnion('type', [
+  z.object({ type: z.literal('empty') }),
+  z.object({ type: z.literal('anonymous'), access_token: z.string() }).strip(),
+  z.object({ type: z.literal('customer'), access_token: z.string(), refresh_token: z.string() }),
+]);
 
 type State = z.infer<typeof stateSchema>;
 
 type Actions = {
-  updateAnonToken: (state: AnonToken) => void;
-  resetAnonToken: () => void;
-  updateCustomerToken: (state: CustomerToken) => void;
-  resetCustomerToken: () => void;
+  init: () => Promise<void>;
+  update: (state: State) => void;
+  reset: () => void;
 };
 
 type Store = State & Actions;
 
+export type AuthStateByType<T extends State['type']> = Extract<State, { type: T }>;
+
 const EMPTY_STATE: State = {
-  anonToken: null,
-  customerToken: null,
+  type: 'empty',
 };
 
 const [StoreProvider, useStore] = createZustandStore({
@@ -56,12 +40,15 @@ const [StoreProvider, useStore] = createZustandStore({
     createStore<Store>()(
       devtools(
         persist(
-          (set) => ({
+          (set, get) => ({
             ...EMPTY_STATE,
-            updateAnonToken: (state): void => void set({ anonToken: anonTokenSchema.parse(state) }),
-            resetAnonToken: (): void => void set({ anonToken: null }),
-            updateCustomerToken: (state): void => void set({ customerToken: customerTokenSchema.parse(state) }),
-            resetCustomerToken: (): void => void set({ customerToken: null }),
+            init: async (): Promise<void> => {
+              if (get().type === 'empty') {
+                get().update({ type: 'anonymous', ...(await getTokenInfo()) });
+              }
+            },
+            update: (state): void => void set(stateSchema.parse(state)),
+            reset: (): void => void set(EMPTY_STATE),
           }),
           { name: wrapStorageKey('auth/token') }
         )
@@ -70,15 +57,15 @@ const [StoreProvider, useStore] = createZustandStore({
 });
 
 function AuthStoreInit(): ReactNode {
-  const { updateAnonToken, updateCustomerToken } = useStore((store) => store);
-  /*   const { data } = useQuery({ queryKey: ['anon-token'], queryFn: getTokenInfo });
-  const a = useMemo(() => data, []);
-  toast(a); */
+  const { init } = useStore((store) => store);
 
   useEffect(() => {
-    updateAnonToken({ access_token: 'wo1o' });
-    updateCustomerToken({ access_token: 'not w1oo', refresh_token: ' def not 1woo' });
-  }, [updateAnonToken, updateCustomerToken]);
+    init().catch((reason: unknown) => {
+      if (reason instanceof Error) {
+        toast.error(reason.message);
+      }
+    });
+  }, [init]);
 
   return null;
 }

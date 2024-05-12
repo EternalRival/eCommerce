@@ -2,15 +2,9 @@ import dayjs, { isDayjs } from 'dayjs';
 import { z } from 'zod';
 
 import { ALLOWED_COUNTRIES, ALLOWED_COUNTRY_POSTCODES } from './allowed-countries';
-import { signInDtoSchema } from './sign-in-dto.schema';
+import { passwordSchema } from './password.schema';
 
 import type { Dayjs } from 'dayjs';
-
-const nameSchema = z
-  .string()
-  .min(1 /* , 'Must contain at least one character' */)
-  .regex(/[^!@#$%^&*]/, 'No special characters allowed')
-  .regex(/\D/, 'No numbers allowed');
 
 type PostCodeEntity = (typeof ALLOWED_COUNTRY_POSTCODES)[number];
 
@@ -34,12 +28,16 @@ function isAllowedCountry(country: string): boolean {
   return ALLOWED_COUNTRIES.includes(country);
 }
 
-export const signUpDtoSchema = signInDtoSchema
-  .pick({
-    email: true,
-    password: true,
-  })
-  .extend({
+const nameSchema = z
+  .string()
+  .min(1 /* , 'Must contain at least one character' */)
+  .regex(/[^!@#$%^&*]/, 'No special characters allowed')
+  .regex(/\D/, 'No numbers allowed');
+
+export const signUpDtoSchema = z
+  .object({
+    email: z.string().email(),
+    password: passwordSchema,
     firstName: nameSchema,
     lastName: nameSchema,
     dateOfBirth: z.custom<Dayjs>(isDayjs).refine((date) => {
@@ -53,6 +51,7 @@ export const signUpDtoSchema = signInDtoSchema
     postalCode: z.string(),
     country: z.string().refine(isAllowedCountry, 'Must be one of the proposed countries'),
   })
+  .strip()
   .superRefine(({ country, postalCode }, ctx) => {
     try {
       assertPostCode(country, postalCode);

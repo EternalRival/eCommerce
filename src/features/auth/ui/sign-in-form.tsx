@@ -17,7 +17,7 @@ const inputsData: InputsData<SignInDto> = {
     password: { label: 'Password', placeholder: 'aaAA11##' },
   },
   defaultValues: {
-    email: 'qwe@qwe.qwe',
+    email: 'customer@example.com',
     password: '!Q1qqqqq',
   },
 };

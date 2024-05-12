@@ -3,8 +3,6 @@ export { anonTokenInfoSchema, type AnonTokenInfo } from './anon-token-info.schem
 export { CTP_AUTH_URL, CTP_BASIC_AUTH, CTP_PROJECT_KEY } from './api-config';
 export { customerSignInResultSchema } from './customer-sign-in-result.schema';
 export type { CustomerSignInResult } from './customer-sign-in-result.schema';
-export { customerTokenInfoSchema } from './customer-token-info.schema';
-export type { CustomerTokenInfo } from './customer-token-info.schema';
 export { httpClient } from './http-client';
 export { signInDtoSchema, type SignInDto } from './sign-in-dto.schema';
 export { signUpDtoSchema, type SignUpDto } from './sign-up-dto.schema';
