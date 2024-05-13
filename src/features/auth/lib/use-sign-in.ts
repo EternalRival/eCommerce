@@ -1,18 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
-import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import { useAuthStore } from '~/entities/auth-store';
 import { useCustomerStore } from '~/entities/customer-store';
 import { getTokenInfoByCredentials, myCustomerSignIn, signInDtoSchema } from '~/shared/api/commercetools';
-import { Route } from '~/shared/model/route.enum';
+import { toastifyError } from '~/shared/lib/react-toastify';
 
 import type { Control, UseFormHandleSubmit } from 'react-hook-form';
 import type { CustomerSignInResult, SignInDto } from '~/shared/api/commercetools';
-import type { AuthStateByType } from '~/entities/auth-store/store';
 
 type UseSignInReturn = {
   control: Control<SignInDto>;
@@ -21,7 +18,6 @@ type UseSignInReturn = {
 };
 
 export function useSignIn(defaultValues: SignInDto): UseSignInReturn {
-  const router = useRouter();
   const authStore = useAuthStore((store) => store);
   const customerStore = useCustomerStore((store) => store);
 
@@ -31,7 +27,7 @@ export function useSignIn(defaultValues: SignInDto): UseSignInReturn {
     mode: 'onChange',
   });
 
-  type MutationFnReturn = [Omit<AuthStateByType<'customer'>, 'type'>, CustomerSignInResult];
+  type MutationFnReturn = [Parameters<typeof authStore.setCustomerToken>[0], CustomerSignInResult];
 
   const { isPending, mutate: signIn } = useMutation<MutationFnReturn, Error, SignInDto>({
     async mutationFn(signInDto) {
@@ -42,19 +38,12 @@ export function useSignIn(defaultValues: SignInDto): UseSignInReturn {
       return [customerToken, signInData];
     },
 
-    onError(error) {
-      if (!isAxiosError(error)) {
-        throw error;
-      }
-
-      toast.error(error.message);
-    },
+    onError: toastifyError,
 
     async onSuccess([customerToken, customerSignInResult]) {
       toast.success('Successful sign in');
-      authStore.update({ ...customerToken, type: 'customer' });
+      authStore.setCustomerToken(customerToken);
       customerStore.update(customerSignInResult.customer);
-      await router.push(Route.ROOT);
     },
   });
 

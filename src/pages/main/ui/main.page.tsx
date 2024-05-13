@@ -2,6 +2,7 @@ import Link from '@mui/material/Link';
 import NextLink from 'next/link';
 
 import { Route } from '~/shared/model/route.enum';
+import { SignOutButton } from '~/features/auth';
 
 import type { ReactNode } from 'react';
 
@@ -23,6 +24,7 @@ export function MainPage(): ReactNode {
       >
         Sign up
       </Link>
+      <SignOutButton />
     </>
   );
 }
