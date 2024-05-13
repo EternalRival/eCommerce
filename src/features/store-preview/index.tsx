@@ -8,7 +8,7 @@ export function StorePreview(): ReactNode {
   const customerStore = useCustomerStore((s) => s);
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 overflow-scroll text-xs">
+    <div className="pointer-events-none fixed bottom-0 left-0 right-0 overflow-scroll text-xs">
       <pre>{JSON.stringify(authStore)}</pre>
       <pre>{JSON.stringify(customerStore)}</pre>
     </div>

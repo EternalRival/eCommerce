@@ -1,1 +1,1 @@
-export { SignInForm, SignUpForm } from './ui';
+export { AuthGuard, SignInForm, SignOutButton, SignUpForm } from './ui';
