@@ -25,7 +25,7 @@ export function Header(): ReactNode {
               underline="none"
               color="inherit"
             >
-              eCommerce app
+              ER-Shop
             </Link>
           </Box>
           <NavMenu />
