@@ -43,7 +43,7 @@ export function useSignIn(defaultValues: SignInDto): UseSignInReturn {
     async onSuccess([customerToken, customerSignInResult]) {
       toast.success('Successful sign in');
       authStore.setCustomerToken(customerToken);
-      customerStore.update(customerSignInResult.customer);
+      customerStore.setCustomer(customerSignInResult.customer);
     },
   });
 
