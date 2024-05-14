@@ -5,7 +5,6 @@ export {
   signInDtoSchema,
   signUpDtoSchema,
   type CustomerSignInResult,
-  type CustomerTokenInfo,
   type SignInDto,
   type SignUpDto,
 } from './model';
