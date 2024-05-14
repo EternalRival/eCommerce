@@ -24,7 +24,7 @@ export function ProfileButtons(): ReactNode {
   ] as const;
   const anonymousButtonsProps = [
     ['Sign up', createNavigate(Route.AUTH_SIGN_UP), PersonAddIcon],
-    ['Sign out', createNavigate(Route.AUTH_SIGN_IN), LoginIcon],
+    ['Sign in', createNavigate(Route.AUTH_SIGN_IN), LoginIcon],
   ] as const;
 
   return (isCustomer ? customerButtonsProps : anonymousButtonsProps).map(([title, onClick, Icon]) => (

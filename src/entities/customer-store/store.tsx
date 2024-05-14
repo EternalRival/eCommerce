@@ -8,25 +8,23 @@ import { wrapStorageKey } from '~/shared/lib/local-storage';
 
 import type { StoreApi } from 'zustand';
 
-const stateSchema = z.object({
-  id: z.string().nullable(),
-  email: z.string().nullable(),
-});
-
-const updateDtoSchema = stateSchema.partial().strip();
+const stateSchema = z
+  .object({
+    id: z.string().nullable(),
+    email: z.string().nullable(),
+  })
+  .strip();
 
 type State = z.infer<typeof stateSchema>;
 
-type UpdateDto = z.infer<typeof updateDtoSchema>;
-
 type Actions = {
-  update: (state: UpdateDto) => void;
-  delete: () => void;
+  setCustomer: (state: State) => void;
+  reset: () => void;
 };
 
 type Store = State & Actions;
 
-const INITIAL_STATE: State = {
+const EMPTY_STATE: State = {
   id: null,
   email: null,
 };
@@ -38,9 +36,9 @@ export const [CustomerStoreProvider, useCustomerStore] = createZustandStore({
       devtools(
         persist(
           (set) => ({
-            ...INITIAL_STATE,
-            update: (state): void => void set(() => updateDtoSchema.parse(state)),
-            delete: (): void => void set(() => INITIAL_STATE),
+            ...EMPTY_STATE,
+            setCustomer: (state): void => void set(stateSchema.parse(state)),
+            reset: (): void => void set(EMPTY_STATE),
           }),
           { name: wrapStorageKey('customer') }
         )
