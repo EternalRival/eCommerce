@@ -12,18 +12,20 @@ import { Route } from '~/shared/model/route.enum';
 import type { ReactNode } from 'react';
 
 export function SignInPage(): ReactNode {
-  const isCustomer = useAuthStore((store) => store.type === 'customer');
+  const auth = useAuthStore(({ type }) => ({ isPending: type === 'empty', isCustomer: type === 'customer' }));
   const router = useRouter();
 
   useEffect(() => {
-    if (isCustomer) {
+    if (auth.isCustomer) {
       router.replace(Route.ROOT).catch(toastifyError);
     }
-  }, [isCustomer, router]);
+  }, [auth.isCustomer, router]);
 
-  return isCustomer ? (
-    <PageSpinner />
-  ) : (
+  if (auth.isPending || auth.isCustomer) {
+    return <PageSpinner />;
+  }
+
+  return (
     <Stack className="grow items-center justify-center">
       <Typography
         component="h1"

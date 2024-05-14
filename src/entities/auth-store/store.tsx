@@ -50,7 +50,7 @@ const [StoreProvider, useStore] = createZustandStore({
         persist(
           (set, get) => ({
             ...EMPTY_STATE,
-            init: async (): Promise<void> => {
+            async init(): Promise<void> {
               if (get().type === 'empty') {
                 get().setAnonymousToken(await getTokenInfo());
               }
