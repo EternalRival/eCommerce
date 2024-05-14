@@ -1,1 +1,2 @@
-export { AuthGuard, SignInForm, SignOutButton, SignUpForm } from './ui';
+export { useSignOut } from './lib';
+export { SignInForm, SignUpForm } from './ui';
