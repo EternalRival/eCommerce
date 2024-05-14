@@ -15,7 +15,7 @@ export function Layout({ children }: Props): ReactNode {
       <Header />
       <Container
         component="main"
-        className="flex grow flex-col"
+        className="flex grow flex-col py-4"
       >
         {children}
       </Container>

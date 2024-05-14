@@ -26,7 +26,7 @@ export function MainPage(): ReactNode {
       <Typography
         component="h1"
         variant="h5"
-        className="py-4"
+        className="py-2"
       >
         Main Page
       </Typography>
