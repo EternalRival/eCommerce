@@ -1,9 +1,10 @@
 import { createContext } from 'react';
 import { z } from 'zod';
 import { createStore } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 
 import { createZustandStore } from '~/shared/lib/zustand';
+import { wrapStorageKey } from '~/shared/lib/local-storage';
 
 import type { StoreApi } from 'zustand';
 
@@ -34,10 +35,15 @@ export const [CustomerStoreProvider, useCustomerStore] = createZustandStore({
   context: createContext<Nullable<StoreApi<Store>>>(null),
   createStoreFactory: () =>
     createStore<Store>()(
-      devtools((set) => ({
-        ...INITIAL_STATE,
-        update: (state): void => void set(() => updateDtoSchema.parse(state)),
-        delete: (): void => void set(() => INITIAL_STATE),
-      }))
+      devtools(
+        persist(
+          (set) => ({
+            ...INITIAL_STATE,
+            update: (state): void => void set(() => updateDtoSchema.parse(state)),
+            delete: (): void => void set(() => INITIAL_STATE),
+          }),
+          { name: wrapStorageKey('customer') }
+        )
+      )
     ),
 });
