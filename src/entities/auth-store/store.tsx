@@ -35,9 +35,9 @@ type State = z.infer<typeof stateSchema>;
 
 type Actions = {
   init: () => Promise<void>;
+  reset: () => Promise<void>;
   setAnonymousToken: (state: Pick<State, 'access_token'>) => void;
   setCustomerToken: (state: Pick<State, 'access_token' | 'refresh_token'>) => void;
-  reset: () => void;
 };
 
 type Store = State & Actions;
@@ -61,9 +61,12 @@ const [StoreProvider, useStore] = createZustandStore({
                 get().setAnonymousToken(await getTokenInfo());
               }
             },
+            async reset(): Promise<void> {
+              set(EMPTY_STATE);
+              await get().init();
+            },
             setAnonymousToken: (state): void => void set(anonymousTokenSchema.parse({ ...state, type: 'anonymous' })),
             setCustomerToken: (state): void => void set(customerTokenSchema.parse({ ...state, type: 'customer' })),
-            reset: (): void => void set(EMPTY_STATE),
           }),
           { name: wrapStorageKey('auth/token') }
         )
