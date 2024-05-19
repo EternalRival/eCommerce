@@ -8,12 +8,10 @@ import { wrapStorageKey } from '~/shared/lib/local-storage';
 
 import type { StoreApi } from 'zustand';
 
-const stateSchema = z
-  .object({
-    id: z.string().nullable(),
-    email: z.string().nullable(),
-  })
-  .strip();
+const stateSchema = z.object({
+  id: z.string().nullable(),
+  email: z.string().nullable(),
+});
 
 type State = z.infer<typeof stateSchema>;
 

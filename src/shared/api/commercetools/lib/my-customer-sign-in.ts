@@ -1,13 +1,13 @@
-import { CTP_PROJECT_KEY, customerSignInResultSchema, httpClient } from '../model';
+import { CTP_PROJECT_KEY, customerSignInResultSchema, httpClient, myCustomerSignInSchema } from '../model';
 import { createAuthorizationHeader } from './create-authorization-header';
 import { createContentTypeHeader } from './create-content-type-header';
 
-import type { CustomerSignInResult, SignInDto } from '../model';
+import type { CustomerSignInResult, MyCustomerSignIn } from '../model';
 
 // https://docs.commercetools.com/api/projects/me-profile#authenticate-sign-in-customer
-export async function myCustomerSignIn(token: string, signInDto: SignInDto): Promise<CustomerSignInResult> {
+export async function myCustomerSignIn(token: string, signInDto: MyCustomerSignIn): Promise<CustomerSignInResult> {
   return httpClient.api
-    .post(`/${CTP_PROJECT_KEY}/me/login`, signInDto, {
+    .post(`/${CTP_PROJECT_KEY}/me/login`, myCustomerSignInSchema.parse(signInDto), {
       headers: {
         ...createContentTypeHeader('json'),
         ...createAuthorizationHeader(token),

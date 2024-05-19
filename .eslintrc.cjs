@@ -92,7 +92,6 @@ const overrides = [
     rules: {
       'complexity': ['error', 10],
       'max-depth': ['error', 4],
-      'max-lines-per-function': ['error', { max: 40, skipBlankLines: true, skipComments: true }],
       'max-nested-callbacks': ['error', 4],
       'max-statements': ['error', 10],
       'no-constant-binary-expression': 'error',
