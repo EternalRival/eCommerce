@@ -10,9 +10,8 @@ export function useSignOut(): () => Promise<void> {
   const router = useRouter();
 
   return async () => {
-    authStore.reset();
     customerStore.reset();
-    await authStore.init(); // ? переписать под ТЗ
+    await authStore.reset(); // ? переписать под ТЗ
     await router.replace(Route.ROOT); // ? переписать под ТЗ
   };
 }

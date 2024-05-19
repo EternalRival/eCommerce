@@ -8,6 +8,6 @@ export function assertPostCode(country: string, postCode: string): void {
   }
 
   if (!postCodeEntity.regex.test(postCode)) {
-    throw new Error(`Post code must follow ${postCodeEntity.example} format`);
+    throw new Error(`Post code must follow ${postCodeEntity.format} format`);
   }
 }
