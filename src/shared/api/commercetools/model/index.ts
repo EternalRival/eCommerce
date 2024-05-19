@@ -1,4 +1,4 @@
-export { ALLOWED_COUNTRIES, ALLOWED_COUNTRY_POSTCODES, type PostCodeEntity } from './allowed-countries';
+export { ALLOWED_COUNTRIES, ALLOWED_COUNTRY_NAMES, type Country } from './allowed-countries';
 export { CTP_AUTH_URL, CTP_BASIC_AUTH, CTP_PROJECT_KEY } from './api-config';
 export { customerSignInResultSchema } from './customer-sign-in-result.schema';
 export type { CustomerSignInResult } from './customer-sign-in-result.schema';

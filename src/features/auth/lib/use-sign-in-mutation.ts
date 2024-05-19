@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 
 import { useAuthStore } from '~/entities/auth-store';
 import { useCustomerStore } from '~/entities/customer-store';
-import { getTokenInfoByCredentials, myCustomerSignIn } from '~/shared/api/commercetools';
+import { getTokenInfoByCredentials, signInCustomer } from '~/shared/api/commercetools';
 import { toastifyError } from '~/shared/lib/react-toastify';
 
 import type { AuthStateByType } from '~/entities/auth-store';
@@ -28,7 +28,7 @@ export function useSignInMutation(): UseSignInMutationReturn {
       const customerToken = isCustomer
         ? authStore
         : await getTokenInfoByCredentials({ username: signInDto.email, password: signInDto.password });
-      const customerSignInResult = await myCustomerSignIn(customerToken.access_token, signInDto);
+      const customerSignInResult = await signInCustomer(customerToken.access_token, signInDto);
 
       return [customerToken, customerSignInResult];
     },

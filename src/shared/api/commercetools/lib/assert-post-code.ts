@@ -1,13 +1,13 @@
-import { findPostCodeEntityByName } from './find-post-code-entity-by-name';
+import { findCountryByLabel } from './find-country-by-label';
 
-export function assertPostCode(country: string, postCode: string): void {
-  const postCodeEntity = findPostCodeEntityByName(country);
+export function assertPostCode(countryLabel: string, postCode: string): void {
+  const country = findCountryByLabel(countryLabel);
 
-  if (!postCodeEntity) {
+  if (!country) {
     throw new Error('Country not found');
   }
 
-  if (!postCodeEntity.regex.test(postCode)) {
-    throw new Error(`Post code must follow ${postCodeEntity.format} format`);
+  if (!country.regex.test(postCode)) {
+    throw new Error(`Post code must follow ${country.format} format`);
   }
 }
