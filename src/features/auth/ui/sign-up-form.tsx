@@ -1,6 +1,6 @@
 import { Collapse, Divider } from '@mui/material';
 
-import { ALLOWED_COUNTRIES } from '~/shared/api/commercetools';
+import { ALLOWED_COUNTRY_NAMES } from '~/shared/api/commercetools';
 
 import { useSignUpForm, useSignUpMutation } from '../lib';
 import { AuthForm } from './auth-form';
@@ -46,7 +46,7 @@ export function SignUpForm(): ReactNode {
       <ControlledStringAutocomplete
         {...createProps('shippingCountry')}
         fieldProps={{ label: 'Country' }}
-        options={ALLOWED_COUNTRIES}
+        options={ALLOWED_COUNTRY_NAMES}
       />
       <ControlledTextField
         {...createProps('shippingPostalCode')}
@@ -74,7 +74,7 @@ export function SignUpForm(): ReactNode {
         <ControlledStringAutocomplete
           {...createProps('billingCountry')}
           fieldProps={{ label: 'Country' }}
-          options={ALLOWED_COUNTRIES}
+          options={ALLOWED_COUNTRY_NAMES}
         />
         <ControlledTextField
           {...createProps('billingPostalCode')}

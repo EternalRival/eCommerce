@@ -5,7 +5,7 @@ import { createContentTypeHeader } from './create-content-type-header';
 import type { CustomerSignInResult, MyCustomerSignIn } from '../model';
 
 // https://docs.commercetools.com/api/projects/me-profile#authenticate-sign-in-customer
-export async function myCustomerSignIn(token: string, signInDto: MyCustomerSignIn): Promise<CustomerSignInResult> {
+export async function signInCustomer(token: string, signInDto: MyCustomerSignIn): Promise<CustomerSignInResult> {
   return httpClient.api
     .post(`/${CTP_PROJECT_KEY}/me/login`, myCustomerSignInSchema.parse(signInDto), {
       headers: {
