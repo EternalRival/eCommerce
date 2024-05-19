@@ -1,29 +1,39 @@
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 import { Controller } from 'react-hook-form';
 
-import { baseTextFieldProps } from '../model';
+import { dateFormat } from '~/shared/lib/dayjs';
 
+import type { TextFieldProps } from '@mui/material/TextField';
 import type { ReactNode } from 'react';
-import type { ControlledTextFieldProps } from '../model';
+import type { Control, FieldValues, Path } from 'react-hook-form';
+import type { FCProps } from '~/shared/model/types';
 
-export function ControlledDatePicker<T extends Dict<unknown>>({
-  name,
-  control,
-  textFieldProps,
-}: ControlledTextFieldProps<T>): ReactNode {
-  const props = { ...baseTextFieldProps, ...textFieldProps };
+type Props<T extends FieldValues> = FCProps<{
+  control: Control<T>;
+  name: Path<T>;
+  fieldProps?: Omit<TextFieldProps, 'name'>;
+}>;
 
+export function ControlledDatePicker<T extends FieldValues>({ name, control, fieldProps }: Props<T>): ReactNode {
   return (
     <Controller
       name={name}
       control={control}
-      render={({ field, fieldState: { error, invalid } }) => (
+      render={({ field: { value, onChange, ...field }, fieldState: { error, invalid } }) => (
         <DatePicker
           {...field}
           closeOnSelect
+          format={dateFormat}
+          value={dayjs(value)}
+          onChange={(date) => void onChange(date?.format(dateFormat) ?? null)}
           slotProps={{
             textField: {
-              ...props,
+              required: true,
+              size: 'small',
+              fullWidth: true,
+              margin: 'dense',
+              ...fieldProps,
               error: invalid,
               helperText: error?.message ?? ' ',
             },

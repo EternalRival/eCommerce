@@ -6,3 +6,5 @@ export const ALLOWED_COUNTRY_POSTCODES = [
 ].sort((a, b) => a.name.localeCompare(b.name));
 
 export const ALLOWED_COUNTRIES = ALLOWED_COUNTRY_POSTCODES.map(({ name }) => name);
+
+export type PostCodeEntity = (typeof ALLOWED_COUNTRY_POSTCODES)[number];

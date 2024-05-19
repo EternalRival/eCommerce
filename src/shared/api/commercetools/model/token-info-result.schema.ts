@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
-export const anonTokenInfoSchema = z.object({
+export const tokenInfoResultSchema = z.object({
   access_token: z.string(),
   token_type: z.string(),
   expires_in: z.number(),
   scope: z.string(),
 });
 
-export type AnonTokenInfo = z.infer<typeof anonTokenInfoSchema>;
+export type TokenInfoResult = z.infer<typeof tokenInfoResultSchema>;

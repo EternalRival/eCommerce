@@ -14,15 +14,21 @@ import type { FCPropsWC } from '~/shared/model/types';
 
 const optionalNullSchema = z.null().optional().default(null);
 
-const emptyTokenSchema = z
-  .object({ type: z.literal('empty'), access_token: optionalNullSchema, refresh_token: optionalNullSchema })
-  .strip();
-const anonymousTokenSchema = z
-  .object({ type: z.literal('anonymous'), access_token: z.string(), refresh_token: optionalNullSchema })
-  .strip();
-const customerTokenSchema = z
-  .object({ type: z.literal('customer'), access_token: z.string(), refresh_token: z.string() })
-  .strip();
+const emptyTokenSchema = z.object({
+  type: z.literal('empty'),
+  access_token: optionalNullSchema,
+  refresh_token: optionalNullSchema,
+});
+const anonymousTokenSchema = z.object({
+  type: z.literal('anonymous'),
+  access_token: z.string(),
+  refresh_token: optionalNullSchema,
+});
+const customerTokenSchema = z.object({
+  type: z.literal('customer'),
+  access_token: z.string(),
+  refresh_token: z.string(),
+});
 const stateSchema = z.discriminatedUnion('type', [emptyTokenSchema, anonymousTokenSchema, customerTokenSchema]);
 
 type State = z.infer<typeof stateSchema>;
@@ -85,3 +91,5 @@ export function AuthStoreProvider({ children, ...props }: FCPropsWC<ComponentPro
 }
 
 export const useAuthStore = useStore;
+
+export type AuthStateByType<T extends State['type']> = Extract<State, { type: T }>;

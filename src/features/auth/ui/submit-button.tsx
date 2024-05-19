@@ -13,7 +13,7 @@ export function SubmitButton({ isPending }: Props): ReactNode {
       variant="contained"
       type="submit"
       disabled={isPending}
-      className="my-4"
+      className="my-2"
     >
       Submit
       {isPending && (
