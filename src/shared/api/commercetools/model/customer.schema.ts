@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { baseAddressSchema } from './base-address.schema';
+
 const string = z.string();
 const number = z.number();
 const boolean = z.boolean();
@@ -25,7 +27,7 @@ export const customerSchema = z.object({
   dateOfBirth: string.date().optional(),
   companyName: string.optional(),
   vatId: string.optional(),
-  addresses: unknown,
+  addresses: z.array(baseAddressSchema),
   defaultShippingAddressId: string.optional(),
   shippingAddressId: z.array(string).optional(),
   defaultBillingAddressId: string.optional(),

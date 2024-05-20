@@ -42,8 +42,8 @@ export function useSignUpForm(): {
     resolver: zodResolver(signUpDtoSchema),
     mode: 'onChange',
     defaultValues: {
-      email: 'customer@example.com',
-      password: '!Q1qqqqq',
+      email: '',
+      password: '',
       firstName: '',
       lastName: '',
       dateOfBirth: dayjs().format(dateFormat),

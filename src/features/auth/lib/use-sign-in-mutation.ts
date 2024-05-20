@@ -19,23 +19,22 @@ type MutationFnReturn = [Omit<AuthStateByType<'customer'>, 'type'>, CustomerSign
 
 export function useSignInMutation(): UseSignInMutationReturn {
   const authStore = useAuthStore((store) => store);
-  const isCustomer = authStore.type === 'customer';
-
   const customerStore = useCustomerStore((store) => store);
 
   const { isPending, mutate } = useMutation<MutationFnReturn, Error, SignInDto>({
     async mutationFn(signInDto) {
-      const customerToken = isCustomer
-        ? authStore
-        : await getTokenInfoByCredentials({ username: signInDto.email, password: signInDto.password });
-      const customerSignInResult = await signInCustomer(customerToken.access_token, signInDto);
+      const customerToken = await getTokenInfoByCredentials({
+        username: signInDto.email,
+        password: signInDto.password,
+      });
+      const signInResult = await signInCustomer(customerToken.access_token, signInDto);
 
-      return [customerToken, customerSignInResult];
+      return [customerToken, signInResult];
     },
-    async onSuccess([customerToken, customerSignInResult]) {
+    async onSuccess([customerToken, signInResult]) {
       toast.success('Successful sign in');
       authStore.setCustomerToken(customerToken);
-      customerStore.setCustomer(customerSignInResult.customer);
+      customerStore.setCustomer(signInResult.customer);
     },
     onError: toastifyError,
   });

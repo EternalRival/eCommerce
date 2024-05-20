@@ -29,7 +29,7 @@ function ProfileButtonsSkeleton({ arrayLength }: FCProps<{ arrayLength: number }
 }
 
 export function ProfileButtons(): ReactNode {
-  const auth = useAuthStore(({ type }) => ({ isPending: type === 'empty', isAnonymous: type === 'anonymous' }));
+  const auth = useAuthStore(({ type }) => ({ isPending: type === 'empty', isGuest: type === 'guest' }));
   const signOut = useSignOut();
   const router = useRouter();
 
@@ -43,12 +43,12 @@ export function ProfileButtons(): ReactNode {
     ['Profile', createNavigate(Route.PROFILE), AccountCircleIcon],
     ['Sign out', signOut, LogoutIcon],
   ] as const;
-  const anonymousButtonsProps = [
+  const guestButtonsProps = [
     ['Sign up', createNavigate(Route.AUTH_SIGN_UP), PersonAddIcon],
     ['Sign in', createNavigate(Route.AUTH_SIGN_IN), LoginIcon],
   ] as const;
 
-  return (auth.isAnonymous ? anonymousButtonsProps : customerButtonsProps).map(([title, onClick, Icon]) => (
+  return (auth.isGuest ? guestButtonsProps : customerButtonsProps).map(([title, onClick, Icon]) => (
     <Tooltip
       key={title}
       title={title}
