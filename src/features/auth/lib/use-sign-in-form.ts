@@ -15,7 +15,7 @@ export function useSignInForm(): {
   const { control, handleSubmit } = useForm<SignInDto>({
     resolver: zodResolver(signInDtoSchema),
     mode: 'onChange',
-    defaultValues: { email: 'customer@example.com', password: '!Q1qqqqq' },
+    defaultValues: { email: '', password: '' },
   });
 
   return { createProps: createFieldPropsFactory(control), handleSubmit };

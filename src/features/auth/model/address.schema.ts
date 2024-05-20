@@ -1,12 +1,12 @@
 import { z } from 'zod';
 
-import { assertPostCode, isAllowedCountry } from '~/shared/api/commercetools';
+import { assertPostCode, isAllowedCountryName } from '~/shared/api/commercetools';
 
 import { nameSchema } from './name.schema';
 
 export const shippingAddressSchema = z
   .object({
-    shippingCountry: z.string().refine(isAllowedCountry, 'Must be one of the proposed countries'),
+    shippingCountry: z.string().refine(isAllowedCountryName, 'Must be one of the proposed countries'),
     shippingPostalCode: z.string(),
     shippingCity: nameSchema,
     shippingStreet: z.string().min(1, 'Must contain at least one character'),
@@ -24,7 +24,7 @@ export const shippingAddressSchema = z
 
 export const billingAddressSchema = z
   .object({
-    billingCountry: z.string().refine(isAllowedCountry, 'Must be one of the proposed countries'),
+    billingCountry: z.string().refine(isAllowedCountryName, 'Must be one of the proposed countries'),
     billingPostalCode: z.string(),
     billingCity: nameSchema,
     billingStreet: z.string().min(1, 'Must contain at least one character'),

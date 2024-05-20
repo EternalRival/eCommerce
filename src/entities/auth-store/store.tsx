@@ -19,8 +19,8 @@ const emptyTokenSchema = z.object({
   access_token: optionalNullSchema,
   refresh_token: optionalNullSchema,
 });
-const anonymousTokenSchema = z.object({
-  type: z.literal('anonymous'),
+const guestTokenSchema = z.object({
+  type: z.literal('guest'),
   access_token: z.string(),
   refresh_token: optionalNullSchema,
 });
@@ -29,14 +29,14 @@ const customerTokenSchema = z.object({
   access_token: z.string(),
   refresh_token: z.string(),
 });
-const stateSchema = z.discriminatedUnion('type', [emptyTokenSchema, anonymousTokenSchema, customerTokenSchema]);
+const stateSchema = z.discriminatedUnion('type', [emptyTokenSchema, guestTokenSchema, customerTokenSchema]);
 
 type State = z.infer<typeof stateSchema>;
 
 type Actions = {
   init: () => Promise<void>;
   reset: () => Promise<void>;
-  setAnonymousToken: (state: Pick<State, 'access_token'>) => void;
+  setGuestToken: (state: Pick<State, 'access_token'>) => void;
   setCustomerToken: (state: Pick<State, 'access_token' | 'refresh_token'>) => void;
 };
 
@@ -58,14 +58,14 @@ const [StoreProvider, useStore] = createZustandStore({
             ...EMPTY_STATE,
             async init(): Promise<void> {
               if (get().type === 'empty') {
-                get().setAnonymousToken(await getTokenInfo());
+                get().setGuestToken(await getTokenInfo());
               }
             },
             async reset(): Promise<void> {
               set(EMPTY_STATE);
               await get().init();
             },
-            setAnonymousToken: (state): void => void set(anonymousTokenSchema.parse({ ...state, type: 'anonymous' })),
+            setGuestToken: (state): void => void set(guestTokenSchema.parse({ ...state, type: 'guest' })),
             setCustomerToken: (state): void => void set(customerTokenSchema.parse({ ...state, type: 'customer' })),
           }),
           { name: wrapStorageKey('auth/token') }
