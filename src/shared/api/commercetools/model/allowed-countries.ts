@@ -3,6 +3,7 @@ export const ALLOWED_COUNTRIES = [
   { code: 'BY', label: 'Belarus', regex: /^\d{6}$/, format: 'NNNNNN' },
   { code: 'UA', label: 'Ukraine', regex: /^\d{5}$/, format: 'NNNNN' },
   { code: 'KZ', label: 'Kazakhstan', regex: /^\d{6}$/, format: 'NNNNNN' },
+  { code: 'PL', label: 'Poland', regex: /^\d{2}-\d{3}$/, format: 'NN-NNN' },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
 export const ALLOWED_COUNTRY_NAMES = ALLOWED_COUNTRIES.map(({ label }) => label);
