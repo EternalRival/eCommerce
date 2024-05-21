@@ -8,6 +8,7 @@ export { httpClient } from './http-client';
 export { myCustomerDraftSchema, type MyCustomerDraft } from './my-customer-draft.schema';
 export { myCustomerSignInSchema, type MyCustomerSignIn } from './my-customer-sign-in.schema';
 export { myCustomerUpdateActionSchema, type MyCustomerUpdateAction } from './my-customer-update-action.schema';
+export type { Scope, StoreScope } from './scope.type';
 export {
   tokenInfoByCredentialsResultSchema,
   type TokenInfoByCredentialsResult,
