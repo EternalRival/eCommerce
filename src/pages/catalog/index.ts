@@ -1,1 +1,1 @@
-export { CatalogPage, getServerSideProps } from './ui';
+export { CatalogPage } from './ui';
