@@ -1,6 +1,12 @@
 import { z } from 'zod';
 
-import { CTP_BASIC_AUTH, CTP_PROJECT_KEY, httpClient, tokenInfoByCredentialsResultSchema } from '../model';
+import {
+  CTP_BASIC_AUTH,
+  CTP_PROJECT_KEY,
+  customerTokenScopes,
+  httpClient,
+  tokenInfoByCredentialsResultSchema,
+} from '../model';
 import { createContentTypeHeader } from './create-content-type-header';
 import { createScope } from './create-scope';
 
@@ -23,7 +29,7 @@ export async function getTokenInfoByCredentials(credentials: Credentials): Promi
       {
         grant_type: 'password',
         ...credentialsSchema.parse(credentials),
-        scope: createScope(['manage_my_profile']), // ? добавить необходимое, убрать лишнее
+        scope: createScope(customerTokenScopes),
       },
       {
         headers: createContentTypeHeader('urlencoded'),

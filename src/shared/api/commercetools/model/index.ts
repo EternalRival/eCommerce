@@ -5,11 +5,14 @@ export { customerSignInResultSchema } from './customer-sign-in-result.schema';
 export type { CustomerSignInResult } from './customer-sign-in-result.schema';
 export { customerSchema, type Customer } from './customer.schema';
 export { httpClient } from './http-client';
+export type { Image } from './image.schema';
 export { myCustomerDraftSchema, type MyCustomerDraft } from './my-customer-draft.schema';
 export { myCustomerSignInSchema, type MyCustomerSignIn } from './my-customer-sign-in.schema';
 export { myCustomerUpdateActionSchema, type MyCustomerUpdateAction } from './my-customer-update-action.schema';
 export { pagedQueryResultSchema, type PagedQueryResult } from './paged-query-result.schema';
+export type { ProductProjection } from './product-projection-schema';
 export type { Scope, StoreScope } from './scope.type';
+export { customerTokenScopes, guestTokenScopes } from './scopes';
 export {
   tokenInfoByCredentialsResultSchema,
   type TokenInfoByCredentialsResult,

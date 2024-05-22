@@ -9,22 +9,20 @@ import { ToastProvider } from './toast.provider';
 import type { AppProps } from 'next/app';
 import type { ReactNode } from 'react';
 import type { FCPropsWC } from '~/shared/model/types';
-import type { DehydratedStateProps } from './query.provider';
+import type { PageProps } from '../model';
 
-type Props = FCPropsWC<{ appProps: AppProps<DehydratedStateProps> }>;
-
-export function Providers({ children, appProps }: Props): ReactNode {
+export function Providers<T>({ children, appProps }: FCPropsWC<{ appProps: AppProps<PageProps<T>> }>): ReactNode {
   const { pageProps } = appProps;
 
   return (
-    <QueryProvider dehydratedState={pageProps.dehydratedState}>
-      <AuthStoreProvider>
-        <CustomerStoreProvider>
-          <MuiProvider {...{ appProps, theme }}>
-            <ToastProvider>{children}</ToastProvider>
-          </MuiProvider>
-        </CustomerStoreProvider>
-      </AuthStoreProvider>
-    </QueryProvider>
+    <ToastProvider>
+      <QueryProvider dehydratedState={pageProps.dehydratedState}>
+        <AuthStoreProvider>
+          <CustomerStoreProvider>
+            <MuiProvider {...{ appProps, theme }}>{children}</MuiProvider>
+          </CustomerStoreProvider>
+        </AuthStoreProvider>
+      </QueryProvider>
+    </ToastProvider>
   );
 }

@@ -7,9 +7,9 @@ import { siteTitle } from '~/shared/model/constants';
 
 import type { AppProps } from 'next/app';
 import type { ReactNode } from 'react';
-import type { DehydratedStateProps } from '~/_app';
+import type { PageProps } from '~/_app/model';
 
-export default function App<T>(appProps: AppProps<T & DehydratedStateProps>): ReactNode {
+export default function App<T>(appProps: AppProps<PageProps<T>>): ReactNode {
   const { Component, pageProps } = appProps;
 
   return (
