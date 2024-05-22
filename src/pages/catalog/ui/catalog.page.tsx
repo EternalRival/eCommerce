@@ -1,6 +1,8 @@
 import { Box } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
+import { Catalog } from '~/features/catalog';
+
 import type { ReactNode } from 'react';
 
 export function CatalogPage(): ReactNode {
@@ -14,11 +16,8 @@ export function CatalogPage(): ReactNode {
         Catalog Page
       </Typography>
 
-      <Box
-        component="pre"
-        className="ring"
-      >
-        123
+      <Box>
+        <Catalog />
       </Box>
     </>
   );
