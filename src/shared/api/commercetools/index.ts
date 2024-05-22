@@ -1,6 +1,7 @@
 export {
   assertPostCode,
   findCountryByLabel,
+  getPagedQueryResult,
   getTokenInfo,
   getTokenInfoByCredentials,
   isAllowedCountryName,
