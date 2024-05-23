@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '~/entities/auth-store';
 import { PageSpinner } from '~/entities/page-spinner';
 import { getCatalog } from '~/shared/api/commercetools';
+import { QueryKey } from '~/shared/lib/tanstack-query';
 
 import { ProductCard } from './product-card';
 
@@ -13,7 +14,7 @@ export function Catalog(): ReactNode {
   const { token } = useAuthStore((store) => ({ token: store.access_token }));
 
   const { data, isPending } = useQuery({
-    queryKey: ['catalog', token],
+    queryKey: [QueryKey.CATALOG, token],
     queryFn() {
       if (token === null) {
         return null;

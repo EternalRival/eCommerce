@@ -1,0 +1,20 @@
+{
+  "ignore": {
+    "files": [
+      "/home/er/projects/e-commerce/commitlint.config.ts",
+      "/home/er/projects/e-commerce/lint-staged.config.mjs",
+      "/home/er/projects/e-commerce/pages/_app.tsx",
+      "/home/er/projects/e-commerce/pages/_document.tsx",
+      "/home/er/projects/e-commerce/pages/404.tsx",
+      "/home/er/projects/e-commerce/pages/auth/sign-in/index.tsx",
+      "/home/er/projects/e-commerce/pages/auth/sign-up/index.tsx",
+      "/home/er/projects/e-commerce/pages/catalog/index.tsx",
+      "/home/er/projects/e-commerce/pages/detailed-product/index.tsx",
+      "/home/er/projects/e-commerce/pages/index.tsx",
+      "/home/er/projects/e-commerce/pages/profile/index.tsx",
+      "/home/er/projects/e-commerce/stylelint.config.ts",
+      "/home/er/projects/e-commerce/tailwind.config.ts",
+      "/home/er/projects/e-commerce/vitest.config.mts"
+    ]
+  }
+}
