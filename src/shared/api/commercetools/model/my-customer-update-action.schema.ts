@@ -1,8 +1,7 @@
 import { z } from 'zod';
 
-import { jsonSchema } from '~/shared/lib/zod';
-
 import { baseAddressSchema } from './base-address.schema';
+import { localeSchema } from './locale.schema';
 
 export const myCustomerUpdateActionSchema = z.union([
   z.object({
@@ -16,18 +15,6 @@ export const myCustomerUpdateActionSchema = z.union([
   z.object({
     action: z.literal('setLastName'),
     lastName: z.string().optional(),
-  }),
-  z.object({
-    action: z.literal('setMiddleName'),
-    middleName: z.string().optional(),
-  }),
-  z.object({
-    action: z.literal('setTitle'),
-    title: z.string().optional(),
-  }),
-  z.object({
-    action: z.literal('setSalutation'),
-    salutation: z.string().optional(),
   }),
   z.object({
     action: z.literal('addAddress'),
@@ -100,32 +87,12 @@ export const myCustomerUpdateActionSchema = z.union([
     addressKey: z.string().optional(),
   }),
   z.object({
-    action: z.literal('setCompanyName'),
-    companyName: z.string().optional(),
-  }),
-  z.object({
     action: z.literal('setDateOfBirth'),
-    dateOfBirth: z.string().optional(),
-  }),
-  z.object({
-    action: z.literal('setVatId'),
-    vatId: z.string().optional(),
-  }),
-  z.object({
-    action: z.literal('setCustomType'),
-    type: z
-      .union([z.object({ id: z.string(), typeId: z.string() }), z.object({ key: z.string(), typeId: z.string() })])
-      .optional(),
-    fields: jsonSchema.optional(),
-  }),
-  z.object({
-    action: z.literal('setCustomField'),
-    name: z.string(),
-    value: z.unknown().optional(),
+    dateOfBirth: z.string().date().optional(),
   }),
   z.object({
     action: z.literal('setLocale'),
-    locale: z.string().optional(),
+    locale: localeSchema.optional(),
   }),
 ]);
 

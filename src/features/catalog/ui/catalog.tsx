@@ -1,9 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
 import { Stack } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 
 import { useAuthStore } from '~/entities/auth-store';
 import { PageSpinner } from '~/entities/page-spinner';
-import { getPagedQueryResult } from '~/shared/api/commercetools';
+import { getCatalog } from '~/shared/api/commercetools';
 
 import { ProductCard } from './product-card';
 
@@ -19,7 +19,7 @@ export function Catalog(): ReactNode {
         return null;
       }
 
-      return getPagedQueryResult(token);
+      return getCatalog(token);
     },
   });
 
@@ -29,7 +29,7 @@ export function Catalog(): ReactNode {
 
   return (
     <Stack className="flex-row flex-wrap justify-center gap-8">
-      {data?.results.map((result) => (
+      {data?.data.productProjectionSearch.results.map((result) => (
         <ProductCard
           key={result.id}
           productProjection={result}

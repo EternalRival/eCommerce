@@ -1,48 +1,67 @@
-import { Card, CardContent, CardMedia, Chip, Typography } from '@mui/material';
-
-import { useLocaleStore } from '~/entities/locale-store';
+import { Card, CardContent, CardMedia, Chip, Paper, Stack, Typography } from '@mui/material';
+import clsx from 'clsx';
 
 import type { ReactNode } from 'react';
-import type { Price, ProductProjection } from '~/shared/api/commercetools';
+import type { CatalogQueryResult } from '~/shared/api/commercetools';
 import type { FCPropsWC } from '~/shared/model/types';
 
-function PriceChip({ value }: Price): ReactNode {
-  const priceValue = (value.centAmount / 10 ** value.fractionDigits).toString();
-  const currency = value.currencyCode;
+type ProductProjection = CatalogQueryResult['data']['productProjectionSearch']['results'][number];
 
-  return <Chip label={`${priceValue} ${currency}`} />;
-}
+type BaseMoney = NonNullable<ProductProjection['masterVariant']['price']>['value'];
 
 export function ProductCard({ productProjection }: FCPropsWC<{ productProjection: ProductProjection }>): ReactNode {
-  const localeStore = useLocaleStore((store) => store);
-  const name = productProjection.name[localeStore.locale];
-  const description = productProjection.description?.[localeStore.locale];
-  const image = productProjection.masterVariant.images?.find(({ url }) => Boolean(url));
-  const price = productProjection.masterVariant.prices?.find(({ country }) => country === localeStore.country);
+  const { name, description, masterVariant } = productProjection;
+  const { images, price } = masterVariant;
+  const image = images.find(({ url }) => Boolean(url));
+  const priceValue = price?.value;
+  const discountedValue = price?.discounted?.value;
+
+  const createPriceLabel = ({ centAmount, currencyCode, fractionDigits }: BaseMoney): string => {
+    const currencyMap = { USD: '$', EUR: '€', GBP: '£' } as const;
+
+    return `${currencyMap[currencyCode]}${(centAmount / 10 ** fractionDigits).toString()}`;
+  };
 
   // ? Image из next/image совместимо с CardMedia?
 
   return (
     <Card className="relative h-[30rem] w-80">
-      <CardContent>
-        <CardMedia
-          className="h-48 w-auto bg-contain"
-          image={image?.url}
-          title={image?.label}
-        />
-        <Typography
-          gutterBottom
-          variant="h6"
-        >
-          {name}
-        </Typography>
+      <CardContent
+        component={Stack}
+        spacing={1.5}
+      >
+        <Paper>
+          <CardMedia
+            className="h-48 w-auto bg-contain"
+            image={image?.url}
+          />
+        </Paper>
+        <Typography variant="h6">{name}</Typography>
         <Typography
           variant="body2"
           className="line-clamp-5 text-wrap"
         >
           {description}
         </Typography>
-        {price && <PriceChip {...price} />}
+        <Stack
+          direction="row"
+          justifyContent="center"
+          spacing={1.5}
+        >
+          {discountedValue && (
+            <Chip
+              color="primary"
+              label={createPriceLabel(discountedValue)}
+            />
+          )}
+          {priceValue && (
+            <Chip
+              color="primary"
+              className={clsx(discountedValue && 'line-through opacity-60')}
+              label={createPriceLabel(priceValue)}
+            />
+          )}
+        </Stack>
       </CardContent>
     </Card>
   );

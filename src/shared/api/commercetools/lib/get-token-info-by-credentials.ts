@@ -1,13 +1,6 @@
 import { z } from 'zod';
 
-import {
-  CTP_BASIC_AUTH,
-  CTP_PROJECT_KEY,
-  customerTokenScopes,
-  httpClient,
-  tokenInfoByCredentialsResultSchema,
-} from '../model';
-import { createContentTypeHeader } from './create-content-type-header';
+import { $http, CTP_PROJECT_KEY, customerTokenScopes, tokenInfoByCredentialsResultSchema } from '../model';
 import { createScope } from './create-scope';
 
 import type { TokenInfoByCredentialsResult } from '../model';
@@ -23,18 +16,11 @@ const credentialsSchema = z.object({
 type Credentials = z.infer<typeof credentialsSchema>;
 
 export async function getTokenInfoByCredentials(credentials: Credentials): Promise<TokenInfoByCredentialsResult> {
-  return httpClient.auth
-    .post(
-      `/oauth/${CTP_PROJECT_KEY}/customers/token`,
-      {
-        grant_type: 'password',
-        ...credentialsSchema.parse(credentials),
-        scope: createScope(customerTokenScopes),
-      },
-      {
-        headers: createContentTypeHeader('urlencoded'),
-        auth: CTP_BASIC_AUTH,
-      }
-    )
+  return $http.auth
+    .post(`/oauth/${CTP_PROJECT_KEY}/customers/token`, {
+      grant_type: 'password',
+      ...credentialsSchema.parse(credentials),
+      scope: createScope(customerTokenScopes),
+    })
     .then(({ data }) => tokenInfoByCredentialsResultSchema.parse(data));
 }
