@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { baseAddressSchema } from './base-address.schema';
-import { localeSchema } from './locale.schema';
+import { localeSchema } from './project-settings.schema';
 
 export const myCustomerUpdateActionSchema = z.union([
   z.object({
