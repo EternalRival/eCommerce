@@ -4,12 +4,9 @@ import Stack from '@mui/material/Stack';
 import { Header } from '~/widgets/header';
 
 import type { ReactNode } from 'react';
+import type { FCPropsWC } from '~/shared/model/types';
 
-type Props = Readonly<{
-  children: ReactNode;
-}>;
-
-export function Layout({ children }: Props): ReactNode {
+export function Layout({ children }: FCPropsWC): ReactNode {
   return (
     <Stack className="min-h-dvh">
       <Header />
