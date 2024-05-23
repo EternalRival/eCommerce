@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { countryCodeSchema } from './country-code.schema';
+import { countryCodeSchema } from './project-settings.schema';
 
 export const baseAddressSchema = z.object({
   id: z.string().optional(),

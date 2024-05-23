@@ -1,8 +1,17 @@
+import { postcodeValidator } from 'postcode-validator';
 import { z } from 'zod';
 
-import { assertPostCode, isAllowedCountryName } from '~/shared/api/commercetools';
+import { findCountryByLabel, isAllowedCountryName } from '~/shared/api/commercetools';
 
 import { nameSchema } from './name.schema';
+
+function assertPostCode(countryLabel: string, postCode: string): void {
+  const country = findCountryByLabel(countryLabel);
+
+  if (!postcodeValidator(postCode, country.code)) {
+    throw new Error(`Post code must follow country format (e.g. ${country.format})`);
+  }
+}
 
 export const shippingAddressSchema = z
   .object({

@@ -1,4 +1,3 @@
-export { assertPostCode } from './assert-post-code';
 export { findCountryByLabel } from './find-country-by-label';
 export { getCatalog, type CatalogQueryResult } from './get-catalog';
 export { getTokenInfo } from './get-token-info';
