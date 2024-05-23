@@ -1,6 +1,6 @@
 export { assertPostCode } from './assert-post-code';
 export { findCountryByLabel } from './find-country-by-label';
-export { getPagedQueryResult } from './get-paged-query-result';
+export { getCatalog, type CatalogQueryResult } from './get-catalog';
 export { getTokenInfo } from './get-token-info';
 export { getTokenInfoByCredentials } from './get-token-info-by-credentials';
 export { isAllowedCountryName } from './is-allowed-country-name';

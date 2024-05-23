@@ -1,21 +1,22 @@
-export { pagedQueryResult } from './__mocks__';
+export { mockPagedQueryResult as pagedQueryResult } from './__mocks__';
 export {
   assertPostCode,
   findCountryByLabel,
-  getPagedQueryResult,
+  getCatalog,
   getTokenInfo,
   getTokenInfoByCredentials,
   isAllowedCountryName,
   signInCustomer,
   signUpCustomer,
   updateCustomer,
+  type CatalogQueryResult,
 } from './lib';
 export {
   ALLOWED_COUNTRIES,
   ALLOWED_COUNTRY_NAMES,
   countryCodeSchema,
   currencyCodeSchema,
-  httpClient,
+  $http as httpClient,
   localeSchema,
   type BaseAddress,
   type Country,
@@ -23,7 +24,5 @@ export {
   type CustomerSignInResult,
   type Image,
   type MyCustomerDraft,
-  type Price,
   type UpdateCustomerDto,
 } from './model';
-export type { ProductProjection } from './model';
