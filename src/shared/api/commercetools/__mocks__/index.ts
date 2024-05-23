@@ -1,1 +1,1 @@
-export { default as pagedQueryResult } from './paged-query-result.json';
+export { default as mockPagedQueryResult } from './mock-paged-query-result.json';

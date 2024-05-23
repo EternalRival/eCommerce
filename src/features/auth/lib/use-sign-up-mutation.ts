@@ -30,7 +30,7 @@ function createMyCustomerDraft(signUpDto: SignUpDto): MyCustomerDraft {
     ...{ email, password, dateOfBirth, firstName, lastName },
     addresses: [
       {
-        country: findCountryByLabel(signUpDto.shippingCountry)?.code ?? '',
+        country: findCountryByLabel(signUpDto.shippingCountry).code,
         postalCode: signUpDto.shippingPostalCode,
         city: signUpDto.shippingCity,
         streetName: signUpDto.shippingStreet,
@@ -40,7 +40,7 @@ function createMyCustomerDraft(signUpDto: SignUpDto): MyCustomerDraft {
 
   if (!isSingleAddressMode) {
     myCustomerDraft.addresses.push({
-      country: findCountryByLabel(signUpDto.billingCountry)?.code ?? '',
+      country: findCountryByLabel(signUpDto.billingCountry).code,
       postalCode: signUpDto.billingPostalCode,
       city: signUpDto.billingCity,
       streetName: signUpDto.billingStreet,
