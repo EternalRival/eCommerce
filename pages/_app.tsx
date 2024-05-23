@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { ErrorBoundary } from 'react-error-boundary';
 import 'react-toastify/dist/ReactToastify.min.css';
 import '~/_app/globals.css';
 
@@ -13,17 +14,19 @@ export default function App<T>(appProps: AppProps<PageProps<T>>): ReactNode {
   const { Component, pageProps } = appProps;
 
   return (
-    <Providers appProps={appProps}>
-      <Head>
-        <meta
-          name="viewport"
-          content="initial-scale=1, width=device-width"
-        />
-        <title>{siteTitle}</title>
-      </Head>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </Providers>
+    <ErrorBoundary fallback={<div>Something went wrong</div>}>
+      <Providers appProps={appProps}>
+        <Head>
+          <meta
+            name="viewport"
+            content="initial-scale=1, width=device-width"
+          />
+          <title>{siteTitle}</title>
+        </Head>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </Providers>
+    </ErrorBoundary>
   );
 }
