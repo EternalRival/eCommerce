@@ -1,13 +1,13 @@
 export {
   findCountryByLabel,
-  getCatalog,
   getTokenInfo,
   getTokenInfoByCredentials,
   isAllowedCountryName,
+  queryProductProjectionSearch,
   signInCustomer,
   signUpCustomer,
   updateCustomer,
-  type CatalogQueryResult,
+  type QueryProductProjectionSearchResult,
 } from './lib';
 export {
   ALLOWED_COUNTRY_NAMES,

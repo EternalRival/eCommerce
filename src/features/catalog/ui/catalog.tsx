@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { useAuthStore } from '~/entities/auth-store';
 import { PageSpinner } from '~/entities/page-spinner';
-import { getCatalog } from '~/shared/api/commercetools';
+import { queryProductProjectionSearch } from '~/shared/api/commercetools';
 import { QueryKey } from '~/shared/lib/tanstack-query';
 
 import { ProductCard } from './product-card';
@@ -20,7 +20,7 @@ export function Catalog(): ReactNode {
         return null;
       }
 
-      return getCatalog(token);
+      return queryProductProjectionSearch(token);
     },
   });
 
