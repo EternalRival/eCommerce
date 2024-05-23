@@ -1,18 +1,29 @@
-import { Card, CardContent, CardMedia, Typography } from '@mui/material';
+import { Card, CardContent, CardMedia, Chip, Typography } from '@mui/material';
+
+import { useLocaleStore } from '~/entities/locale-store';
 
 import type { ReactNode } from 'react';
-import type { ProductProjection } from '~/shared/api/commercetools';
+import type { Price, ProductProjection } from '~/shared/api/commercetools';
 import type { FCPropsWC } from '~/shared/model/types';
 
-export function ProductCard({ productProjection }: FCPropsWC<{ productProjection: ProductProjection }>): ReactNode {
-  const name = productProjection.name['en-US'];
-  const description = productProjection.description?.['en-US'];
-  const image = productProjection.masterVariant.images?.find(({ url }) => Boolean(url));
+function PriceChip({ value }: Price): ReactNode {
+  const priceValue = (value.centAmount / 10 ** value.fractionDigits).toString();
+  const currency = value.currencyCode;
 
-  // ? Image из next/image совместно с CardMedia?
+  return <Chip label={`${priceValue} ${currency}`} />;
+}
+
+export function ProductCard({ productProjection }: FCPropsWC<{ productProjection: ProductProjection }>): ReactNode {
+  const localeStore = useLocaleStore((store) => store);
+  const name = productProjection.name[localeStore.locale];
+  const description = productProjection.description?.[localeStore.locale];
+  const image = productProjection.masterVariant.images?.find(({ url }) => Boolean(url));
+  const price = productProjection.masterVariant.prices?.find(({ country }) => country === localeStore.country);
+
+  // ? Image из next/image совместимо с CardMedia?
 
   return (
-    <Card className="relative h-96 max-w-80">
+    <Card className="relative h-[30rem] w-80">
       <CardContent>
         <CardMedia
           className="h-48 w-auto bg-contain"
@@ -31,6 +42,7 @@ export function ProductCard({ productProjection }: FCPropsWC<{ productProjection
         >
           {description}
         </Typography>
+        {price && <PriceChip {...price} />}
       </CardContent>
     </Card>
   );

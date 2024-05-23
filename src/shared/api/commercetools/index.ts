@@ -13,13 +13,17 @@ export {
 export {
   ALLOWED_COUNTRIES,
   ALLOWED_COUNTRY_NAMES,
+  countryCodeSchema,
+  currencyCodeSchema,
   httpClient,
+  localeSchema,
   type BaseAddress,
   type Country,
-  type Image,
   type Customer,
   type CustomerSignInResult,
+  type Image,
   type MyCustomerDraft,
+  type Price,
   type UpdateCustomerDto,
 } from './model';
 export type { ProductProjection } from './model';
