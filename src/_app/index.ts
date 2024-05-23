@@ -1,3 +1,2 @@
-export { type PageProps, roboto, theme } from './model';
-export { Layout, MuiProvider, Providers, QueryProvider } from './ui';
-export type { DehydratedStateProps } from './ui';
+export { roboto, theme } from './model';
+export { Layout, Providers } from './ui';

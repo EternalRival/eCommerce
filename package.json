@@ -14,6 +14,7 @@
     "format": "prettier -luw .",
     "stylelint": "npm run ci:stylelint -- --fix src/**/*.css",
     "fix": "npm run lint && npm run stylelint && npm run format",
+    "typecheck": "tsc",
     "commitlint": "commitlint --edit",
     "lint-staged": "lint-staged",
     "test": "vitest",
