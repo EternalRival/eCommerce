@@ -1,5 +1,4 @@
 import { $http, CTP_PROJECT_KEY, customerSignInResultSchema, myCustomerSignInSchema } from '../model';
-import { createAuthorizationHeader } from './create-authorization-header';
 
 import type { CustomerSignInResult, MyCustomerSignIn } from '../model';
 
@@ -7,7 +6,7 @@ import type { CustomerSignInResult, MyCustomerSignIn } from '../model';
 export async function signInCustomer(token: string, signInDto: MyCustomerSignIn): Promise<CustomerSignInResult> {
   return $http.api
     .post(`/${CTP_PROJECT_KEY}/me/login`, myCustomerSignInSchema.parse(signInDto), {
-      headers: createAuthorizationHeader(token),
+      headers: { Authorization: `Bearer ${token}` },
     })
     .then(({ data }) => customerSignInResultSchema.parse(data));
 }
