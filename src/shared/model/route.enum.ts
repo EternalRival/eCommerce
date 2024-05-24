@@ -6,4 +6,5 @@ export const enum Route {
   CATALOG = '/catalog',
   CART = '/cart',
   ABOUT = '/about',
+  PRODUCT = '/product',
 }

@@ -1,4 +1,5 @@
-import { Collapse, Divider } from '@mui/material';
+import Collapse from '@mui/material/Collapse';
+import Divider from '@mui/material/Divider';
 
 import { ALLOWED_COUNTRY_NAMES } from '~/shared/api/commercetools';
 
