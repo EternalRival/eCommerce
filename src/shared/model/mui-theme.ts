@@ -1,13 +1,8 @@
 import { createTheme } from '@mui/material';
-import { Roboto } from 'next/font/google';
 
-export const roboto = Roboto({
-  weight: ['300', '400', '500', '700'],
-  subsets: ['latin', 'cyrillic'],
-  display: 'swap',
-});
+import { roboto } from './next-fonts';
 
-export const theme = createTheme({
+export const muiTheme = createTheme({
   palette: {
     primary: {
       main: '#2E628C',
