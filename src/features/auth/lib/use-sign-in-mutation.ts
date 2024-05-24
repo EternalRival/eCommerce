@@ -3,11 +3,11 @@ import { toast } from 'react-toastify';
 
 import { useAuthStore } from '~/entities/auth-store';
 import { useCustomerStore } from '~/entities/customer-store';
-import { getTokenInfoByCredentials, signInCustomer } from '~/shared/api/commercetools';
+import { getTokenInfoByCredentials, mutateCustomerSignMeIn } from '~/shared/api/commercetools';
 import { toastifyError } from '~/shared/lib/react-toastify';
 
+import type { MutateCustomerSignMeInReturn } from '~/shared/api/commercetools';
 import type { AuthStateByType } from '~/entities/auth-store';
-import type { CustomerSignInResult } from '~/shared/api/commercetools';
 import type { SignInDto } from '../model';
 
 type UseSignInMutationReturn = {
@@ -15,7 +15,7 @@ type UseSignInMutationReturn = {
   signIn: (signInDto: SignInDto) => void;
 };
 
-type MutationFnReturn = [Omit<AuthStateByType<'customer'>, 'type'>, CustomerSignInResult];
+type MutationFnReturn = [Omit<AuthStateByType<'customer'>, 'type'>, MutateCustomerSignMeInReturn];
 
 export function useSignInMutation(): UseSignInMutationReturn {
   const authStore = useAuthStore((store) => store);
@@ -27,7 +27,8 @@ export function useSignInMutation(): UseSignInMutationReturn {
         username: signInDto.email,
         password: signInDto.password,
       });
-      const signInResult = await signInCustomer(customerToken.access_token, signInDto);
+
+      const signInResult = await mutateCustomerSignMeIn(customerToken.access_token, signInDto);
 
       return [customerToken, signInResult];
     },

@@ -2,10 +2,10 @@ import { Card, CardContent, CardMedia, Chip, Paper, Stack, Typography } from '@m
 import clsx from 'clsx';
 
 import type { ReactNode } from 'react';
-import type { QueryProductProjectionSearchResult } from '~/shared/api/commercetools';
+import type { QueryProductProjectionSearchReturn } from '~/shared/api/commercetools';
 import type { FCPropsWC } from '~/shared/model/types';
 
-type ProductProjection = QueryProductProjectionSearchResult['data']['productProjectionSearch']['results'][number];
+type ProductProjection = QueryProductProjectionSearchReturn['results'][number];
 
 type BaseMoney = NonNullable<ProductProjection['masterVariant']['price']>['value'];
 
