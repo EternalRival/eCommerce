@@ -1,4 +1,4 @@
-import { Card, CardContent, CardMedia, Chip, Paper, Stack, Typography } from '@mui/material';
+import { Card, CardContent, CardMedia, Paper, Stack, Tooltip, Typography } from '@mui/material';
 import clsx from 'clsx';
 
 import type { ReactNode } from 'react';
@@ -30,13 +30,29 @@ export function ProductCard({ productProjection }: FCPropsWC<{ productProjection
         component={Stack}
         spacing={1.5}
       >
-        <Paper>
-          <CardMedia
-            className="h-48 w-auto bg-contain"
-            image={image?.url}
-          />
-        </Paper>
-        <Typography variant="h6">{name}</Typography>
+        <Tooltip
+          title={name}
+          arrow
+        >
+          <Paper>
+            <CardMedia
+              className="h-48 w-auto bg-contain"
+              image={image?.url}
+            />
+          </Paper>
+        </Tooltip>
+        <Tooltip
+          title={name}
+          followCursor
+        >
+          <Typography
+            component="p"
+            variant="h6"
+            className="line-clamp-1 w-fit"
+          >
+            {name}
+          </Typography>
+        </Tooltip>
         <Typography
           variant="body2"
           className="line-clamp-5 text-wrap"
@@ -48,18 +64,28 @@ export function ProductCard({ productProjection }: FCPropsWC<{ productProjection
           justifyContent="center"
           spacing={1.5}
         >
-          {discountedValue && (
-            <Chip
-              color="primary"
-              label={createPriceLabel(discountedValue)}
-            />
-          )}
-          {priceValue && (
-            <Chip
-              color="primary"
-              className={clsx(discountedValue && 'line-through opacity-60')}
-              label={createPriceLabel(priceValue)}
-            />
+          {(!!discountedValue || !!priceValue) && (
+            <Stack
+              direction="row"
+              spacing={1}
+            >
+              {discountedValue && (
+                <Typography className="font-bold [text-shadow:0_0_1rem_lime,0_0_1rem_lime,0_0_1rem_lime]">
+                  {createPriceLabel(discountedValue)}
+                </Typography>
+              )}
+              {priceValue && (
+                <Typography
+                  variant={discountedValue && 'caption'}
+                  className={clsx(
+                    'font-medium',
+                    discountedValue && 'text-rose-500 line-through [text-shadow:0_0_.5rem_red]'
+                  )}
+                >
+                  {createPriceLabel(priceValue)}
+                </Typography>
+              )}
+            </Stack>
           )}
         </Stack>
       </CardContent>
