@@ -16,11 +16,7 @@ export function Catalog(): ReactNode {
   const { data, isPending } = useQuery({
     queryKey: [QueryKey.CATALOG, token],
     queryFn() {
-      if (token === null) {
-        return null;
-      }
-
-      return queryProductProjectionSearch(token);
+      return token === null ? null : queryProductProjectionSearch(token);
     },
   });
 
@@ -30,7 +26,7 @@ export function Catalog(): ReactNode {
 
   return (
     <Stack className="flex-row flex-wrap justify-center gap-8">
-      {data?.data.productProjectionSearch.results.map((result) => (
+      {data?.results.map((result) => (
         <ProductCard
           key={result.id}
           productProjection={result}

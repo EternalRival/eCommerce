@@ -3,16 +3,11 @@ export {
   getTokenInfo,
   getTokenInfoByCredentials,
   isAllowedCountryName,
+  mutateCustomerSignMeIn,
+  mutateCustomerSignMeUp,
   queryProductProjectionSearch,
-  signInCustomer,
-  signUpCustomer,
-  updateCustomer,
-  type QueryProductProjectionSearchResult,
+  type MutateCustomerSignMeInReturn,
+  type MutateCustomerSignMeUpReturn,
+  type QueryProductProjectionSearchReturn,
 } from './lib';
-export {
-  ALLOWED_COUNTRY_NAMES,
-  type Customer,
-  type CustomerSignInResult,
-  type MyCustomerDraft,
-  type UpdateCustomerDto,
-} from './model';
+export { ALLOWED_COUNTRY_NAMES } from './model';

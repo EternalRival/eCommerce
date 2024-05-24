@@ -7,14 +7,13 @@ import {
   findCountryByLabel,
   getTokenInfo,
   getTokenInfoByCredentials,
-  signInCustomer,
-  signUpCustomer,
-  updateCustomer,
+  mutateCustomerSignMeIn,
+  mutateCustomerSignMeUp,
 } from '~/shared/api/commercetools';
 import { toastifyError } from '~/shared/lib/react-toastify';
 
 import type { AuthStateByType } from '~/entities/auth-store';
-import type { Customer, CustomerSignInResult, MyCustomerDraft, UpdateCustomerDto } from '~/shared/api/commercetools';
+import type { MutateCustomerSignMeInReturn } from '~/shared/api/commercetools';
 import type { SignUpDto } from '../model';
 
 type UseSignUpMutationReturn = {
@@ -22,58 +21,52 @@ type UseSignUpMutationReturn = {
   signUp: (signUpDto: SignUpDto) => void;
 };
 
-type MutationFnReturn = [Omit<AuthStateByType<'customer'>, 'type'>, CustomerSignInResult];
+type MutationFnReturn = [Omit<AuthStateByType<'customer'>, 'type'>, MutateCustomerSignMeInReturn];
 
-function createMyCustomerDraft(signUpDto: SignUpDto): MyCustomerDraft {
-  const { email, password, dateOfBirth, firstName, lastName, isSingleAddressMode } = signUpDto;
-  const myCustomerDraft: MyCustomerDraft & Required<Pick<MyCustomerDraft, 'addresses'>> = {
-    ...{ email, password, dateOfBirth, firstName, lastName },
+type CustomerSignMeUpDraft = Parameters<typeof mutateCustomerSignMeUp>[1];
+
+function createCustomerSignMeUpDraft({
+  email,
+  password,
+  firstName,
+  lastName,
+  dateOfBirth,
+  ...addresses
+}: SignUpDto): CustomerSignMeUpDraft {
+  const [shippingAddressIndex, billingAddressIndex] = [0, addresses.isSingleAddressMode ? 0 : 1];
+
+  const customerSignMeUpDraft: CustomerSignMeUpDraft & Required<Pick<CustomerSignMeUpDraft, 'addresses'>> = {
+    ...{ email, password, firstName, lastName, dateOfBirth },
     addresses: [
       {
-        country: findCountryByLabel(signUpDto.shippingCountry).code,
-        postalCode: signUpDto.shippingPostalCode,
-        city: signUpDto.shippingCity,
-        streetName: signUpDto.shippingStreet,
+        country: findCountryByLabel(addresses.shippingCountry).code,
+        postalCode: addresses.shippingPostalCode,
+        city: addresses.shippingCity,
+        streetName: addresses.shippingStreet,
       },
     ],
+    shippingAddresses: [shippingAddressIndex],
+    billingAddresses: [billingAddressIndex],
   };
 
-  if (!isSingleAddressMode) {
-    myCustomerDraft.addresses.push({
-      country: findCountryByLabel(signUpDto.billingCountry).code,
-      postalCode: signUpDto.billingPostalCode,
-      city: signUpDto.billingCity,
-      streetName: signUpDto.billingStreet,
+  if (!addresses.isSingleAddressMode) {
+    customerSignMeUpDraft.addresses.push({
+      country: findCountryByLabel(addresses.billingCountry).code,
+      postalCode: addresses.billingPostalCode,
+      city: addresses.billingCity,
+      streetName: addresses.billingStreet,
     });
   }
 
-  return myCustomerDraft;
-}
-
-function createUpdateCustomerDto(
-  { addresses, version }: Customer,
-  { isSingleAddressMode, shippingIsDefault, billingIsDefault }: SignUpDto
-): UpdateCustomerDto {
-  const shippingAddressId = addresses[0]?.id;
-  const billingAddressId = isSingleAddressMode ? shippingAddressId : addresses[1]?.id;
-
-  const updateCustomerDto: UpdateCustomerDto = {
-    version,
-    actions: [
-      { action: 'addShippingAddressId', addressId: shippingAddressId },
-      { action: 'addBillingAddressId', addressId: billingAddressId },
-    ],
-  };
-
-  if (shippingIsDefault) {
-    updateCustomerDto.actions.push({ action: 'setDefaultShippingAddress', addressId: shippingAddressId });
+  if (addresses.shippingIsDefault) {
+    customerSignMeUpDraft.defaultShippingAddress = shippingAddressIndex;
   }
 
-  if (billingIsDefault) {
-    updateCustomerDto.actions.push({ action: 'setDefaultBillingAddress', addressId: billingAddressId });
+  if (addresses.billingIsDefault) {
+    customerSignMeUpDraft.defaultBillingAddress = billingAddressIndex;
   }
 
-  return updateCustomerDto;
+  return customerSignMeUpDraft;
 }
 
 export function useSignUpMutation(): UseSignUpMutationReturn {
@@ -82,30 +75,26 @@ export function useSignUpMutation(): UseSignUpMutationReturn {
 
   const { isPending, mutate } = useMutation<MutationFnReturn, Error, SignUpDto>({
     async mutationFn(signUpDto) {
+      const { email, password } = signUpDto;
+
       // get guest token
       const guestToken = authStore.type === 'guest' ? authStore : await getTokenInfo();
 
       // signup new customer
-      const signUpResult = await signUpCustomer(guestToken.access_token, createMyCustomerDraft(signUpDto));
+      await mutateCustomerSignMeUp(guestToken.access_token, createCustomerSignMeUpDraft(signUpDto));
 
       // get his token
-      const customerToken = await getTokenInfoByCredentials({
-        username: signUpDto.email,
-        password: signUpDto.password,
-      });
-
-      // set addresses
-      await updateCustomer(customerToken.access_token, createUpdateCustomerDto(signUpResult.customer, signUpDto));
+      const customerToken = await getTokenInfoByCredentials({ username: email, password });
 
       // get his data
-      const signInResult = await signInCustomer(customerToken.access_token, signUpDto);
+      const customerSignMeInResult = await mutateCustomerSignMeIn(customerToken.access_token, { email, password });
 
-      return [customerToken, signInResult];
+      return [customerToken, customerSignMeInResult];
     },
-    async onSuccess([customerToken, signInResult]) {
+    async onSuccess([customerToken, customerSignMeInResult]) {
       toast.success('Successful sign up');
       authStore.setCustomerToken(customerToken);
-      customerStore.setCustomer(signInResult.customer);
+      customerStore.setCustomer(customerSignMeInResult.customer);
     },
     onError: toastifyError,
   });
