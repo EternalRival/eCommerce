@@ -1,5 +1,14 @@
-import { Card, CardContent, CardMedia, Paper, Stack, Tooltip, Typography } from '@mui/material';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 import clsx from 'clsx';
+
+import { Route } from '~/shared/model/route.enum';
 
 import type { ReactNode } from 'react';
 import type { QueryProductProjectionSearchReturn } from '~/shared/api/commercetools';
@@ -16,6 +25,7 @@ type MediaProps = FCProps<{
 
 function Media({ name, image }: MediaProps): ReactNode {
   // ? Image из next/image совместимо с CardMedia?
+
   return (
     <Tooltip
       title={name}
@@ -116,12 +126,21 @@ function Prices({ discountedValue, priceValue }: PricesProps): ReactNode {
   );
 }
 
+type ViewDetailsProps = FCProps<{ id: ProductProjection['id'] }>;
+
+function ViewDetails({ id }: ViewDetailsProps): ReactNode {
+  return <Button href={`${Route.PRODUCT}/${id}`}>View Details</Button>;
+}
+
 export function ProductCard({ productProjection }: Props): ReactNode {
-  const { name, description, masterVariant } = productProjection;
+  const { id, name, description, masterVariant } = productProjection;
   const { images, price } = masterVariant;
 
   return (
-    <Card className="relative h-[30rem] w-80">
+    <Card
+      className="relative h-[30rem] w-80"
+      sx={{ ':hover': { boxShadow: 8 } }}
+    >
       <CardContent
         component={Stack}
         spacing={1.5}
@@ -139,6 +158,8 @@ export function ProductCard({ productProjection }: Props): ReactNode {
           priceValue={price?.value}
           discountedValue={price?.discounted?.value}
         />
+
+        <ViewDetails id={id} />
       </CardContent>
     </Card>
   );
