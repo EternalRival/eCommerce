@@ -1,8 +1,9 @@
 import { DocumentHeadTags, documentGetInitialProps } from '@mui/material-nextjs/v14-pagesRouter';
 import { Head, Html, Main, NextScript } from 'next/document';
 
-import { roboto, theme } from '~/_app';
 import { authorGithubUrl, deployUrl, siteTitle } from '~/shared/model/constants';
+import { muiTheme } from '~/shared/model/mui-theme';
+import { roboto } from '~/shared/model/next-fonts';
 
 import type { DocumentHeadTagsProps } from '@mui/material-nextjs/v14-pagesRouter';
 import type { DocumentContext, DocumentProps } from 'next/document';
@@ -47,7 +48,7 @@ export default function MyDocument(props: DocumentProps & DocumentHeadTagsProps)
       <Head>
         <meta
           name="theme-color"
-          content={theme.palette.primary.main}
+          content={muiTheme.palette.primary.main}
         />
         {createIconLinkTags(['shortcut icon', 'icon', 'apple-touch-icon'])}
         <meta
