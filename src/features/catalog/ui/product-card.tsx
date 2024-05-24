@@ -15,6 +15,7 @@ type MediaProps = FCProps<{
 }>;
 
 function Media({ name, image }: MediaProps): ReactNode {
+  // ? Image из next/image совместимо с CardMedia?
   return (
     <Tooltip
       title={name}
@@ -35,8 +36,6 @@ type NameProps = FCProps<{
 }>;
 
 function Name({ name }: NameProps): ReactNode {
-  // ? Image из next/image совместимо с CardMedia?
-
   return (
     <Tooltip
       title={name}
@@ -105,7 +104,7 @@ function Prices({ discountedValue, priceValue }: PricesProps): ReactNode {
             <Typography
               variant={discountedValue && 'caption'}
               color={discountedValue ? 'error.light' : 'primary'}
-              sx={{ textShadow: '0 0 .6rem' }}
+              sx={{ textShadow: discountedValue && '0 0 .6rem' }}
               className={clsx('font-medium', discountedValue && 'line-through')}
             >
               {createPriceLabel(priceValue)}
