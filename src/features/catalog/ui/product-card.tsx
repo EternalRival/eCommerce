@@ -126,14 +126,14 @@ function Prices({ discountedValue, priceValue }: PricesProps): ReactNode {
   );
 }
 
-type ViewDetailsProps = FCProps<{ id: ProductProjection['id'] }>;
+type ViewDetailsProps = FCProps<{ slug: ProductProjection['slug'] }>;
 
-function ViewDetails({ id }: ViewDetailsProps): ReactNode {
-  return <Button href={`${Route.PRODUCT}/${id}`}>View Details</Button>;
+function ViewDetails({ slug }: ViewDetailsProps): ReactNode {
+  return <Button href={`${Route.PRODUCT}/${slug}`}>View Details</Button>;
 }
 
 export function ProductCard({ productProjection }: Props): ReactNode {
-  const { id, name, description, masterVariant } = productProjection;
+  const { slug, name, description, masterVariant } = productProjection;
   const { images, price } = masterVariant;
 
   return (
@@ -159,7 +159,7 @@ export function ProductCard({ productProjection }: Props): ReactNode {
           discountedValue={price?.discounted?.value}
         />
 
-        <ViewDetails id={id} />
+        <ViewDetails slug={slug} />
       </CardContent>
     </Card>
   );
