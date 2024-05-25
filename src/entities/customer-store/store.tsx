@@ -16,8 +16,8 @@ const stateSchema = z.object({
 type State = z.infer<typeof stateSchema>;
 
 type Actions = {
-  setCustomer: (state: State) => void;
   reset: () => void;
+  setCustomer: (state: State) => void;
 };
 
 type Store = State & Actions;
@@ -29,17 +29,18 @@ const EMPTY_STATE: State = {
 
 export const [CustomerStoreProvider, useCustomerStore] = createZustandStore({
   context: createContext<Nullable<StoreApi<Store>>>(null),
-  createStoreFactory: () =>
-    createStore<Store>()(
+  createStoreFactory() {
+    return createStore<Store>()(
       devtools(
         persist(
           (set) => ({
             ...EMPTY_STATE,
-            setCustomer: (state): void => void set(stateSchema.parse(state)),
             reset: (): void => void set(EMPTY_STATE),
+            setCustomer: (state): void => void set(stateSchema.parse(state)),
           }),
           { name: wrapStorageKey('customer') }
         )
       )
-    ),
+    );
+  },
 });
