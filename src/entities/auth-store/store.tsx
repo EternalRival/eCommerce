@@ -34,8 +34,8 @@ const stateSchema = z.discriminatedUnion('type', [emptyTokenSchema, guestTokenSc
 type State = z.infer<typeof stateSchema>;
 
 type Actions = {
-  init: () => Promise<void>;
   reset: () => Promise<void>;
+  init: () => Promise<void>;
   setGuestToken: (state: Pick<State, 'access_token'>) => void;
   setCustomerToken: (state: Pick<State, 'access_token' | 'refresh_token'>) => void;
 };
@@ -50,20 +50,20 @@ const EMPTY_STATE: State = {
 
 const [StoreProvider, useStore] = createZustandStore({
   context: createContext<Nullable<StoreApi<Store>>>(null),
-  createStoreFactory: () =>
-    createStore<Store>()(
+  createStoreFactory() {
+    return createStore<Store>()(
       devtools(
         persist(
           (set, get) => ({
             ...EMPTY_STATE,
+            async reset(): Promise<void> {
+              set(EMPTY_STATE);
+              await get().init();
+            },
             async init(): Promise<void> {
               if (get().type === 'empty') {
                 get().setGuestToken(await getTokenInfo());
               }
-            },
-            async reset(): Promise<void> {
-              set(EMPTY_STATE);
-              await get().init();
             },
             setGuestToken: (state): void => void set(guestTokenSchema.parse({ ...state, type: 'guest' })),
             setCustomerToken: (state): void => void set(customerTokenSchema.parse({ ...state, type: 'customer' })),
@@ -71,7 +71,8 @@ const [StoreProvider, useStore] = createZustandStore({
           { name: wrapStorageKey('auth/token') }
         )
       )
-    ),
+    );
+  },
 });
 
 function AuthStoreInit(): ReactNode {

@@ -6,7 +6,8 @@ import { PageSpinner } from '~/entities/page-spinner';
 import { queryProductProjectionSearch } from '~/shared/api/commercetools';
 import { QueryKey } from '~/shared/lib/tanstack-query';
 
-import { ProductCard } from './product-card';
+import { ProductCardList } from './product-card-list';
+import { Filters } from './filters';
 
 import type { ReactNode } from 'react';
 
@@ -25,13 +26,9 @@ export function Catalog(): ReactNode {
   }
 
   return (
-    <Stack className="flex-row flex-wrap justify-center gap-8">
-      {data?.results.map((result) => (
-        <ProductCard
-          key={result.id}
-          productProjection={result}
-        />
-      ))}
+    <Stack direction="row">
+      <Filters />
+      <ProductCardList listData={data?.results} />
     </Stack>
   );
 }

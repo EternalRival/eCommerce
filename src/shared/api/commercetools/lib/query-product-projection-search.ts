@@ -9,6 +9,7 @@ query ProductProjectionSearch($limit: Int = 10, $offset: Int = 0, $locale: Local
   productProjectionSearch(limit: $limit, offset: $offset) {
     results {
       id
+      slug(locale:$locale)
       name(locale: $locale)
       description(locale: $locale)
       masterVariant {
@@ -58,6 +59,7 @@ const productProjectionSearchSchema = z
       results: z.array(
         z.object({
           id: z.string(),
+          slug: z.string(),
           name: z.string().nullable(),
           description: z.string().nullable(),
           masterVariant: z.object({
