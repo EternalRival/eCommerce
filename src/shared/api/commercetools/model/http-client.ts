@@ -62,10 +62,15 @@ auth.interceptors.response.use(onFulfilled, onRejected);
 export const httpClient = {
   api,
   auth,
-  async gql(
-    token: string,
-    body: { query: string; operationName?: string; variables?: Json }
-  ): Promise<NonNullable<GqlResponse['data']>> {
+  async gql({
+    token,
+    ...body
+  }: {
+    token: string;
+    query: string;
+    operationName?: string;
+    variables?: Json;
+  }): Promise<NonNullable<GqlResponse['data']>> {
     return api
       .post(`/${CTP_PROJECT_KEY}/graphql`, body, {
         headers: { Authorization: `Bearer ${token}` },

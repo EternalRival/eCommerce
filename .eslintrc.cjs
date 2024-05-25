@@ -83,6 +83,7 @@ const overrides = [
       'consistent-return': ['error', { treatUndefinedAsUnspecified: true }],
       'import/no-cycle': 'error',
       'jsx-a11y/label-has-associated-control': 'off', // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/966
+      'max-statements': ['error', 10, { ignoreTopLevelFunctions: true }],
     },
   },
 
@@ -93,7 +94,6 @@ const overrides = [
       'complexity': ['error', 10],
       'max-depth': ['error', 4],
       'max-nested-callbacks': ['error', 4],
-      'max-statements': ['error', 10],
       'no-constant-binary-expression': 'error',
       'no-implicit-coercion': 'error',
       'no-negated-condition': 'error',

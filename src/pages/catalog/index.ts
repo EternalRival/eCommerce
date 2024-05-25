@@ -1,1 +1,1 @@
-export { CatalogPage } from './ui';
+export { CatalogPage, type CatalogPageProps } from './ui';
