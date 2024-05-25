@@ -1,6 +1,6 @@
 export { ALLOWED_COUNTRIES, ALLOWED_COUNTRY_NAMES, type Country } from './allowed-countries';
 export { CTP_PROJECT_KEY } from './api-config';
-export { $http } from './http-client';
+export { httpClient as $http, httpClient } from './http-client';
 export {
   countryCodeSchema,
   currencyCodeSchema,
