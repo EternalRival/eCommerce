@@ -24,7 +24,7 @@ export function usePruneCategoriesEndpoint({ baseEndpoint, categoriesBreadcrumbs
       );
 
       if (router.asPath !== endpoint) {
-        router.replace(endpoint).catch(toastifyError);
+        router.push(endpoint).catch(toastifyError);
       }
     }
   }, [baseEndpoint, categoriesBreadcrumbsProps, isReady, router]);
