@@ -53,7 +53,8 @@ export async function mutateUpdateMyCustomer(
   { version, actions }: { version: number; actions: MyCustomerUpdateAction[] }
 ): Promise<MutateUpdateMyCustomerReturn> {
   return $http
-    .gql(token, {
+    .gql({
+      token,
       operationName: 'UpdateMyCustomer',
       query: document,
       variables: { version, actions },

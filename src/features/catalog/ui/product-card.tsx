@@ -129,7 +129,13 @@ function Prices({ discountedValue, priceValue }: PricesProps): ReactNode {
 type ViewDetailsProps = FCProps<{ slug: ProductProjection['slug'] }>;
 
 function ViewDetails({ slug }: ViewDetailsProps): ReactNode {
-  return <Button href={`${Route.PRODUCT}/${slug}`}>View Details</Button>;
+  const buttonText = 'View Details';
+
+  return slug ? (
+    <Button href={`${Route.PRODUCT}/${slug}`}>{buttonText}</Button>
+  ) : (
+    <Button disabled>{buttonText}</Button>
+  );
 }
 
 export function ProductCard({ productProjection }: Props): ReactNode {

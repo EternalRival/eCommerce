@@ -5,6 +5,7 @@ export { isAllowedCountryName } from './is-allowed-country-name';
 export { mutateCustomerSignMeIn, type MutateCustomerSignMeInReturn } from './mutate-customer-sign-me-in';
 export { mutateCustomerSignMeUp, type MutateCustomerSignMeUpReturn } from './mutate-customer-sign-me-up';
 export { mutateUpdateMyCustomer, type MutateUpdateMyCustomerReturn } from './mutate-update-my-customer';
+export { queryCategories, type QueryCategoriesReturn } from './query-categories';
 export {
   queryProductProjectionSearch,
   type QueryProductProjectionSearchReturn,
