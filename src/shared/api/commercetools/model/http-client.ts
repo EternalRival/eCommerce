@@ -59,7 +59,7 @@ function onRejected<T>(error: T): Promise<never> {
 api.interceptors.response.use(onFulfilled, onRejected);
 auth.interceptors.response.use(onFulfilled, onRejected);
 
-export const $http = {
+export const httpClient = {
   api,
   auth,
   async gql(
