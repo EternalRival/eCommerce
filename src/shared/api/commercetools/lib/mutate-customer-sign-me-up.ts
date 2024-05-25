@@ -48,7 +48,8 @@ export type MutateCustomerSignMeUpReturn = z.infer<typeof customerSignMeUpSchema
 
 export async function mutateCustomerSignMeUp(token: string, draft: Draft): Promise<MutateCustomerSignMeUpReturn> {
   return $http
-    .gql(token, {
+    .gql({
+      token,
       operationName: 'CustomerSignMeUp',
       query: document,
       variables: { draft },
