@@ -1,12 +1,14 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { useMemo } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useMemo } from 'react';
 
+import { Breadcrumbs } from '~/entities/breadcrumbs';
 import { Catalog } from '~/features/catalog';
+import { toastifyError } from '~/shared/lib/react-toastify';
 import { Route } from '~/shared/model/route.enum';
-import { CategoriesBreadcrumbs } from '~/features/categories-breadcrumbs';
 
-import { createCategoriesBreadcrumbsProps, useCategories, usePruneCategoriesEndpoint } from '../lib';
+import { createCategoriesBreadcrumbsProps, useCategories } from '../lib';
 
 import type { ReactNode } from 'react';
 import type { FCProps } from '~/shared/model/types';
@@ -17,12 +19,24 @@ export type CatalogPageProps = FCProps<{
 
 const baseEndpoint = Route.CATALOG;
 
-export function CatalogPage({ slug }: CatalogPageProps): ReactNode {
-  const { data, isPending } = useCategories();
+export function CatalogPage({ slug: slugList }: CatalogPageProps): ReactNode {
+  const { data: categories, isPending } = useCategories();
 
-  const categoriesBreadcrumbsProps = useMemo(() => createCategoriesBreadcrumbsProps(slug, data), [data, slug]);
+  const categoriesBreadcrumbsProps = useMemo(
+    () => (categories ? createCategoriesBreadcrumbsProps({ baseEndpoint, categories, slugList }) : []),
+    [categories, slugList]
+  );
 
-  usePruneCategoriesEndpoint({ isReady: !isPending, categoriesBreadcrumbsProps, baseEndpoint });
+  const router = useRouter();
+  useEffect(() => {
+    if (!isPending && router.isReady) {
+      const endpoint = categoriesBreadcrumbsProps.at(-1)?.href ?? baseEndpoint;
+
+      if (router.asPath !== endpoint) {
+        router.push(endpoint).catch(toastifyError);
+      }
+    }
+  }, [categoriesBreadcrumbsProps, isPending, router]);
 
   return (
     <>
@@ -34,12 +48,10 @@ export function CatalogPage({ slug }: CatalogPageProps): ReactNode {
         Catalog Page
       </Typography>
 
-      {categoriesBreadcrumbsProps.length > 0 && (
-        <CategoriesBreadcrumbs
-          baseEndpoint={baseEndpoint}
-          categoriesBreadcrumbsProps={categoriesBreadcrumbsProps}
-        />
-      )}
+      <Breadcrumbs
+        isPending={slugList.length > 0 && isPending}
+        breadcrumbsLinksProps={categoriesBreadcrumbsProps}
+      />
 
       <Box>
         <Catalog />
