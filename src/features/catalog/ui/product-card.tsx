@@ -3,6 +3,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Paper from '@mui/material/Paper';
+import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
@@ -16,7 +17,7 @@ import type { FCProps, FCPropsWC } from '~/shared/model/types';
 
 type ProductProjection = QueryProductProjectionSearchReturn['results'][number];
 
-type Props = FCPropsWC<{ productProjection: ProductProjection }>;
+type Props = FCPropsWC<{ productProjection?: ProductProjection }>;
 
 type MediaProps = FCProps<{
   name: ProductProjection['name'];
@@ -139,12 +140,23 @@ function ViewDetails({ slug }: ViewDetailsProps): ReactNode {
 }
 
 export function ProductCard({ productProjection }: Props): ReactNode {
+  const cardClassName = 'relative h-[30rem] w-80';
+
+  if (!productProjection) {
+    return (
+      <Skeleton
+        className={cardClassName}
+        variant="rectangular"
+      />
+    );
+  }
+
   const { slug, name, description, masterVariant } = productProjection;
   const { images, price } = masterVariant;
 
   return (
     <Card
-      className="relative h-[30rem] w-80"
+      className={cardClassName}
       sx={{ ':hover': { boxShadow: 8 } }}
     >
       <CardContent

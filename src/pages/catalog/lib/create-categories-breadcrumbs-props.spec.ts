@@ -1,25 +1,43 @@
 import { createCategoriesBreadcrumbsProps } from './create-categories-breadcrumbs-props';
 
+import type { BreadcrumbsLinkProps } from '~/entities/breadcrumbs';
+
 describe('createCategoriesBreadcrumbsProps', () => {
-  const categoryA = { id: 'A', slug: 'a', parent: null };
-  const categoryB = { id: 'B', slug: 'b', parent: { slug: 'a' } };
-  const categoryC = { id: 'C', slug: 'c', parent: { slug: 'b' } };
-  const categories = [categoryA, categoryB, categoryC];
+  const categoryA = { id: 'A', name: 'A', slug: 'a', parent: null };
+  const categoryB = { id: 'B', name: 'B', slug: 'b', parent: { slug: 'a' } };
+  const categoryC = { id: 'C', name: 'C', slug: 'c', parent: { slug: 'b' } };
+
+  const expectedA = { id: 'A', label: 'A', href: '/endpoint/a' };
+  const expectedB = { id: 'B', label: 'B', href: '/endpoint/a/b' };
+  const expectedC = { id: 'C', label: 'C', href: '/endpoint/a/b/c' };
+
+  const createProps = (slugList: string[]): BreadcrumbsLinkProps[] =>
+    createCategoriesBreadcrumbsProps({
+      baseEndpoint: '/endpoint',
+      categories: [categoryA, categoryB, categoryC],
+      slugList,
+    });
+
+  it('return empty list on empty categories list', () => {
+    [[], ['a'], ['a', 'b'], ['a', 'b', 'c']].forEach((slugList) => {
+      expect(createCategoriesBreadcrumbsProps({ categories: [], baseEndpoint: '/endpoint', slugList })).toEqual([]);
+    });
+  });
 
   it('return empty list on invalid root slug', () => {
-    expect(createCategoriesBreadcrumbsProps(['b', 'c'], categories)).toEqual([]);
-    expect(createCategoriesBreadcrumbsProps(['invalid', 'b', 'c'], categories)).toEqual([]);
+    expect(createProps(['b', 'c'])).toEqual([]);
+    expect(createProps(['invalid', 'b', 'c'])).toEqual([]);
   });
 
-  it('return root category list on invalid second slug', () => {
-    expect(createCategoriesBreadcrumbsProps(['a', 'invalid', 'c'], categories)).toEqual([categoryA]);
-    expect(createCategoriesBreadcrumbsProps(['a', 'c', 'b'], categories)).toEqual([categoryA]);
+  it('return one breadcrumb props object on invalid second slug', () => {
+    expect(createProps(['a', 'invalid', 'c'])).toEqual([expectedA]);
+    expect(createProps(['a', 'c', 'b'])).toEqual([expectedA]);
   });
 
-  it('return full props list on valid data', () => {
-    expect(createCategoriesBreadcrumbsProps([], categories)).toEqual([]);
-    expect(createCategoriesBreadcrumbsProps(['a'], categories)).toEqual([categoryA]);
-    expect(createCategoriesBreadcrumbsProps(['a', 'b'], categories)).toEqual([categoryA, categoryB]);
-    expect(createCategoriesBreadcrumbsProps(['a', 'b', 'c'], categories)).toEqual([categoryA, categoryB, categoryC]);
+  it('return full breadcrumb props objects list on valid data', () => {
+    expect(createProps([])).toEqual([]);
+    expect(createProps(['a'])).toEqual([expectedA]);
+    expect(createProps(['a', 'b'])).toEqual([expectedA, expectedB]);
+    expect(createProps(['a', 'b', 'c'])).toEqual([expectedA, expectedB, expectedC]);
   });
 });
