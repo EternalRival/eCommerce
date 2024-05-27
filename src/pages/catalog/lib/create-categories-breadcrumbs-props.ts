@@ -4,16 +4,11 @@ import type { QueryCategoriesReturn } from '~/shared/api/commercetools';
 type Category = QueryCategoriesReturn['results'][number];
 
 type Props = {
-  baseEndpoint: string;
   categories?: Category[];
   slugList: string[];
 };
 
-export function createCategoriesBreadcrumbsProps({
-  baseEndpoint,
-  categories,
-  slugList,
-}: Props): BreadcrumbsLinkProps[] {
+export function createCategoriesBreadcrumbsProps({ categories, slugList }: Props): BreadcrumbsLinkProps[] {
   if (!categories || categories.length < 1) {
     return [];
   }
@@ -21,7 +16,7 @@ export function createCategoriesBreadcrumbsProps({
   const result: BreadcrumbsLinkProps[] = [];
   const slugLength = slugList.length;
   let lastSlug: Nullable<string> = null;
-  let lastHref = baseEndpoint;
+  let lastHref = '';
 
   for (let i = 0; i < slugLength; i += 1) {
     const currentCategory = categories.find((category) => category.slug === slugList[i]);

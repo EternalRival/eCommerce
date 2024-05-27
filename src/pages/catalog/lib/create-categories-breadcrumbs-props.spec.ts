@@ -7,20 +7,19 @@ describe('createCategoriesBreadcrumbsProps', () => {
   const categoryB = { id: 'B', name: 'B', slug: 'b', parent: { slug: 'a' } };
   const categoryC = { id: 'C', name: 'C', slug: 'c', parent: { slug: 'b' } };
 
-  const expectedA = { id: 'A', label: 'A', href: '/endpoint/a' };
-  const expectedB = { id: 'B', label: 'B', href: '/endpoint/a/b' };
-  const expectedC = { id: 'C', label: 'C', href: '/endpoint/a/b/c' };
+  const expectedA = { id: 'A', label: 'A', href: '/a' };
+  const expectedB = { id: 'B', label: 'B', href: '/a/b' };
+  const expectedC = { id: 'C', label: 'C', href: '/a/b/c' };
 
   const createProps = (slugList: string[]): BreadcrumbsLinkProps[] =>
     createCategoriesBreadcrumbsProps({
-      baseEndpoint: '/endpoint',
       categories: [categoryA, categoryB, categoryC],
       slugList,
     });
 
   it('return empty list on empty categories list', () => {
     [[], ['a'], ['a', 'b'], ['a', 'b', 'c']].forEach((slugList) => {
-      expect(createCategoriesBreadcrumbsProps({ categories: [], baseEndpoint: '/endpoint', slugList })).toEqual([]);
+      expect(createCategoriesBreadcrumbsProps({ categories: [], slugList })).toEqual([]);
     });
   });
 
