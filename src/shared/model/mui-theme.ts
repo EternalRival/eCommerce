@@ -5,16 +5,16 @@ import { roboto } from './next-fonts';
 export const muiTheme = createTheme({
   palette: {
     primary: {
-      main: '#2E628C',
+      main: '#904b3c',
     },
     secondary: {
-      main: '#51606F',
+      main: '#775750',
     },
     error: {
-      main: '#BA1A1A',
+      main: '#ba1a1a',
     },
     info: {
-      main: '#68587a',
+      main: '#6e5d2e',
     },
   },
   typography: {

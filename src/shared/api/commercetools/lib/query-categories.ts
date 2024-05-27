@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { $http } from '../model';
 
 const document = `
-query Categories($limit: Int, $locale: Locale = "en-US") {
+query Categories($limit: Int, $locale: Locale = "en") {
   categories(limit: $limit) {
     count
     offset
