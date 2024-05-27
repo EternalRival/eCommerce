@@ -1,9 +1,13 @@
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
+import { useCustomerStore } from '~/entities/customer-store';
+
 import type { ReactNode } from 'react';
 
 export function ProfilePage(): ReactNode {
+  const { email } = useCustomerStore((store) => store);
+
   return (
     <>
       <Typography
@@ -13,7 +17,7 @@ export function ProfilePage(): ReactNode {
       >
         Profile Page
       </Typography>
-      <Stack className="self-start">123</Stack>
+      <Stack className="self-start">{email}</Stack>
     </>
   );
 }
