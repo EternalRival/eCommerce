@@ -72,7 +72,7 @@ function Description({ description }: DescriptionProps): ReactNode {
   return (
     <Typography
       variant="body2"
-      className="line-clamp-5 text-wrap"
+      className="line-clamp-4 grow text-wrap"
     >
       {description}
     </Typography>
@@ -162,6 +162,7 @@ export function ProductCard({ productProjection }: Props): ReactNode {
       <CardContent
         component={Stack}
         spacing={1.5}
+        height="inherit"
       >
         <Media
           name={name}
