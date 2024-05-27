@@ -1,0 +1,343 @@
+{
+  "id": "81cafd00-d5fb-4f33-aad1-1656670674c6",
+  "version": 1,
+  "productType": {
+    "typeId": "product-type",
+    "id": "e3bd311c-b7f9-4659-9280-04354e6f7bab"
+  },
+  "name": {
+    "en": "Bag “Greyson“ Guess",
+    "de": "Tasche „Greyson“ Guess"
+  },
+  "categories": [
+    {
+      "typeId": "category",
+      "id": "5fb88fbe-2c8a-4929-9554-264d37d88434"
+    }
+  ],
+  "categoryOrderHints": {},
+  "slug": {
+    "en": "guess-bag-greyson-30230-lightrose",
+    "de": "guess-tasche-greyson-30230-hellrosa"
+  },
+  "variants": [],
+  "masterVariant": {
+    "attributes": [
+      {
+        "name": "articleNumberManufacturer",
+        "value": "HWVG49 30230 LTR"
+      },
+      {
+        "name": "articleNumberMax",
+        "value": "73207"
+      },
+      {
+        "name": "matrixId",
+        "value": "A0E200000001YVZ"
+      },
+      {
+        "name": "baseId",
+        "value": "73207"
+      },
+      {
+        "name": "designer",
+        "value": {
+          "key": "guess",
+          "label": "Guess"
+        }
+      },
+      {
+        "name": "madeInItaly",
+        "value": {
+          "key": "no",
+          "label": "no"
+        }
+      },
+      {
+        "name": "commonSize",
+        "value": {
+          "key": "oneSize",
+          "label": "one Size"
+        }
+      },
+      {
+        "name": "size",
+        "value": "one size"
+      },
+      {
+        "name": "color",
+        "value": {
+          "key": "pink",
+          "label": {
+            "de": "rosa",
+            "en": "pink",
+            "it": "rosa"
+          }
+        }
+      },
+      {
+        "name": "colorFreeDefinition",
+        "value": {
+          "en": "light rose",
+          "de": "hellrosa"
+        }
+      },
+      {
+        "name": "style",
+        "value": {
+          "key": "sporty",
+          "label": "sporty"
+        }
+      },
+      {
+        "name": "gender",
+        "value": {
+          "key": "women",
+          "label": "Damen"
+        }
+      },
+      {
+        "name": "season",
+        "value": "s15"
+      }
+    ],
+    "assets": [],
+    "images": [
+      {
+        "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/073207_1_large.jpg",
+        "dimensions": {
+          "w": 0,
+          "h": 0
+        }
+      }
+    ],
+    "prices": [
+      {
+        "id": "89b6f414-2b86-40de-b511-2a8b51f0ddbb",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 18625,
+          "fractionDigits": 2
+        }
+      },
+      {
+        "id": "e7679159-29c5-428f-b254-db7a78d84bbd",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 12213,
+          "fractionDigits": 2
+        },
+        "customerGroup": {
+          "typeId": "customer-group",
+          "id": "fd240266-bd6b-4306-b7e2-16d6d46094c0"
+        }
+      },
+      {
+        "id": "4055459c-4a35-4422-b51c-c98c73ac66c2",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "USD",
+          "centAmount": 18625,
+          "fractionDigits": 2
+        },
+        "country": "US"
+      },
+      {
+        "id": "c98b65f4-a9c3-419e-822b-a6c7585f3e8c",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "USD",
+          "centAmount": 12213,
+          "fractionDigits": 2
+        },
+        "customerGroup": {
+          "typeId": "customer-group",
+          "id": "fd240266-bd6b-4306-b7e2-16d6d46094c0"
+        }
+      },
+      {
+        "id": "a045daf2-a803-4c98-a915-e2c6b1c9e5fb",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 14900,
+          "fractionDigits": 2
+        },
+        "country": "DE"
+      },
+      {
+        "id": "66194c09-6519-451a-b1ff-a41aaa6f446e",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 14900,
+          "fractionDigits": 2
+        },
+        "country": "IT"
+      },
+      {
+        "id": "6a96e4ac-c32e-4f3f-945e-54c367eef788",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 14900,
+          "fractionDigits": 2
+        },
+        "country": "GB"
+      },
+      {
+        "id": "cf82a480-7f62-4e0c-84f2-0515a9e02f63",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 16390,
+          "fractionDigits": 2
+        },
+        "country": "DE",
+        "channel": {
+          "typeId": "channel",
+          "id": "d4b6a245-4962-4426-b829-26f18569bbec"
+        }
+      },
+      {
+        "id": "d2d10533-96ea-40f3-a50d-6567c5b12548",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 17135,
+          "fractionDigits": 2
+        },
+        "channel": {
+          "typeId": "channel",
+          "id": "2cf563d2-9be4-49f0-932e-46d6e9542ec7"
+        }
+      },
+      {
+        "id": "5c6ed943-dfc8-4214-9ef3-82735c86d380",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 15347,
+          "fractionDigits": 2
+        },
+        "country": "DE",
+        "channel": {
+          "typeId": "channel",
+          "id": "dc74d218-59d6-4a76-b772-a79653907cfd"
+        }
+      },
+      {
+        "id": "bad9d211-9336-47b0-b378-c87853dc0aa3",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 16390,
+          "fractionDigits": 2
+        },
+        "country": "DE",
+        "channel": {
+          "typeId": "channel",
+          "id": "c72d70cd-de8b-4b72-ae8c-ebb222907100"
+        }
+      },
+      {
+        "id": "511fec0e-3d31-46dd-b329-fc85dede7f7b",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 13708,
+          "fractionDigits": 2
+        },
+        "country": "DE",
+        "channel": {
+          "typeId": "channel",
+          "id": "4260a9cb-53ca-493d-bd90-f813bd4a8591"
+        }
+      },
+      {
+        "id": "eac94c93-70d7-457b-8f80-d1fc9140f8df",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "USD",
+          "centAmount": 16390,
+          "fractionDigits": 2
+        },
+        "country": "US",
+        "channel": {
+          "typeId": "channel",
+          "id": "5df9c6c6-2584-4172-82d0-74f3a956a3be"
+        }
+      },
+      {
+        "id": "873c5e3c-702b-4359-aa2d-918d687df2ce",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "USD",
+          "centAmount": 17135,
+          "fractionDigits": 2
+        },
+        "channel": {
+          "typeId": "channel",
+          "id": "9e3d2cfd-4dd7-47bc-b5e6-15973391c461"
+        }
+      },
+      {
+        "id": "25e8ecb5-102b-4d13-87ac-cca8581113b0",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "USD",
+          "centAmount": 15347,
+          "fractionDigits": 2
+        },
+        "country": "US",
+        "channel": {
+          "typeId": "channel",
+          "id": "4a66c5a5-f50d-471a-8054-87ddeaff19a4"
+        }
+      },
+      {
+        "id": "f225bb79-ccd7-4cc9-abe4-b1f7c9fb3701",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "USD",
+          "centAmount": 16390,
+          "fractionDigits": 2
+        },
+        "country": "US",
+        "channel": {
+          "typeId": "channel",
+          "id": "bf692570-1e14-4c66-9e71-7b456e7f2d03"
+        }
+      },
+      {
+        "id": "258d7673-4bee-4194-8fcf-8e94ba5a49b0",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "USD",
+          "centAmount": 13708,
+          "fractionDigits": 2
+        },
+        "country": "US",
+        "channel": {
+          "typeId": "channel",
+          "id": "3979d7dd-7285-4078-ba83-d3023653093e"
+        }
+      }
+    ],
+    "key": "A0E200000001YVZ",
+    "sku": "A0E200000001YVZ",
+    "id": 1
+  },
+  "searchKeywords": {},
+  "hasStagedChanges": false,
+  "published": true,
+  "key": "73207",
+  "taxCategory": {
+    "typeId": "tax-category",
+    "id": "262e2137-03dd-44a0-ae5f-4c52d84c6eec"
+  },
+  "createdAt": "2024-05-27T03:21:17.673Z",
+  "lastModifiedAt": "2024-05-27T03:21:17.673Z"
+}

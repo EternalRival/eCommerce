@@ -34,7 +34,7 @@ function Media({ name, image }: MediaProps): ReactNode {
     >
       <Paper>
         <CardMedia
-          className="h-48 w-auto bg-contain"
+          className="h-56 w-auto bg-cover"
           image={image?.url}
         />
       </Paper>

@@ -6,6 +6,7 @@ export { mutateCustomerSignMeIn, type MutateCustomerSignMeInReturn } from './mut
 export { mutateCustomerSignMeUp, type MutateCustomerSignMeUpReturn } from './mutate-customer-sign-me-up';
 export { mutateUpdateMyCustomer, type MutateUpdateMyCustomerReturn } from './mutate-update-my-customer';
 export { queryCategories, type QueryCategoriesReturn } from './query-categories';
+export { queryProductTypes, type QueryProductTypesReturn } from './query-product-types';
 export {
   queryProductProjectionSearch,
   type QueryProductProjectionSearchReturn,

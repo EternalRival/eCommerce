@@ -1,0 +1,87 @@
+{
+  "results": [
+    {
+      "attributeDefinitions": {
+        "results": [
+          {
+            "name": "type",
+            "label": "Type",
+            "isSearchable": true
+          }
+        ]
+      }
+    },
+    {
+      "attributeDefinitions": {
+        "results": [
+          {
+            "name": "product-description",
+            "label": "product-description",
+            "isSearchable": false
+          },
+          {
+            "name": "product-spec",
+            "label": "Product Spec",
+            "isSearchable": false
+          },
+          {
+            "name": "product-ref",
+            "label": "Products of this bundle",
+            "isSearchable": false
+          }
+        ]
+      }
+    },
+    {
+      "attributeDefinitions": {
+        "results": [
+          {
+            "name": "productspec",
+            "label": "Product Specifications",
+            "isSearchable": false
+          },
+          {
+            "name": "color",
+            "label": "Color",
+            "isSearchable": false
+          },
+          {
+            "name": "finish",
+            "label": "Finish",
+            "isSearchable": false
+          },
+          {
+            "name": "colorlabel",
+            "label": "Color Label",
+            "isSearchable": true
+          },
+          {
+            "name": "finishlabel",
+            "label": "Finish Label",
+            "isSearchable": true
+          },
+          {
+            "name": "new-arrival",
+            "label": "New Arrival",
+            "isSearchable": false
+          },
+          {
+            "name": "size",
+            "label": "Size",
+            "isSearchable": true
+          },
+          {
+            "name": "product-description",
+            "label": "Product Description",
+            "isSearchable": false
+          },
+          {
+            "name": "color-filter",
+            "label": "Color Filter",
+            "isSearchable": true
+          }
+        ]
+      }
+    }
+  ]
+}
