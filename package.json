@@ -18,6 +18,7 @@
     "commitlint": "commitlint --edit",
     "lint-staged": "lint-staged",
     "test": "vitest",
+    "test:watch": "vitest --watch",
     "prepare": "husky"
   },
   "dependencies": {
