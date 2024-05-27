@@ -1,10 +1,16 @@
 import { Stack } from '@mui/material';
 
 import type { ReactNode } from 'react';
+import type { QueryProductTypesReturn } from '~/shared/api/commercetools';
+import type { FCProps } from '~/shared/model/types';
 
-type Props = Readonly<{ placeholder?: string }>;
+type Props = FCProps<{
+  placeholder?: string;
+  isPending?: boolean;
+  productTypesReturn?: Nullable<QueryProductTypesReturn>;
+}>;
 
-export function Filters({ placeholder = '123' }: Props): ReactNode {
+export function Filters({ isPending, productTypesReturn, placeholder = 'Filters' }: Props): ReactNode {
   // price range, brand, color, size
   /* 
   - colorlabel
@@ -13,7 +19,16 @@ export function Filters({ placeholder = '123' }: Props): ReactNode {
   - color-filter
   */
   // items with color, fabric, size, finish and/or product spec attributes
-  return <Stack className="ring">{placeholder}</Stack>;
+  if (isPending) {
+    return 'pending...';
+  }
+
+  return (
+    <Stack className="ring">
+      {placeholder}
+      <>{JSON.stringify(productTypesReturn?.results)}</>
+    </Stack>
+  );
 }
 
 /** 

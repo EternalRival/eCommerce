@@ -5,7 +5,6 @@ import { useAuthStore } from '~/entities/auth-store';
 import { queryProductProjectionSearch } from '~/shared/api/commercetools';
 import { QueryKey } from '~/shared/lib/tanstack-query';
 
-import { Filters } from './filters';
 import { ProductCardList } from './product-card-list';
 
 import type { ReactNode } from 'react';
@@ -16,17 +15,28 @@ export function Catalog(): ReactNode {
   const catalogQuery = useQuery({
     queryKey: [QueryKey.CATALOG, token],
     queryFn() {
-      return token === null ? null : queryProductProjectionSearch(token);
+      return queryProductProjectionSearch(token);
     },
   });
 
+  /*   const productTypesQuery = useQuery({
+    queryKey: [QueryKey.PRODUCT_TYPES, token],
+    queryFn() {
+      return queryProductTypes(token);
+    },
+    throwOnError: true,
+  }); */
+
   return (
     <Stack direction="row">
-      <Filters />
+      {/* <Filters
+        isPending={productTypesQuery.isPending}
+        productTypesReturn={productTypesQuery.data}
+      /> */}
 
       <ProductCardList
         isPending={catalogQuery.isPending}
-        listData={catalogQuery.data?.results}
+        productProjectionSearchResult={catalogQuery.data}
       />
     </Stack>
   );

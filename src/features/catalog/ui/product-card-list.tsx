@@ -9,10 +9,10 @@ import type { FCProps } from '~/shared/model/types';
 
 type Props = FCProps<{
   isPending?: boolean;
-  listData?: QueryProductProjectionSearchReturn['results'];
+  productProjectionSearchResult?: QueryProductProjectionSearchReturn;
 }>;
 
-export function ProductCardList({ isPending, listData }: Props): ReactNode {
+export function ProductCardList({ isPending, productProjectionSearchResult }: Props): ReactNode {
   const noListText = 'No products';
   const emptyListText = 'No products found';
   const containerClassName = 'flex-row flex-wrap justify-center gap-8';
@@ -27,17 +27,17 @@ export function ProductCardList({ isPending, listData }: Props): ReactNode {
     );
   }
 
-  if (!listData) {
+  if (!productProjectionSearchResult) {
     return <Typography>{noListText}</Typography>;
   }
 
-  if (listData.length === 0) {
+  if (productProjectionSearchResult.count === 0) {
     return <Typography>{emptyListText}</Typography>;
   }
 
   return (
     <Stack className={containerClassName}>
-      {listData.map((result) => (
+      {productProjectionSearchResult.results.map((result) => (
         <ProductCard
           key={result.id}
           productProjection={result}
