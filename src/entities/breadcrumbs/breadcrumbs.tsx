@@ -13,22 +13,30 @@ export type BreadcrumbsLinkProps = {
 };
 
 type Props = FCProps<{
+  baseEndpoint: string;
   isPending?: boolean;
   breadcrumbsLinksProps: BreadcrumbsLinkProps[];
 }>;
 
-export function Breadcrumbs({ isPending, breadcrumbsLinksProps }: Props): ReactNode {
+export function Breadcrumbs({ baseEndpoint, isPending, breadcrumbsLinksProps }: Props): ReactNode {
   if (isPending) {
     return <Skeleton />;
   }
 
   return breadcrumbsLinksProps.length < 1 ? null : (
     <MuiBreadcrumbs>
+      <Link
+        key="home"
+        component={NextLink}
+        href={baseEndpoint}
+      >
+        Home
+      </Link>
       {breadcrumbsLinksProps.map(({ id, href, label }) => (
         <Link
           key={id}
           component={NextLink}
-          href={href}
+          href={`${baseEndpoint}${href}`}
         >
           {label}
         </Link>

@@ -24,25 +24,30 @@ export type CatalogPageProps = FCProps<{
 const baseEndpoint = Route.CATALOG;
 
 export function CatalogPage({ slug: slugList }: CatalogPageProps): ReactNode {
+  // token
   const { token } = useAuthStore((store) => ({ token: store.access_token }));
 
+  // categories
   const categoriesQuery = useQuery({
     queryKey: [QueryKey.CATEGORIES, token],
     queryFn: () => queryCategories(token),
   });
 
+  // breadcrumbs
   const categoriesBreadcrumbsProps = useMemo(
-    () => createCategoriesBreadcrumbsProps({ baseEndpoint, categories: categoriesQuery.data?.results, slugList }),
+    () => createCategoriesBreadcrumbsProps({ categories: categoriesQuery.data?.results, slugList }),
     [categoriesQuery.data, slugList]
   );
 
+  // validate+redirect
   const router = useRouter();
   useEffect(() => {
     if (!categoriesQuery.isPending && router.isReady) {
-      const endpoint = categoriesBreadcrumbsProps.at(-1)?.href ?? baseEndpoint;
+      const categoryEndpoint = categoriesBreadcrumbsProps.at(-1)?.href ?? '';
+      const expectedEndpoint = `${baseEndpoint}${categoryEndpoint}`;
 
-      if (router.asPath !== endpoint) {
-        router.push(endpoint).catch(toastifyError);
+      if (router.asPath !== expectedEndpoint) {
+        router.push(expectedEndpoint).catch(toastifyError);
       }
     }
   }, [categoriesBreadcrumbsProps, categoriesQuery.isPending, router]);
@@ -58,6 +63,7 @@ export function CatalogPage({ slug: slugList }: CatalogPageProps): ReactNode {
       </Typography>
 
       <Breadcrumbs
+        baseEndpoint={baseEndpoint}
         isPending={slugList.length > 0 && categoriesQuery.isPending}
         breadcrumbsLinksProps={categoriesBreadcrumbsProps}
       />
