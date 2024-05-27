@@ -5,7 +5,7 @@ type Category = QueryCategoriesReturn['results'][number];
 
 type Props = {
   baseEndpoint: string;
-  categories: Category[];
+  categories?: Category[];
   slugList: string[];
 };
 
@@ -14,7 +14,7 @@ export function createCategoriesBreadcrumbsProps({
   categories,
   slugList,
 }: Props): BreadcrumbsLinkProps[] {
-  if (categories.length < 1) {
+  if (!categories || categories.length < 1) {
     return [];
   }
 
