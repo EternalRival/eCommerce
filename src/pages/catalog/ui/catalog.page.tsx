@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
@@ -12,7 +11,7 @@ import { toastifyError } from '~/shared/lib/react-toastify';
 import { QueryKey } from '~/shared/lib/tanstack-query';
 import { Route } from '~/shared/model/route.enum';
 
-import { createCategoriesBreadcrumbsProps } from '../lib';
+import { createCategoriesBreadcrumbsProps, getCurrentCategories } from '../lib';
 
 import type { ReactNode } from 'react';
 import type { FCProps } from '~/shared/model/types';
@@ -32,11 +31,15 @@ export function CatalogPage({ slug: slugList }: CatalogPageProps): ReactNode {
     queryKey: [QueryKey.CATEGORIES, token],
     queryFn: () => queryCategories(token),
   });
+  const currentCategories = useMemo(
+    () => getCurrentCategories({ categories: categoriesQuery.data?.results, slugList }),
+    [categoriesQuery.data?.results, slugList]
+  );
 
   // breadcrumbs
   const categoriesBreadcrumbsProps = useMemo(
-    () => createCategoriesBreadcrumbsProps({ categories: categoriesQuery.data?.results, slugList }),
-    [categoriesQuery.data, slugList]
+    () => createCategoriesBreadcrumbsProps({ categories: currentCategories }),
+    [currentCategories]
   );
 
   // validate+redirect
@@ -68,9 +71,7 @@ export function CatalogPage({ slug: slugList }: CatalogPageProps): ReactNode {
         breadcrumbsLinksProps={categoriesBreadcrumbsProps}
       />
 
-      <Box>
-        <Catalog />
-      </Box>
+      <Catalog />
     </>
   );
 }
