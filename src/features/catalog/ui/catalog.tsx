@@ -1,23 +1,27 @@
 import Stack from '@mui/material/Stack';
-import { useQuery } from '@tanstack/react-query';
 
-import { useAuthStore } from '~/entities/auth-store';
-import { queryProductProjectionSearch } from '~/shared/api/commercetools';
-import { QueryKey } from '~/shared/lib/tanstack-query';
-
+import { useProductProjectionSearchQuery } from '../lib';
 import { ProductCardList } from './product-card-list';
 
 import type { ReactNode } from 'react';
+import type { FCProps } from '~/shared/model/types';
 
-export function Catalog(): ReactNode {
-  const { token } = useAuthStore((store) => ({ token: store.access_token }));
+type Props = FCProps<{
+  productProjectionSearchQueryVariables: Parameters<typeof useProductProjectionSearchQuery>[0];
+}>;
 
-  const catalogQuery = useQuery({
-    queryKey: [QueryKey.CATALOG, token],
-    queryFn() {
-      return queryProductProjectionSearch(token);
-    },
-  });
+/* const filters = useMemo(
+    () => [
+      createSizeFilter(['30cm']),
+      createDoughFilter(['thin', 'traditional']),
+      createPriceFilter({ from: 660, to: 800 }),
+      createCategoryFilter(['27a860ea-41c0-4613-a35e-ac58c5ada96e']),
+    ],
+    []
+  ); */
+
+export function Catalog({ productProjectionSearchQueryVariables }: Props): ReactNode {
+  const catalogQuery = useProductProjectionSearchQuery(productProjectionSearchQueryVariables);
 
   /*   const productTypesQuery = useQuery({
     queryKey: [QueryKey.PRODUCT_TYPES, token],
@@ -32,6 +36,11 @@ export function Catalog(): ReactNode {
       {/* <Filters
         isPending={productTypesQuery.isPending}
         productTypesReturn={productTypesQuery.data}
+      /> */}
+
+      {/* <CategoryPicker
+        isPending={categoryQuery.isPending}
+        categoriesReturn={categoryQuery.data}
       /> */}
 
       <ProductCardList
