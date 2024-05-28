@@ -1,3 +1,4 @@
+import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import Typography from '@mui/material/Typography';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
@@ -67,6 +68,7 @@ export function CatalogPage({ slug: slugList }: CatalogPageProps): ReactNode {
 
       <Breadcrumbs
         baseEndpoint={baseEndpoint}
+        baseEndpointLabel={<ViewModuleIcon />}
         isPending={slugList.length > 0 && categoriesQuery.isPending}
         breadcrumbsLinksProps={categoriesBreadcrumbsProps}
       />
