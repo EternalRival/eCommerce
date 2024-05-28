@@ -1,41 +1,30 @@
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import Typography from '@mui/material/Typography';
-import { useQuery } from '@tanstack/react-query';
-import { useRouter } from 'next/router';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 
-import { useAuthStore } from '~/entities/auth-store';
 import { Breadcrumbs } from '~/entities/breadcrumbs';
 import { Catalog } from '~/features/catalog';
-import { queryCategories } from '~/shared/api/commercetools';
-import { toastifyError } from '~/shared/lib/react-toastify';
-import { QueryKey } from '~/shared/lib/tanstack-query';
+import { useSlug } from '~/shared/lib/nextjs';
 import { Route } from '~/shared/model/route.enum';
 
-import { createCategoriesBreadcrumbsProps, getCurrentCategories } from '../lib';
+import {
+  createCategoriesBreadcrumbsProps,
+  getCurrentCategories,
+  useCategoriesQuery,
+  usePruneInvalidCategoriesFromUrl,
+} from '../lib';
 
 import type { ReactNode } from 'react';
-import type { FCProps } from '~/shared/model/types';
-
-export type CatalogPageProps = FCProps<{
-  slug: string[];
-}>;
 
 const baseEndpoint = Route.CATALOG;
 
-export function CatalogPage({ slug: slugList }: CatalogPageProps): ReactNode {
-  // token
-  const { token } = useAuthStore((store) => ({ token: store.access_token }));
+export function CatalogPage(): ReactNode {
+  const slugList = useSlug();
 
   // categories
-  const categoriesQuery = useQuery({
-    queryKey: [QueryKey.CATEGORIES, token],
-    queryFn: () => queryCategories(token),
-  });
-  const currentCategories = useMemo(
-    () => getCurrentCategories({ categories: categoriesQuery.data?.results, slugList }),
-    [categoriesQuery.data?.results, slugList]
-  );
+  const categoriesQuery = useCategoriesQuery();
+  const categories = categoriesQuery.data?.results;
+  const currentCategories = useMemo(() => getCurrentCategories({ categories, slugList }), [categories, slugList]);
 
   // breadcrumbs
   const categoriesBreadcrumbsProps = useMemo(
@@ -44,17 +33,11 @@ export function CatalogPage({ slug: slugList }: CatalogPageProps): ReactNode {
   );
 
   // validate+redirect
-  const router = useRouter();
-  useEffect(() => {
-    if (!categoriesQuery.isPending && router.isReady) {
-      const categoryEndpoint = categoriesBreadcrumbsProps.at(-1)?.href ?? '';
-      const expectedEndpoint = `${baseEndpoint}${categoryEndpoint}`;
-
-      if (router.asPath !== expectedEndpoint) {
-        router.push(expectedEndpoint).catch(toastifyError);
-      }
-    }
-  }, [categoriesBreadcrumbsProps, categoriesQuery.isPending, router]);
+  usePruneInvalidCategoriesFromUrl({
+    baseEndpoint,
+    isReady: !categoriesQuery.isPending,
+    getCategoryEndpoint: () => categoriesBreadcrumbsProps.at(-1)?.href ?? '',
+  });
 
   return (
     <>
@@ -73,7 +56,7 @@ export function CatalogPage({ slug: slugList }: CatalogPageProps): ReactNode {
         breadcrumbsLinksProps={categoriesBreadcrumbsProps}
       />
 
-      <Catalog />
+      <Catalog productProjectionSearchQueryVariables={{ limit: 50, offset: 0, filters: [] }} />
     </>
   );
 }
