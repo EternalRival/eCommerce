@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 import { $http } from '../model';
-import { assertToken } from './assert-token';
 
 const document = `
 query Categories($limit: Int, $locale: Locale = "en") {
@@ -45,15 +44,18 @@ const categoriesSchema = z
 
 export type QueryCategoriesReturn = z.infer<typeof categoriesSchema>;
 
-export async function queryCategories(token: Nullable<string>): Promise<QueryCategoriesReturn> {
-  assertToken(token);
+type Props = {
+  token: Maybe<string>;
+  variables?: { limit?: number };
+};
 
+export async function queryCategories({ token, variables }: Props): Promise<QueryCategoriesReturn> {
   return $http
     .gql({
       token,
       operationName: 'Categories',
       query: document,
-      variables: { limit: 100 },
+      variables,
     })
     .then((response) => categoriesSchema.parse(response));
 }
