@@ -130,7 +130,7 @@ export function createCategoryFilter(ids: string[]): SearchFilterInput {
   return { string: `categories.id:${values}` };
 }
 
-export function createPriceFilter({ from = '*', to = '*' }: { from?: string; to?: string }): SearchFilterInput {
+export function createPriceFilter({ from = '0', to = '*' }: { from?: string; to?: string }): SearchFilterInput {
   return { string: `variants.price.centAmount:range(${from} to ${to})` };
 }
 
