@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 import { $http } from '../model';
-import { assertToken } from './assert-token';
 
 const document = `
 query ProductTypes($locale: Locale = "en") {
@@ -34,9 +33,11 @@ const productTypesSchema = z
 
 export type QueryProductTypesReturn = z.infer<typeof productTypesSchema>;
 
-export async function queryProductTypes(token: Nullable<string>): Promise<QueryProductTypesReturn> {
-  assertToken(token);
+type Props = {
+  token: Maybe<string>;
+};
 
+export async function queryProductTypes({ token }: Props): Promise<QueryProductTypesReturn> {
   return $http
     .gql({
       token,

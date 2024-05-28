@@ -66,11 +66,15 @@ export const httpClient = {
     token,
     ...body
   }: {
-    token: string;
+    token: Maybe<string>;
     query: string;
     operationName?: string;
     variables?: Json;
   }): Promise<NonNullable<GqlResponse['data']>> {
+    if (!token) {
+      throw new Error('No token provided');
+    }
+
     return api
       .post(`/${CTP_PROJECT_KEY}/graphql`, body, {
         headers: { Authorization: `Bearer ${token}` },
