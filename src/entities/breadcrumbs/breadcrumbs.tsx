@@ -14,11 +14,12 @@ export type BreadcrumbsLinkProps = {
 
 type Props = FCProps<{
   baseEndpoint: string;
+  baseEndpointLabel: ReactNode;
   isPending?: boolean;
   breadcrumbsLinksProps: BreadcrumbsLinkProps[];
 }>;
 
-export function Breadcrumbs({ baseEndpoint, isPending, breadcrumbsLinksProps }: Props): ReactNode {
+export function Breadcrumbs({ baseEndpoint, baseEndpointLabel, isPending, breadcrumbsLinksProps }: Props): ReactNode {
   if (isPending) {
     return <Skeleton />;
   }
@@ -29,8 +30,9 @@ export function Breadcrumbs({ baseEndpoint, isPending, breadcrumbsLinksProps }: 
         key="home"
         component={NextLink}
         href={baseEndpoint}
+        className="flex"
       >
-        Home
+        {baseEndpointLabel}
       </Link>
       {breadcrumbsLinksProps.map(({ id, href, label }) => (
         <Link
