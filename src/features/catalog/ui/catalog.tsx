@@ -1,27 +1,14 @@
 import Stack from '@mui/material/Stack';
 
-import { useProductProjectionSearchQuery } from '../lib';
+import { useParseFilterOptions, useProductProjectionSearchQuery } from '../lib';
 import { ProductCardList } from './product-card-list';
 
 import type { ReactNode } from 'react';
-import type { FCProps } from '~/shared/model/types';
 
-type Props = FCProps<{
-  productProjectionSearchQueryVariables: Parameters<typeof useProductProjectionSearchQuery>[0];
-}>;
+export function Catalog(): ReactNode {
+  const filters = useParseFilterOptions();
 
-/* const filters = useMemo(
-    () => [
-      createSizeFilter(['30cm']),
-      createDoughFilter(['thin', 'traditional']),
-      createPriceFilter({ from: 660, to: 800 }),
-      createCategoryFilter(['27a860ea-41c0-4613-a35e-ac58c5ada96e']),
-    ],
-    []
-  ); */
-
-export function Catalog({ productProjectionSearchQueryVariables }: Props): ReactNode {
-  const catalogQuery = useProductProjectionSearchQuery(productProjectionSearchQueryVariables);
+  const catalogQuery = useProductProjectionSearchQuery({ limit: 50, offset: 0, filters });
 
   /*   const productTypesQuery = useQuery({
     queryKey: [QueryKey.PRODUCT_TYPES, token],

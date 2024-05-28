@@ -18,8 +18,16 @@ export function usePruneInvalidCategoriesFromUrl({
     if (isReady && router.isReady) {
       const expectedEndpoint = `${baseEndpoint}${getCategoryEndpoint()}`;
 
-      if (router.asPath !== expectedEndpoint) {
-        router.push(expectedEndpoint).catch(toastifyError);
+      const [currentEndpoint, currentParams] = router.asPath.split('?');
+
+      if (currentEndpoint !== expectedEndpoint) {
+        let redirectUrl = expectedEndpoint;
+
+        if (currentParams) {
+          redirectUrl += `?${currentParams}`;
+        }
+
+        router.push(redirectUrl).catch(toastifyError);
       }
     }
   }, [baseEndpoint, getCategoryEndpoint, isReady, router]);

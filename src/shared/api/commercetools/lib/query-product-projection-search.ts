@@ -99,13 +99,15 @@ type SearchFilterModelInput =
 
 type SearchFilterInput = { model: SearchFilterModelInput } | { string: string };
 
+export type QueryProductProjectionSearchVariables = {
+  limit?: number;
+  offset?: number;
+  filters?: SearchFilterInput[];
+};
+
 type Props = {
   token: Maybe<string>;
-  variables?: {
-    limit?: number;
-    offset?: number;
-    filters?: SearchFilterInput[];
-  };
+  variables?: QueryProductProjectionSearchVariables;
 };
 
 export async function queryProductProjectionSearch({
@@ -123,17 +125,23 @@ export async function queryProductProjectionSearch({
 }
 
 export function createCategoryFilter(ids: string[]): SearchFilterInput {
-  return { string: `categories.id:subtree("${ids.join('"),subtree("')}")` };
+  const values = ids.map((id) => `subtree("${id}")`).join();
+
+  return { string: `categories.id:${values}` };
 }
 
-export function createPriceFilter({ from, to }: { from: number | string; to: number | string }): SearchFilterInput {
-  return { string: `variants.price.centAmount:range(${from.toString()} to ${to.toString()})` };
+export function createPriceFilter({ from = '*', to = '*' }: { from?: string; to?: string }): SearchFilterInput {
+  return { string: `variants.price.centAmount:range(${from} to ${to})` };
 }
 
 export function createDoughFilter(doughs: string[]): SearchFilterInput {
-  return { string: `variants.attributes.dough.key:"${doughs.join('","')}"` };
+  const values = doughs.map((dough) => `"${dough}"`).join();
+
+  return { string: `variants.attributes.dough.key:${values}` };
 }
 
 export function createSizeFilter(sizes: string[]): SearchFilterInput {
-  return { string: `variants.attributes.size.key:"${sizes.join('","')}"` };
+  const values = sizes.map((size) => `"${size}"`).join();
+
+  return { string: `variants.attributes.size.key:${values}` };
 }

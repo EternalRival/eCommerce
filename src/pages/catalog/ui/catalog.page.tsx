@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 
 import { Breadcrumbs } from '~/entities/breadcrumbs';
 import { Catalog } from '~/features/catalog';
-import { useSlug } from '~/shared/lib/nextjs';
+import { useParseQueryParam } from '~/shared/lib/nextjs';
 import { Route } from '~/shared/model/route.enum';
 
 import {
@@ -19,7 +19,7 @@ import type { ReactNode } from 'react';
 const baseEndpoint = Route.CATALOG;
 
 export function CatalogPage(): ReactNode {
-  const slugList = useSlug();
+  const slugList = useParseQueryParam('slug');
 
   // categories
   const categoriesQuery = useCategoriesQuery();
@@ -56,7 +56,7 @@ export function CatalogPage(): ReactNode {
         breadcrumbsLinksProps={categoriesBreadcrumbsProps}
       />
 
-      <Catalog productProjectionSearchQueryVariables={{ limit: 50, offset: 0, filters: [] }} />
+      <Catalog />
     </>
   );
 }
