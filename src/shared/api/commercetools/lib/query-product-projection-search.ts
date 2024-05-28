@@ -108,6 +108,20 @@ type Props = {
   };
 };
 
+export async function queryProductProjectionSearch({
+  token,
+  variables,
+}: Props): Promise<QueryProductProjectionSearchReturn> {
+  return $http
+    .gql({
+      token,
+      operationName: 'ProductProjectionSearch',
+      query: document,
+      variables,
+    })
+    .then((response) => productProjectionSearchSchema.parse(response));
+}
+
 export function createCategoryFilter(ids: string[]): SearchFilterInput {
   return { string: `categories.id:subtree("${ids.join('"),subtree("')}")` };
 }
@@ -122,18 +136,4 @@ export function createDoughFilter(doughs: string[]): SearchFilterInput {
 
 export function createSizeFilter(sizes: string[]): SearchFilterInput {
   return { string: `variants.attributes.size.key:"${sizes.join('","')}"` };
-}
-
-export async function queryProductProjectionSearch({
-  token,
-  variables,
-}: Props): Promise<QueryProductProjectionSearchReturn> {
-  return $http
-    .gql({
-      token,
-      operationName: 'ProductProjectionSearch',
-      query: document,
-      variables,
-    })
-    .then((response) => productProjectionSearchSchema.parse(response));
 }
