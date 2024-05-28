@@ -1,1 +1,1 @@
-export { useSlug } from './use-slug';
+export { createParseQueryParam, useParseQueryParam } from './parse-query-param';
