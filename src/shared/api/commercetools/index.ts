@@ -1,4 +1,8 @@
 export {
+  createCategoryFilter,
+  createDoughFilter,
+  createPriceFilter,
+  createSizeFilter,
   findCountryByLabel,
   getTokenInfo,
   getTokenInfoByCredentials,
