@@ -1,16 +1,18 @@
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import Typography from '@mui/material/Typography';
+import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
 import { Breadcrumbs } from '~/entities/breadcrumbs';
 import { Catalog } from '~/features/catalog';
-import { useParseQueryParam } from '~/shared/lib/nextjs';
+import { createParseQueryParam } from '~/shared/lib/nextjs';
 import { Route } from '~/shared/model/route.enum';
 
 import {
   createCategoriesBreadcrumbsProps,
   getCurrentCategories,
   useCategoriesQuery,
+  useParseFilterOptions,
   usePruneInvalidCategoriesFromUrl,
 } from '../lib';
 
@@ -19,12 +21,27 @@ import type { ReactNode } from 'react';
 const baseEndpoint = Route.CATALOG;
 
 export function CatalogPage(): ReactNode {
-  const slugList = useParseQueryParam('slug');
+  const router = useRouter();
+  const parseQueryParam = createParseQueryParam(router.query);
+  const slugList = parseQueryParam('slug');
+  const [priceFrom] = parseQueryParam('priceFrom');
+  const [priceTo] = parseQueryParam('priceTo');
+  const sizes = parseQueryParam('size');
+  const doughs = parseQueryParam('dough');
 
   // categories
   const categoriesQuery = useCategoriesQuery();
   const categories = categoriesQuery.data?.results;
   const currentCategories = useMemo(() => getCurrentCategories({ categories, slugList }), [categories, slugList]);
+  const currentCategory = currentCategories.at(-1);
+
+  // filters
+  const filters = useParseFilterOptions({
+    categories: currentCategory ? [currentCategory.id] : [],
+    doughs,
+    price: { from: priceFrom, to: priceTo },
+    sizes,
+  });
 
   // breadcrumbs
   const categoriesBreadcrumbsProps = useMemo(
@@ -56,7 +73,7 @@ export function CatalogPage(): ReactNode {
         breadcrumbsLinksProps={categoriesBreadcrumbsProps}
       />
 
-      <Catalog />
+      <Catalog productProjectionSearchQueryVariables={{ limit: 50, offset: 0, filters }} />
     </>
   );
 }
