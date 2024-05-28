@@ -5,36 +5,29 @@ type Category = QueryCategoriesReturn['results'][number];
 
 type Props = {
   categories?: Category[];
-  slugList: string[];
 };
 
-export function createCategoriesBreadcrumbsProps({ categories, slugList }: Props): BreadcrumbsLinkProps[] {
+export function createCategoriesBreadcrumbsProps({ categories }: Props): BreadcrumbsLinkProps[] {
   if (!categories || categories.length < 1) {
     return [];
   }
 
   const result: BreadcrumbsLinkProps[] = [];
-  const slugLength = slugList.length;
-  let lastSlug: Nullable<string> = null;
+  const currentCategoriesLength = categories.length;
   let lastHref = '';
 
-  for (let i = 0; i < slugLength; i += 1) {
-    const currentCategory = categories.find((category) => category.slug === slugList[i]);
+  for (let i = 0; i < currentCategoriesLength; i += 1) {
+    const currentCategory = categories[i];
 
-    if (
-      !currentCategory?.slug ||
-      !currentCategory.name ||
-      (currentCategory.parent && currentCategory.parent.slug !== lastSlug)
-    ) {
+    if (!currentCategory?.slug || !currentCategory.name) {
       break;
     }
 
-    const { id, name, slug } = currentCategory;
+    const { id, name: label, slug } = currentCategory;
     const href = `${lastHref}/${slug}`;
 
-    result.push({ id, href, label: name });
+    result.push({ id, label, href });
 
-    lastSlug = slug;
     lastHref = href;
   }
 
