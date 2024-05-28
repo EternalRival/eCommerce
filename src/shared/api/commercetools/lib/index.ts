@@ -13,5 +13,6 @@ export {
   createSizeFilter,
   queryProductProjectionSearch,
   type QueryProductProjectionSearchReturn,
+  type QueryProductProjectionSearchVariables,
 } from './query-product-projection-search';
 export { queryProductTypes, type QueryProductTypesReturn } from './query-product-types';

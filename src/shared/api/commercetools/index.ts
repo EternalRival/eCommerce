@@ -17,5 +17,6 @@ export {
   type QueryCategoriesReturn,
   type QueryProductProjectionSearchReturn,
   type QueryProductTypesReturn,
+  type QueryProductProjectionSearchVariables,
 } from './lib';
 export { ALLOWED_COUNTRY_NAMES } from './model';
