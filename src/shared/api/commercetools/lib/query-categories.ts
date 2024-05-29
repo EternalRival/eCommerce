@@ -4,21 +4,57 @@ import { $http } from '../model';
 
 const document = `
 query Categories($limit: Int, $locale: Locale = "en") {
-  categories(limit: $limit) {
+  categories(limit: $limit, where: "parent is not defined") {
     count
     offset
     total
     results {
-      id
-      slug(locale: $locale)
-      name(locale: $locale)
-      parent {
-        slug(locale: $locale)
+      ...category
+      children {
+        ...category
+        children {
+          ...category
+          children {
+            ...category
+            children {
+              ...category
+            }
+          }
+        }
       }
     }
   }
 }
+
+fragment category on Category {
+  id
+  slug(locale: $locale)
+  name(locale: $locale)
+  parent {
+    slug(locale: $locale)
+  }
+}
+
 `;
+
+const baseCategorySchema = z.object({
+  id: z.string(),
+  slug: z.string().nullish(),
+  name: z.string().nullish(),
+  parent: z
+    .object({
+      slug: z.string().nullish(),
+    })
+    .nullish(),
+});
+
+export type Category = z.infer<typeof baseCategorySchema> & {
+  children: Category[];
+};
+
+const categorySchema: z.ZodType<Category> = baseCategorySchema.extend({
+  children: z.lazy(() => categorySchema.array()),
+});
 
 const categoriesSchema = z
   .object({
@@ -26,18 +62,7 @@ const categoriesSchema = z
       count: z.number(),
       offset: z.number(),
       total: z.number(),
-      results: z.array(
-        z.object({
-          id: z.string(),
-          slug: z.string().nullish(),
-          name: z.string().nullish(),
-          parent: z
-            .object({
-              slug: z.string().nullish(),
-            })
-            .nullish(),
-        })
-      ),
+      results: z.array(categorySchema),
     }),
   })
   .transform((data) => data.categories);
