@@ -10,7 +10,7 @@ import { Route } from '~/shared/model/route.enum';
 
 import {
   createCategoriesBreadcrumbsProps,
-  getCurrentCategory,
+  getCurrentCategoryTree,
   useCategoriesQuery,
   useParseFilterOptions,
   usePruneInvalidCategoriesFromUrl,
@@ -32,7 +32,12 @@ export function CatalogPage(): ReactNode {
   // categories
   const categoriesQuery = useCategoriesQuery();
   const categories = categoriesQuery.data?.results;
-  const currentCategory = useMemo(() => getCurrentCategory({ categories, slugList }), [categories, slugList]);
+  const currentCategoryTree = useMemo(() => getCurrentCategoryTree({ categories, slugList }), [categories, slugList]);
+  const categoriesBreadcrumbsProps = useMemo(
+    () => createCategoriesBreadcrumbsProps({ category: currentCategoryTree, endpoint: baseEndpoint }),
+    [currentCategoryTree]
+  );
+  const currentCategory = categoriesBreadcrumbsProps.at(-1);
 
   // filters
   const filters = useParseFilterOptions({
@@ -43,15 +48,11 @@ export function CatalogPage(): ReactNode {
   });
 
   // breadcrumbs
-  const categoriesBreadcrumbsProps = useMemo(
-    () => createCategoriesBreadcrumbsProps({ category: currentCategory, endpoint: baseEndpoint }),
-    [currentCategory]
-  );
 
   // validate+redirect
   usePruneInvalidCategoriesFromUrl({
     isReady: !categoriesQuery.isPending,
-    getExpectedEndpoint: () => categoriesBreadcrumbsProps.at(-1)?.href ?? baseEndpoint,
+    getExpectedEndpoint: () => currentCategory?.href ?? baseEndpoint,
   });
 
   return (
