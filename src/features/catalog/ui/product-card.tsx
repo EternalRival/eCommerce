@@ -133,9 +133,19 @@ function ViewDetails({ slug }: ViewDetailsProps): ReactNode {
   const buttonText = 'View Details';
 
   return slug ? (
-    <Button href={`${Route.PRODUCT}/${slug}`}>{buttonText}</Button>
+    <Button
+      variant="outlined"
+      href={`${Route.PRODUCT}/${slug}`}
+    >
+      {buttonText}
+    </Button>
   ) : (
-    <Button disabled>{buttonText}</Button>
+    <Button
+      variant="outlined"
+      disabled
+    >
+      {buttonText}
+    </Button>
   );
 }
 
