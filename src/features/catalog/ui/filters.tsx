@@ -26,7 +26,7 @@ export function Filters({ isPending, productTypesReturn, placeholder = 'Filters'
   return (
     <Stack className="ring">
       {placeholder}
-      <>{JSON.stringify(productTypesReturn?.results)}</>
+      <>{JSON.stringify(productTypesReturn)}</>
     </Stack>
   );
 }

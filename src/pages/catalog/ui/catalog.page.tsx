@@ -10,7 +10,6 @@ import { Route } from '~/shared/model/route.enum';
 
 import {
   createCategoriesBreadcrumbsProps,
-  getCurrentCategoryTree,
   useCategoriesQuery,
   useParseFilterOptions,
   usePruneInvalidCategoriesFromUrl,
@@ -32,10 +31,11 @@ export function CatalogPage(): ReactNode {
   // categories
   const categoriesQuery = useCategoriesQuery();
   const categories = categoriesQuery.data?.results;
-  const currentCategoryTree = useMemo(() => getCurrentCategoryTree({ categories, slugList }), [categories, slugList]);
+
+  // breadcrumbs
   const categoriesBreadcrumbsProps = useMemo(
-    () => createCategoriesBreadcrumbsProps({ category: currentCategoryTree, endpoint: baseEndpoint }),
-    [currentCategoryTree]
+    () => createCategoriesBreadcrumbsProps({ categories: categories ?? [], slugList, endpoint: baseEndpoint }),
+    [categories, slugList]
   );
   const currentCategory = categoriesBreadcrumbsProps.at(-1);
 
@@ -46,8 +46,6 @@ export function CatalogPage(): ReactNode {
     price: { from: priceFrom, to: priceTo },
     sizes,
   });
-
-  // breadcrumbs
 
   // validate+redirect
   usePruneInvalidCategoriesFromUrl({
