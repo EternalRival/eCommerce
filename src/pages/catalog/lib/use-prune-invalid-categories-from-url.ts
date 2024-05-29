@@ -4,19 +4,17 @@ import { useEffect } from 'react';
 import { toastifyError } from '~/shared/lib/react-toastify';
 
 export function usePruneInvalidCategoriesFromUrl({
-  baseEndpoint,
   isReady,
-  getCategoryEndpoint,
+  getExpectedEndpoint,
 }: {
-  baseEndpoint: string;
   isReady: boolean;
-  getCategoryEndpoint: () => string;
+  getExpectedEndpoint: () => string;
 }): void {
   const router = useRouter();
 
   useEffect(() => {
     if (isReady && router.isReady) {
-      const expectedEndpoint = `${baseEndpoint}${getCategoryEndpoint()}`;
+      const expectedEndpoint = getExpectedEndpoint();
 
       const [currentEndpoint, currentParams] = router.asPath.split('?');
 
@@ -30,5 +28,5 @@ export function usePruneInvalidCategoriesFromUrl({
         router.push(redirectUrl).catch(toastifyError);
       }
     }
-  }, [baseEndpoint, getCategoryEndpoint, isReady, router]);
+  }, [getExpectedEndpoint, isReady, router]);
 }

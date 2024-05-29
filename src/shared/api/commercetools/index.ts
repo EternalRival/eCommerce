@@ -12,6 +12,7 @@ export {
   queryCategories,
   queryProductProjectionSearch,
   queryProductTypes,
+  type Category,
   type MutateCustomerSignMeInReturn,
   type MutateCustomerSignMeUpReturn,
   type QueryCategoriesReturn,

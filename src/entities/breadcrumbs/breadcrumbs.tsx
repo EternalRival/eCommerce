@@ -38,7 +38,7 @@ export function Breadcrumbs({ baseEndpoint, baseEndpointLabel, isPending, breadc
         <Link
           key={id}
           component={NextLink}
-          href={`${baseEndpoint}${href}`}
+          href={href}
         >
           {label}
         </Link>
