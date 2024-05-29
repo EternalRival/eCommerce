@@ -7,14 +7,14 @@ type Props = {
   slugList: string[];
 };
 
-export function getCurrentCategory({ categories, slugList }: Props): Nullable<Category> {
+export function getCurrentCategoryTree({ categories, slugList }: Props): Nullable<Category> {
   const category = categories?.find(({ slug }) => slug === slugList[0]);
 
   if (!category) {
     return null;
   }
 
-  const child = getCurrentCategory({ categories: category.children, slugList: slugList.slice(1) });
+  const child = getCurrentCategoryTree({ categories: category.children, slugList: slugList.slice(1) });
 
   return { ...category, children: child ? [child] : [] };
 }
