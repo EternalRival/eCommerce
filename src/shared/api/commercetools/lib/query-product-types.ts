@@ -10,7 +10,16 @@ query ProductTypes($locale: Locale = "en") {
         results {
           name
           label(locale: $locale)
-          isSearchable
+          type {
+            ... on EnumAttributeDefinitionType {
+              values {
+                results {
+                  key
+                  label
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -24,12 +33,23 @@ const productTypesSchema = z
         z.object({
           name: z.string(),
           label: z.string().nullish(),
-          isSearchable: z.boolean(),
+          type: z.object({
+            values: z.object({
+              results: z.array(
+                z.object({
+                  key: z.string(),
+                  label: z.string(),
+                })
+              ),
+            }),
+          }),
         })
       ),
     }),
   })
-  .transform((data) => data.productTypes);
+  .transform((data) =>
+    data.productTypes.results.map(({ name, label, type }) => ({ name, label, values: type.values.results }))
+  );
 
 export type QueryProductTypesReturn = z.infer<typeof productTypesSchema>;
 
