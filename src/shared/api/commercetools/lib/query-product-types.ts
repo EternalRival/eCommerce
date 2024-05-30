@@ -31,24 +31,34 @@ const productTypesSchema = z
     productTypes: z.object({
       results: z.array(
         z.object({
-          name: z.string(),
-          label: z.string().nullish(),
-          type: z.object({
-            values: z.object({
-              results: z.array(
-                z.object({
-                  key: z.string(),
-                  label: z.string(),
-                })
-              ),
-            }),
+          attributeDefinitions: z.object({
+            results: z.array(
+              z.object({
+                name: z.string(),
+                label: z.string().nullish(),
+                type: z.object({
+                  values: z.object({
+                    results: z.array(
+                      z.object({
+                        key: z.string(),
+                        label: z.string(),
+                      })
+                    ),
+                  }),
+                }),
+              })
+            ),
           }),
         })
       ),
     }),
   })
   .transform((data) =>
-    data.productTypes.results.map(({ name, label, type }) => ({ name, label, values: type.values.results }))
+    data.productTypes.results[0]?.attributeDefinitions.results.map(({ name, label, type }) => ({
+      name,
+      label,
+      values: type.values.results,
+    }))
   );
 
 export type QueryProductTypesReturn = z.infer<typeof productTypesSchema>;

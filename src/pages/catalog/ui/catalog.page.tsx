@@ -70,7 +70,11 @@ export function CatalogPage(): ReactNode {
         breadcrumbsLinksProps={categoriesBreadcrumbsProps}
       />
 
-      <Catalog productProjectionSearchQueryVariables={{ limit: 50, offset: 0, filters }} />
+      <Catalog
+        categories={categories ?? []}
+        categoriesIsPending={categoriesQuery.isPending}
+        productProjectionSearchQueryVariables={{ limit: 50, offset: 0, filters }}
+      />
     </>
   );
 }
