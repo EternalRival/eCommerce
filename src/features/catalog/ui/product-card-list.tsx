@@ -15,7 +15,7 @@ type Props = FCProps<{
 export function ProductCardList({ isPending, productProjectionSearchResult }: Props): ReactNode {
   const noListText = 'No products';
   const emptyListText = 'No products found';
-  const containerClassName = 'flex-row flex-wrap justify-center gap-8';
+  const containerClassName = 'flex-row flex-wrap justify-center grow gap-8';
 
   if (isPending) {
     return (
