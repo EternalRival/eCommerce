@@ -1,19 +1,12 @@
-import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
-import { Breadcrumbs } from '~/entities/breadcrumbs';
-import { Catalog } from '~/features/catalog';
+import { Catalog , CategoryBreadcrumbs } from '~/features/catalog';
 import { createParseQueryParam } from '~/shared/lib/nextjs';
 import { Route } from '~/shared/model/route.enum';
 
-import {
-  createCategoriesBreadcrumbsProps,
-  useCategoriesQuery,
-  useParseFilterOptions,
-  usePruneInvalidCategoriesFromUrl,
-} from '../lib';
+import { createCategoriesBreadcrumbsProps, useCategoriesQuery, useParseFilterOptions } from '../lib';
 
 import type { ReactNode } from 'react';
 
@@ -48,10 +41,10 @@ export function CatalogPage(): ReactNode {
   });
 
   // validate+redirect
-  usePruneInvalidCategoriesFromUrl({
-    isReady: !categoriesQuery.isPending,
-    getExpectedEndpoint: () => currentCategory?.href ?? baseEndpoint,
-  });
+  // usePruneInvalidCategoriesFromUrl({
+  //   isReady: !categoriesQuery.isPending,
+  //   getExpectedEndpoint: () => currentCategory?.href ?? baseEndpoint,
+  // });
 
   return (
     <>
@@ -63,12 +56,7 @@ export function CatalogPage(): ReactNode {
         Catalog Page
       </Typography>
 
-      <Breadcrumbs
-        baseEndpoint={baseEndpoint}
-        baseEndpointLabel={<ViewModuleIcon />}
-        isPending={slugList.length > 0 && categoriesQuery.isPending}
-        breadcrumbsLinksProps={categoriesBreadcrumbsProps}
-      />
+      <CategoryBreadcrumbs />
 
       <Catalog
         categories={categories ?? []}

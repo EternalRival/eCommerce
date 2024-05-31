@@ -17,7 +17,7 @@ export {
   type MutateCustomerSignMeUpReturn,
   type QueryCategoriesReturn,
   type QueryProductProjectionSearchReturn,
-  type QueryProductTypesReturn,
   type QueryProductProjectionSearchVariables,
+  type QueryProductTypesReturn,
 } from './lib';
-export { ALLOWED_COUNTRY_NAMES } from './model';
+export { $http, ALLOWED_COUNTRY_NAMES } from './model';
