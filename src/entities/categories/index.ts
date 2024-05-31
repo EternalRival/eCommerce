@@ -1,1 +1,1 @@
-export { useCategoriesQuery, type Category } from './model';
+export { useCategoriesQuery, type QueryCategoriesReturn } from './model';

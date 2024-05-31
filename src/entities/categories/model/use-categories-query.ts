@@ -7,6 +7,20 @@ import type { UseQueryResult } from '@tanstack/react-query';
 
 const document = `
 query Categories($locale: Locale = "en") {
+  productProjectionSearch(facets: [{string: "categories.id as categories counting products"}]) {
+    facets {
+      facet
+      value {
+        ... on TermsFacetResult {
+          terms {
+            term
+            count
+            productCount
+          }
+        }
+      }
+    }
+  }
   categories(limit: 100, where: "parent is not defined") {
     results {
       ...category
@@ -47,7 +61,7 @@ const baseCategorySchema = z.object({
     .nullish(),
 });
 
-export type Category = z.infer<typeof baseCategorySchema> & {
+type Category = z.infer<typeof baseCategorySchema> & {
   children: Category[];
 };
 
@@ -60,16 +74,37 @@ const categoriesSchema = z
     categories: z.object({
       results: z.array(categorySchema),
     }),
+    productProjectionSearch: z.object({
+      facets: z.array(
+        z.object({
+          facet: z.string(),
+          value: z.object({
+            terms: z.array(
+              z.object({
+                term: z.string(),
+                count: z.number(),
+                productCount: z.number().nullish(),
+              })
+            ),
+          }),
+        })
+      ),
+    }),
   })
-  .transform((data) => data.categories.results);
+  .transform((data) => ({
+    categories: data.categories.results,
+    categoriesFacet: data.productProjectionSearch.facets.find(({ facet }) => facet === 'categories')?.value.terms ?? [],
+  }));
 
-async function queryCategories({ token }: { token: Maybe<string> }): Promise<Category[]> {
+export type QueryCategoriesReturn = z.infer<typeof categoriesSchema>;
+
+async function queryCategories({ token }: { token: Maybe<string> }): Promise<QueryCategoriesReturn> {
   return $http
     .gql({ token, operationName: 'Categories', query: document })
     .then((data) => categoriesSchema.parse(data));
 }
 
-export function useCategoriesQuery({ token }: { token: Maybe<string> }): UseQueryResult<Category[]> {
+export function useCategoriesQuery({ token }: { token: Maybe<string> }): UseQueryResult<QueryCategoriesReturn> {
   return useQuery({
     queryKey: ['categories', token],
     queryFn() {

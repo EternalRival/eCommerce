@@ -12,7 +12,7 @@ import { useParseQueryParam } from '~/shared/lib/nextjs';
 import { Route } from '~/shared/model/route.enum';
 
 import type { ReactNode } from 'react';
-import type { Category } from '~/entities/categories';
+import type { QueryCategoriesReturn } from '~/entities/categories';
 
 function createLinkProps({
   baseUrl,
@@ -21,11 +21,11 @@ function createLinkProps({
 }: {
   baseUrl: string;
   slugList: string[];
-  categories?: Category[];
+  categories?: QueryCategoriesReturn['categories'];
 }): { id: string; href: string; name: string }[] {
   const currentCategory = categories?.find((category) => category.slug === slugList[0]);
 
-  if (!currentCategory || !currentCategory.slug || !currentCategory.name) {
+  if (!currentCategory?.slug || !currentCategory.name) {
     return [];
   }
 
@@ -41,9 +41,10 @@ function createLinkProps({
 export function CategoryBreadcrumbs(): ReactNode {
   const baseUrl = Route.CATALOG;
   const token = useAuthStore((store) => store.access_token);
-  const { data: categories, isPending } = useCategoriesQuery({ token });
+  const { data, isPending } = useCategoriesQuery({ token });
   const slugList = useParseQueryParam('slug');
 
+  const categories = data?.categories;
   const linkProps = useMemo(() => createLinkProps({ baseUrl, categories, slugList }), [baseUrl, categories, slugList]);
 
   if (isPending) {
