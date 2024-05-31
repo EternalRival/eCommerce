@@ -1,1 +1,1 @@
-export { useCategoriesQuery, type Category } from './use-categories-query';
+export { useCategoriesQuery, type QueryCategoriesReturn } from './use-categories-query';
