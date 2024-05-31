@@ -1,3 +1,3 @@
 export {} from './lib';
 export {} from './model';
-export { Catalog } from './ui';
+export { Catalog, CategoryBreadcrumbs } from './ui';
