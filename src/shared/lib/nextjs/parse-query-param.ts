@@ -12,6 +12,7 @@ export function createParseQueryParam(parsedUrlQuery: ParsedUrlQuery) {
 
 export function useParseQueryParam(key: string): string[] {
   const { query } = useRouter();
+  const param = query[key];
 
-  return createParseQueryParam(query)(key);
+  return typeof param === 'string' ? [param] : param ?? [];
 }

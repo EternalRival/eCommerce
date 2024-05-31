@@ -14,7 +14,7 @@ type Props = FCProps<{
   productProjectionSearchQueryVariables: QueryProductProjectionSearchVariables;
 }>;
 
-export function Catalog({ categories, categoriesIsPending, productProjectionSearchQueryVariables }: Props): ReactNode {
+export function Catalog({ productProjectionSearchQueryVariables }: Props): ReactNode {
   const catalogQuery = useProductProjectionSearchQuery(productProjectionSearchQueryVariables);
 
   /*   const productTypesQuery = useQuery({
@@ -38,10 +38,7 @@ export function Catalog({ categories, categoriesIsPending, productProjectionSear
       /> */}
 
       <Stack className="shrink-0">
-        <CategoryPicker
-          categories={categories}
-          isPending={categoriesIsPending}
-        />
+        <CategoryPicker />
       </Stack>
 
       <ProductCardList
