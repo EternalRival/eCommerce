@@ -20,21 +20,26 @@ import type { FCProps } from '~/shared/model/types';
 
 function CategoryItem({
   category,
+  getCount,
   endpoint,
   paddingLeft = 2,
 }: FCProps<{
   category: Category;
+  getCount: (id: string) => Nullable<string>;
   endpoint: string;
   paddingLeft?: number;
 }>): ReactNode {
-  const router = useRouter();
+  const { asPath } = useRouter();
 
-  if (!category.slug) {
+  if (!category.slug || !category.name) {
     return null;
   }
 
+  const { id, slug, name, children } = category;
+
   const paddingStep = 2;
-  const buttonEndpoint = `${endpoint}/${category.slug}`;
+  const buttonEndpoint = `${endpoint}/${slug}`;
+  const count = getCount(id);
 
   return (
     <>
@@ -42,14 +47,15 @@ function CategoryItem({
         LinkComponent={Link}
         sx={{ paddingLeft }}
         href={buttonEndpoint}
-        selected={router.asPath.split('?')[0] === buttonEndpoint}
+        selected={asPath.split('?')[0] === buttonEndpoint}
       >
-        <ListItemText primary={category.name} />
+        <ListItemText primary={count === null ? name : `${name} (${count})`} />
       </ListItemButton>
-      {category.children.map((child) => (
+      {children.map((child) => (
         <CategoryItem
           key={child.id}
           category={child}
+          getCount={getCount}
           endpoint={buttonEndpoint}
           paddingLeft={paddingLeft + paddingStep}
         />
@@ -61,7 +67,7 @@ function CategoryItem({
 export function CategoryPicker(): ReactNode {
   const token = useAuthStore((store) => store.access_token);
 
-  const { data: categories, isPending, error } = useCategoriesQuery({ token });
+  const { data, isPending, error } = useCategoriesQuery({ token });
 
   if (isPending) {
     return (
@@ -85,15 +91,21 @@ export function CategoryPicker(): ReactNode {
           <CategoryItem
             key={rootCategory.id}
             category={rootCategory}
+            getCount={() =>
+              data?.categoriesFacet.reduce((acc, { productCount }) => acc + (productCount ?? 0), 0).toString() ?? null
+            }
             endpoint=""
           />
           {error ? (
             <Alert severity="error">{error.message}</Alert>
           ) : (
-            categories.map((category) => (
+            data.categories.map((category) => (
               <CategoryItem
                 key={category.id}
                 category={category}
+                getCount={(id) =>
+                  data.categoriesFacet.find(({ term }) => term === id)?.productCount?.toString() ?? null
+                }
                 endpoint={Route.CATALOG}
               />
             ))
