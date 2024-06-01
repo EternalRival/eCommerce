@@ -8,6 +8,7 @@ export type Scope =
   | 'manage_my_quotes'
   | 'manage_my_shopping_lists'
   | 'view_categories'
+  | 'view_products'
   | 'view_published_products';
 
 export type StoreScope = Extract<Scope, 'manage_my_orders' | 'manage_my_profile' | 'manage_my_shopping_lists'>;

@@ -15,7 +15,7 @@ import type { ReactNode } from 'react';
 export function Header(): ReactNode {
   return (
     <AppBar position="sticky">
-      <Container>
+      <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box className="grow">
             <Link
