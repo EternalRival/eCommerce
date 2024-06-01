@@ -5,8 +5,10 @@ import { $http } from '~/shared/api/commercetools';
 
 import type { UseQueryResult } from '@tanstack/react-query';
 
-const document = `
-query Categories($locale: Locale = "en") {
+const operationName = 'Categories';
+
+const query = `
+query ${operationName}($locale: Locale = "en") {
   productProjectionSearch(facets: [{string: "categories.id as categories counting products"}]) {
     facets {
       facet
@@ -99,14 +101,12 @@ const categoriesSchema = z
 export type QueryCategoriesReturn = z.infer<typeof categoriesSchema>;
 
 async function queryCategories({ token }: { token: Maybe<string> }): Promise<QueryCategoriesReturn> {
-  return $http
-    .gql({ token, operationName: 'Categories', query: document })
-    .then((data) => categoriesSchema.parse(data));
+  return $http.gql({ token, operationName, query }).then((data) => categoriesSchema.parse(data));
 }
 
 export function useCategoriesQuery({ token }: { token: Maybe<string> }): UseQueryResult<QueryCategoriesReturn> {
   return useQuery({
-    queryKey: ['categories', token],
+    queryKey: [operationName, token],
     queryFn() {
       return queryCategories({ token });
     },
