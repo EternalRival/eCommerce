@@ -15,8 +15,10 @@ import { useCategoriesQuery } from '~/entities/categories';
 import { Route } from '~/shared/model/route.enum';
 
 import type { ReactNode } from 'react';
-import type { Category } from '~/shared/api/commercetools';
+import type { QueryCategoriesReturn } from '~/entities/categories';
 import type { FCProps } from '~/shared/model/types';
+
+type Category = QueryCategoriesReturn['categories'][number];
 
 function CategoryItem({
   category,

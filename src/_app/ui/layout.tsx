@@ -13,6 +13,7 @@ export function Layout({ children }: FCPropsWC): ReactNode {
       <Container
         component="main"
         className="flex grow flex-col py-4"
+        maxWidth="xl"
       >
         {children}
       </Container>

@@ -1,44 +1,22 @@
 import Stack from '@mui/material/Stack';
 
 import { useProductProjectionSearchQuery } from '../lib';
+import { AttributesPicker } from './attributes-picker';
 import { CategoryPicker } from './category-picker';
 import { ProductCardList } from './product-card-list';
 
 import type { ReactNode } from 'react';
-import type { Category, QueryProductProjectionSearchVariables } from '~/shared/api/commercetools';
-import type { FCProps } from '~/shared/model/types';
 
-type Props = FCProps<{
-  categories: Category[];
-  categoriesIsPending: boolean;
-  productProjectionSearchQueryVariables: QueryProductProjectionSearchVariables;
-}>;
+export function Catalog(): ReactNode {
+  const productProjectionSearchQueryVariables = { limit: 50, offset: 0 /* , filters */ };
 
-export function Catalog({ productProjectionSearchQueryVariables }: Props): ReactNode {
   const catalogQuery = useProductProjectionSearchQuery(productProjectionSearchQueryVariables);
 
-  /*   const productTypesQuery = useQuery({
-    queryKey: [QueryKey.PRODUCT_TYPES, token],
-    queryFn() {
-      return queryProductTypes(token);
-    },
-    throwOnError: true,
-  }); */
-
   return (
-    <Stack direction="row">
-      {/* <Filters
-        isPending={productTypesQuery.isPending}
-        productTypesReturn={productTypesQuery.data}
-      /> */}
-
-      {/* <CategoryPicker
-        isPending={categoryQuery.isPending}
-        categoriesReturn={categoryQuery.data}
-      /> */}
-
-      <Stack className="shrink-0">
+    <Stack className="gap-4 md:flex-row">
+      <Stack className="shrink-0 md:w-[max(18rem,25%)]">
         <CategoryPicker />
+        <AttributesPicker />
       </Stack>
 
       <ProductCardList
