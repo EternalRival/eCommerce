@@ -1,1 +1,1 @@
-export { useCategoriesQuery, type QueryCategoriesReturn } from './model';
+export { categoryParamKey, useCategoriesQuery, useCurrentCategory, type QueryCategoriesReturn } from './model';

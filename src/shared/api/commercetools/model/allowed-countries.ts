@@ -1,8 +1,10 @@
 export const ALLOWED_COUNTRIES = (
   [
-    { code: 'DE', label: 'Germany', format: 'NNNNN' },
-    { code: 'US', label: 'United States', format: 'NNNNN' },
-    { code: 'GB', label: 'United Kingdom', format: 'A[A]N[A/N]' },
+    { code: 'RU', label: 'Russia', format: 'NNNNNN' },
+    { code: 'BY', label: 'Belarus', format: 'NNNNNN' },
+    { code: 'PL', label: 'Poland', format: 'NN-NNN' },
+    { code: 'KZ', label: 'Kazakhstan', format: 'NNNNNN' },
+    { code: 'UA', label: 'Ukraine', format: 'NNNNN' },
   ] as const
 ).toSorted((a, b) => a.label.localeCompare(b.label));
 

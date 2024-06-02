@@ -20,4 +20,4 @@ export {
   type QueryProductProjectionSearchVariables,
   type QueryProductTypesReturn,
 } from './lib';
-export { $http, ALLOWED_COUNTRY_NAMES } from './model';
+export { $http, ALLOWED_COUNTRY_NAMES, currencyCodeSchema } from './model';
