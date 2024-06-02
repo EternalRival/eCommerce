@@ -30,8 +30,8 @@ export function parseUrl(url: string): ParsedUrl {
   };
 }
 
-export function useParsedUrl(): ParsedUrl {
-  const router = useRouter();
+export function useParsedUrl(): { isReady: boolean; parsedUrl: ParsedUrl } {
+  const { isReady, asPath } = useRouter();
 
-  return parseUrl(router.asPath);
+  return { isReady, parsedUrl: parseUrl(asPath) };
 }

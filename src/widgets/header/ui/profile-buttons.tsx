@@ -30,7 +30,7 @@ function ProfileButtonsSkeleton({ arrayLength }: FCProps<{ arrayLength: number }
 
 export function ProfileButtons(): ReactNode {
   const auth = useAuthStore(({ type }) => ({ isPending: type === 'empty', isGuest: type === 'guest' }));
-  const signOut = useSignOut();
+  const { signOut } = useSignOut();
   const router = useRouter();
 
   if (auth.isPending) {

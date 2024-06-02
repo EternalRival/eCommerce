@@ -12,16 +12,16 @@ import clsx from 'clsx';
 import { Route } from '~/shared/model/route.enum';
 
 import type { ReactNode } from 'react';
-import type { QueryProductProjectionSearchReturn } from '~/shared/api/commercetools';
 import type { FCProps, FCPropsWC } from '~/shared/model/types';
+import type { QueryProductsReturn } from '~/entities/products';
 
-type ProductProjection = QueryProductProjectionSearchReturn['results'][number];
+type Product = QueryProductsReturn['products'][number];
 
-type Props = FCPropsWC<{ productProjection?: ProductProjection }>;
+type Props = FCPropsWC<{ productData?: Product }>;
 
 type MediaProps = FCProps<{
-  name: ProductProjection['name'];
-  image?: ProductProjection['masterVariant']['images'][number];
+  name: Product['name'];
+  image?: Product['images'][number];
 }>;
 
 function Media({ name, image }: MediaProps): ReactNode {
@@ -43,7 +43,7 @@ function Media({ name, image }: MediaProps): ReactNode {
 }
 
 type NameProps = FCProps<{
-  name: ProductProjection['name'];
+  name: Product['name'];
 }>;
 
 function Name({ name }: NameProps): ReactNode {
@@ -65,7 +65,7 @@ function Name({ name }: NameProps): ReactNode {
 }
 
 type DescriptionProps = FCProps<{
-  description: ProductProjection['description'];
+  description: Product['description'];
 }>;
 
 function Description({ description }: DescriptionProps): ReactNode {
@@ -79,15 +79,15 @@ function Description({ description }: DescriptionProps): ReactNode {
   );
 }
 
-type BaseMoney = NonNullable<ProductProjection['masterVariant']['price']>['value'];
+type BaseMoney = NonNullable<Product['price']>;
 
 type PricesProps = FCProps<{
-  discountedValue?: BaseMoney;
-  priceValue?: BaseMoney;
+  price?: BaseMoney;
+  discountedPrice?: BaseMoney;
 }>;
 
-function Prices({ discountedValue, priceValue }: PricesProps): ReactNode {
-  const currencyMap = { USD: '$', EUR: '€', GBP: '£' } as const;
+function Prices({ price, discountedPrice }: PricesProps): ReactNode {
+  const currencyMap = { USD: '$' } as const;
   const createPriceLabel = ({ centAmount, currencyCode, fractionDigits }: BaseMoney): string =>
     `${currencyMap[currencyCode]}${(centAmount / 10 ** fractionDigits).toString()}`;
 
@@ -97,28 +97,28 @@ function Prices({ discountedValue, priceValue }: PricesProps): ReactNode {
       justifyContent="center"
       spacing={1.5}
     >
-      {(!!discountedValue || !!priceValue) && (
+      {(Boolean(discountedPrice) || Boolean(price)) && (
         <Stack
           direction="row"
           spacing={1}
         >
-          {discountedValue && (
+          {discountedPrice && (
             <Typography
               color="primary"
               sx={{ textShadow: '0 0 .6rem' }}
               className="font-bold"
             >
-              {createPriceLabel(discountedValue)}
+              {createPriceLabel(discountedPrice)}
             </Typography>
           )}
-          {priceValue && (
+          {price && (
             <Typography
-              variant={discountedValue && 'caption'}
-              color={discountedValue ? 'error.light' : 'primary'}
-              sx={{ textShadow: discountedValue && '0 0 .6rem' }}
-              className={clsx('font-medium', discountedValue && 'line-through')}
+              variant={discountedPrice && 'caption'}
+              color={discountedPrice ? 'error.light' : 'primary'}
+              sx={{ textShadow: discountedPrice && '0 0 .6rem' }}
+              className={clsx('font-medium', discountedPrice && 'line-through')}
             >
-              {createPriceLabel(priceValue)}
+              {createPriceLabel(price)}
             </Typography>
           )}
         </Stack>
@@ -127,7 +127,7 @@ function Prices({ discountedValue, priceValue }: PricesProps): ReactNode {
   );
 }
 
-type ViewDetailsProps = FCProps<{ slug: ProductProjection['slug'] }>;
+type ViewDetailsProps = FCProps<{ slug: Product['slug'] }>;
 
 function ViewDetails({ slug }: ViewDetailsProps): ReactNode {
   const buttonText = 'View Details';
@@ -149,24 +149,21 @@ function ViewDetails({ slug }: ViewDetailsProps): ReactNode {
   );
 }
 
-export function ProductCard({ productProjection }: Props): ReactNode {
-  const cardClassName = 'relative h-[30rem] w-80';
-
-  if (!productProjection) {
+export function ProductCard({ productData }: Props): ReactNode {
+  if (!productData) {
     return (
       <Skeleton
-        className={cardClassName}
+        className="relative h-[30rem] w-80"
         variant="rectangular"
       />
     );
   }
 
-  const { slug, name, description, masterVariant } = productProjection;
-  const { images, price } = masterVariant;
+  const { slug, images, name, description, price, discountedPrice } = productData;
 
   return (
     <Card
-      className={cardClassName}
+      className="relative h-[30rem] w-80"
       sx={{ ':hover': { boxShadow: 8 } }}
     >
       <CardContent
@@ -184,8 +181,8 @@ export function ProductCard({ productProjection }: Props): ReactNode {
         <Description description={description} />
 
         <Prices
-          priceValue={price?.value}
-          discountedValue={price?.discounted?.value}
+          price={price}
+          discountedPrice={discountedPrice}
         />
 
         <ViewDetails slug={slug} />

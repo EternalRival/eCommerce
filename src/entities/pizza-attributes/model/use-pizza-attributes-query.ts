@@ -71,13 +71,16 @@ async function queryPizzaAttributes({ token }: { token: Maybe<string> }): Promis
 
 export function usePizzaAttributesQuery({
   token,
+  enabled,
 }: {
   token: Maybe<string>;
+  enabled?: boolean;
 }): UseQueryResult<QueryPizzaAttributesReturn> {
   return useQuery({
     queryKey: [operationName, { token }],
     queryFn() {
       return queryPizzaAttributes({ token });
     },
+    enabled,
   });
 }
