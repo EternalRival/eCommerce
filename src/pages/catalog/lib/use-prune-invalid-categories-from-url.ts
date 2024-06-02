@@ -1,32 +1,51 @@
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
+import { useAuthStore } from '~/entities/auth-store';
+import { useCategoriesQuery } from '~/entities/categories';
+import { useParseQueryParam } from '~/shared/lib/nextjs';
+import { parseUrl } from '~/shared/lib/parse-url';
 import { toastifyError } from '~/shared/lib/react-toastify';
+import { Route } from '~/shared/model/route.enum';
 
-export function usePruneInvalidCategoriesFromUrl({
-  isReady,
-  getExpectedEndpoint,
-}: {
-  isReady: boolean;
-  getExpectedEndpoint: () => string;
-}): void {
+export function usePruneInvalidCategoriesFromUrl(): void {
+  const token = useAuthStore((store) => store.access_token);
+  const categoriesQuery = useCategoriesQuery({ token });
   const router = useRouter();
+  const slugList = useParseQueryParam('slug');
+
+  const getExpectedEndpoint = useCallback(() => {
+    let result: string = Route.CATALOG;
+
+    let categories = categoriesQuery.data?.categories;
+
+    const { length } = slugList;
+    for (let i = 0; i < length; i += 1) {
+      const currentCategory = categories?.find((category) => category.slug === slugList[i]);
+
+      if (!currentCategory?.slug) {
+        break;
+      }
+
+      result += `/${currentCategory.slug}`;
+
+      categories = currentCategory.children;
+    }
+
+    return result;
+  }, [categoriesQuery.data?.categories, slugList]);
 
   useEffect(() => {
-    if (isReady && router.isReady) {
+    if (!categoriesQuery.isPending && router.isReady) {
+      const currentUrl = parseUrl(router.asPath);
+      const currentEndpoint = currentUrl.pathname;
       const expectedEndpoint = getExpectedEndpoint();
 
-      const [currentEndpoint, currentParams] = router.asPath.split('?');
-
-      if (currentEndpoint !== expectedEndpoint) {
-        let redirectUrl = expectedEndpoint;
-
-        if (currentParams) {
-          redirectUrl += `?${currentParams}`;
-        }
-
-        router.push(redirectUrl).catch(toastifyError);
+      if (currentEndpoint === expectedEndpoint) {
+        return;
       }
+
+      router.push({ ...currentUrl, pathname: expectedEndpoint }).catch(toastifyError);
     }
-  }, [getExpectedEndpoint, isReady, router]);
+  }, [categoriesQuery.isPending, getExpectedEndpoint, router]);
 }

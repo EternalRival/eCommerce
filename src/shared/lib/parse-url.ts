@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router';
+
 export type ParsedUrl = {
   protocol: string;
   hostname: string;
@@ -26,4 +28,10 @@ export function parseUrl(url: string): ParsedUrl {
     hash: sourceUrl.hash,
     href: `${sourceUrl.pathname}${sourceUrl.search}${sourceUrl.hash}`,
   };
+}
+
+export function useParsedUrl(): ParsedUrl {
+  const router = useRouter();
+
+  return parseUrl(router.asPath);
 }
