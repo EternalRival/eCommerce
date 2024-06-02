@@ -104,11 +104,18 @@ async function queryCategories({ token }: { token: Maybe<string> }): Promise<Que
   return $http.gql({ token, operationName, query }).then((data) => categoriesSchema.parse(data));
 }
 
-export function useCategoriesQuery({ token }: { token: Maybe<string> }): UseQueryResult<QueryCategoriesReturn> {
+export function useCategoriesQuery({
+  token,
+  enabled,
+}: {
+  token: Maybe<string>;
+  enabled?: boolean;
+}): UseQueryResult<QueryCategoriesReturn> {
   return useQuery({
     queryKey: [operationName, token],
     queryFn() {
       return queryCategories({ token });
     },
+    enabled,
   });
 }

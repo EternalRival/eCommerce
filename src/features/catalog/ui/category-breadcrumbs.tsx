@@ -7,7 +7,7 @@ import NextLink from 'next/link';
 import { useMemo } from 'react';
 
 import { useAuthStore } from '~/entities/auth-store';
-import { useCategoriesQuery } from '~/entities/categories';
+import { categoryParamKey, useCategoriesQuery } from '~/entities/categories';
 import { useParseQueryParam } from '~/shared/lib/nextjs';
 import { Route } from '~/shared/model/route.enum';
 
@@ -42,7 +42,7 @@ export function CategoryBreadcrumbs(): ReactNode {
   const baseUrl = Route.CATALOG;
   const token = useAuthStore((store) => store.access_token);
   const { data, isPending } = useCategoriesQuery({ token });
-  const slugList = useParseQueryParam('slug');
+  const { param: slugList } = useParseQueryParam(categoryParamKey);
 
   const categories = data?.categories;
   const linkProps = useMemo(() => createLinkProps({ baseUrl, categories, slugList }), [baseUrl, categories, slugList]);

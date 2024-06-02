@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect } from 'react';
 
 import { useAuthStore } from '~/entities/auth-store';
-import { useCategoriesQuery } from '~/entities/categories';
+import { categoryParamKey, useCategoriesQuery } from '~/entities/categories';
 import { useParseQueryParam } from '~/shared/lib/nextjs';
 import { parseUrl } from '~/shared/lib/parse-url';
 import { toastifyError } from '~/shared/lib/react-toastify';
@@ -12,7 +12,7 @@ export function usePruneInvalidCategoriesFromUrl(): void {
   const token = useAuthStore((store) => store.access_token);
   const categoriesQuery = useCategoriesQuery({ token });
   const router = useRouter();
-  const slugList = useParseQueryParam('slug');
+  const { param: slugList } = useParseQueryParam(categoryParamKey);
 
   const getExpectedEndpoint = useCallback(() => {
     let result: string = Route.CATALOG;

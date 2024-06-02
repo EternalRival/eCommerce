@@ -10,9 +10,9 @@ export function createParseQueryParam(parsedUrlQuery: ParsedUrlQuery) {
   };
 }
 
-export function useParseQueryParam(key: string): string[] {
-  const { query } = useRouter();
+export function useParseQueryParam(key: string): { isReady: boolean; param: string[] } {
+  const { isReady, query } = useRouter();
   const param = query[key];
 
-  return typeof param === 'string' ? [param] : param ?? [];
+  return { isReady, param: typeof param === 'string' ? [param] : param ?? [] };
 }
