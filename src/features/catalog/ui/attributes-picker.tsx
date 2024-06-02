@@ -11,11 +11,14 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Skeleton from '@mui/material/Skeleton';
-import { useState } from 'react';
 import clsx from 'clsx';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 import { useAuthStore } from '~/entities/auth-store';
 import { usePizzaAttributesQuery } from '~/entities/pizza-attributes';
+import { parseUrl } from '~/shared/lib/parse-url';
+import { toastifyError } from '~/shared/lib/react-toastify';
 
 import type { ReactNode } from 'react';
 import type { QueryPizzaAttributesReturn } from '~/entities/pizza-attributes';
@@ -25,6 +28,23 @@ type Attribute = NonNullable<QueryPizzaAttributesReturn['attributes']>[number];
 
 function AttributeItem({ attribute }: FCProps<{ attribute: Attribute }>): ReactNode {
   const [isOpen, setIsOpen] = useState(true);
+  const router = useRouter();
+  const parsedUrl = parseUrl(router.asPath);
+  const params = new URLSearchParams(parsedUrl.search);
+
+  const isActivated = (key: string): boolean => params.has(attribute.key, key);
+  const toggleValue = (key: string): void => void params[isActivated(key) ? 'delete' : 'append'](attribute.key, key);
+  const updateParams = (): Promise<boolean> => {
+    const url = { ...parsedUrl, search: params.toString() };
+
+    return router.replace(url, url, { scroll: false });
+  };
+
+  const handleChipClick = (key: string): Promise<boolean> => {
+    toggleValue(key);
+
+    return updateParams();
+  };
 
   return (
     attribute.values.length > 0 && (
@@ -52,9 +72,12 @@ function AttributeItem({ attribute }: FCProps<{ attribute: Attribute }>): ReactN
               {attribute.values.map(({ key, label }) => (
                 <Chip
                   key={key}
+                  color="primary"
                   label={label}
-                  variant="outlined"
-                  onClick={() => {}}
+                  variant={isActivated(key) ? 'filled' : 'outlined'}
+                  onClick={() => {
+                    handleChipClick(key).catch(toastifyError);
+                  }}
                 />
               ))}
             </Box>
