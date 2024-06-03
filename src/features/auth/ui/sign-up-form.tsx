@@ -1,10 +1,18 @@
 import Collapse from '@mui/material/Collapse';
 import Divider from '@mui/material/Divider';
+import { toast } from 'react-toastify';
 
+import { useAuthStore } from '~/entities/auth-store';
+import { useGetTokenInfoByCredentialsMutation, useGetTokenInfoMutation } from '~/entities/auth-token';
+import { useCustomerSignInMutation, useCustomerSignUpMutation } from '~/entities/customer';
+import { useCustomerStore } from '~/entities/customer-store';
 import { ALLOWED_COUNTRY_NAMES } from '~/shared/api/commercetools';
+import { toastifyError } from '~/shared/lib/react-toastify';
+import { Route } from '~/shared/model/route.enum';
 
-import { useSignUpForm, useSignUpMutation } from '../lib';
+import { createCustomerSignUpDraft, useSignUpForm } from '../lib';
 import { AuthForm } from './auth-form';
+import { ChangeFormLink } from './change-form-link';
 import { ControlledCheckbox } from './controlled-checkbox';
 import { ControlledDatePicker } from './controlled-date-picker';
 import { ControlledStringAutocomplete } from './controlled-string-autocomplete';
@@ -13,13 +21,75 @@ import { PasswordTextField } from './password-text-field';
 import { SubmitButton } from './submit-button';
 
 import type { ReactNode } from 'react';
+import type { SignUpDto } from '../model';
+
+function useHandleSignUpSubmit({
+  getGuestToken,
+  signUp,
+  getCustomerToken,
+  signIn,
+}: {
+  getGuestToken: ReturnType<typeof useGetTokenInfoMutation>['mutateAsync'];
+  signUp: ReturnType<typeof useCustomerSignUpMutation>['mutateAsync'];
+  getCustomerToken: ReturnType<typeof useGetTokenInfoByCredentialsMutation>['mutateAsync'];
+  signIn: ReturnType<typeof useCustomerSignInMutation>['mutateAsync'];
+}) {
+  const authStore = useAuthStore((store) => store);
+  const customerStore = useCustomerStore((store) => store);
+
+  return async (signUpDto: SignUpDto): Promise<void> => {
+    try {
+      const guestToken = authStore.type === 'guest' ? authStore : await getGuestToken({});
+
+      await signUp({
+        token: guestToken.access_token,
+        variables: { draft: createCustomerSignUpDraft(signUpDto) },
+      });
+
+      const customerToken = await getCustomerToken({
+        username: signUpDto.email,
+        password: signUpDto.password,
+      });
+
+      const signInResult = await signIn({
+        token: customerToken.access_token,
+        variables: {
+          draft: { email: signUpDto.email, password: signUpDto.password },
+        },
+      });
+
+      toast.success('Successful sign up');
+      authStore.setCustomerToken(customerToken);
+      customerStore.setCustomer(signInResult.customer);
+    } catch (error) {
+      toastifyError(error);
+    }
+  };
+}
 
 export function SignUpForm(): ReactNode {
   const { createProps, handleSubmit, watch } = useSignUpForm();
-  const { isPending, signUp } = useSignUpMutation();
+
+  const getTokenInfoMutation = useGetTokenInfoMutation();
+  const customerSignUpMutation = useCustomerSignUpMutation();
+  const getTokenInfoByCredentialsMutation = useGetTokenInfoByCredentialsMutation();
+  const customerSignInMutation = useCustomerSignInMutation();
+
+  const handleSignUpSubmit = useHandleSignUpSubmit({
+    getGuestToken: getTokenInfoMutation.mutateAsync,
+    signUp: customerSignUpMutation.mutateAsync,
+    getCustomerToken: getTokenInfoByCredentialsMutation.mutateAsync,
+    signIn: customerSignInMutation.mutateAsync,
+  });
+
+  const isPending =
+    getTokenInfoMutation.isPending ||
+    customerSignUpMutation.isPending ||
+    getTokenInfoByCredentialsMutation.isPending ||
+    customerSignInMutation.isPending;
 
   return (
-    <AuthForm onSubmit={handleSubmit(signUp)}>
+    <AuthForm onSubmit={(event) => void handleSubmit(handleSignUpSubmit)(event)}>
       <Divider>Credentials</Divider>
       <ControlledTextField
         {...createProps('email')}
@@ -95,6 +165,7 @@ export function SignUpForm(): ReactNode {
         />
       </Collapse>
       <SubmitButton isPending={isPending} />
+      <ChangeFormLink href={Route.AUTH_SIGN_IN}>Already have an account? Sign in</ChangeFormLink>
     </AuthForm>
   );
 }

@@ -90,3 +90,5 @@ export const httpClient = {
       });
   },
 };
+
+export const $http = httpClient;

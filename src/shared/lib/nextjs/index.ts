@@ -1,1 +1,1 @@
-export { createParseQueryParam, useParseQueryParam } from './parse-query-param';
+export { useParseQueryParam } from './use-parse-query-param';
