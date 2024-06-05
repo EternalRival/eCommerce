@@ -127,6 +127,10 @@ export function createEnumAttributeFilter({ key, values }: { key: string; values
   return { string: `variants.attributes.${key}.key:${formattedValues.toString()}` };
 }
 
+export function createPriceFilter({ from, to }: { from: Maybe<string>; to: Maybe<string> }): SearchFilterInput {
+  return { string: `variants.price.centAmount:range(${from ?? '0'} to ${to ?? '*'})` };
+}
+
 export function useProductsQuery({
   token,
   variables,
