@@ -118,7 +118,7 @@ function PriceSlider({ minPrice, maxPrice }: FCProps<{ minPrice: number; maxPric
       >
         <Collapse in={isOpen}>
           <Box className="p-2 px-4">
-            <Box className="flex items-center gap-2">
+            <Box className="flex items-center justify-evenly gap-2">
               <TextField
                 {...textFieldProps}
                 label="min"
