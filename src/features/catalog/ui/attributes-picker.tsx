@@ -108,6 +108,7 @@ function PriceSlider({ minPrice, maxPrice }: FCProps<{ minPrice: number; maxPric
 
   const { isOpen, Button } = useSubListButton();
   const [range, setRange] = useState<[number, number]>([initialMin, initialMax]);
+  const { searchParams, updateUrl } = useSearchParams();
 
   return (
     <ListItem disablePadding>
@@ -148,6 +149,11 @@ function PriceSlider({ minPrice, maxPrice }: FCProps<{ minPrice: number; maxPric
                       setRange([min, max]);
                     }
                   }
+                }}
+                onChangeCommitted={() => {
+                  searchParams.set('priceFrom', range[0].toString());
+                  searchParams.set('priceTo', range[1].toString());
+                  updateUrl({ method: 'replace', scroll: false }).catch(toastifyError);
                 }}
                 min={initialMin}
                 max={initialMax}
