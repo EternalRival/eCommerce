@@ -16,13 +16,13 @@ import Slider from '@mui/material/Slider';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import clsx from 'clsx';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import { useAuthStore } from '~/entities/auth-store';
 import { usePizzaAttributesQuery } from '~/entities/pizza-attributes';
-import { parseUrl } from '~/shared/lib/parse-url';
+import { clampValue } from '~/shared/lib/clamp-value';
 import { toastifyError } from '~/shared/lib/react-toastify';
+import { useSearchParams } from '~/shared/lib/use-search-params';
 
 import type { FC, ReactNode } from 'react';
 import type { QueryPizzaAttributesReturn } from '~/entities/pizza-attributes';
@@ -55,22 +55,17 @@ type Attribute = NonNullable<QueryPizzaAttributesReturn['attributes']>[number];
 
 function AttributeItem({ attribute }: FCProps<{ attribute: Attribute }>): ReactNode {
   const { isOpen, Button } = useSubListButton();
-  const router = useRouter();
-  const parsedUrl = parseUrl(router.asPath);
-  const params = new URLSearchParams(parsedUrl.search);
 
-  const isActivated = (key: string): boolean => params.has(attribute.key, key);
-  const toggleValue = (key: string): void => void params[isActivated(key) ? 'delete' : 'append'](attribute.key, key);
-  const updateParams = (): Promise<boolean> => {
-    const url = { ...parsedUrl, search: params.toString() };
+  const { searchParams, updateUrl } = useSearchParams();
 
-    return router.replace(url, url, { scroll: false });
-  };
+  const isActivated = (key: string): boolean => searchParams.has(attribute.key, key);
+  const toggleValue = (key: string): void =>
+    void searchParams[isActivated(key) ? 'delete' : 'append'](attribute.key, key);
 
   const handleChipClick = (key: string): Promise<boolean> => {
     toggleValue(key);
 
-    return updateParams();
+    return updateUrl({ method: 'replace', scroll: false });
   };
 
   return (
@@ -102,8 +97,17 @@ function AttributeItem({ attribute }: FCProps<{ attribute: Attribute }>): ReactN
 }
 
 function PriceSlider({ minPrice, maxPrice }: FCProps<{ minPrice: number; maxPrice: number }>): ReactNode {
+  const fractionDigits = 2;
+  const step = 10 ** -fractionDigits;
+  const [initialMin, initialMax] = [minPrice * step, maxPrice * step];
+  const textFieldProps = {
+    size: 'small',
+    inputProps: { type: 'number', min: initialMin, max: initialMax, step },
+    InputProps: { startAdornment: <InputAdornment position="start">$</InputAdornment> },
+  } as const;
+
   const { isOpen, Button } = useSubListButton();
-  const [value, setValue] = useState([minPrice, maxPrice]);
+  const [range, setRange] = useState<[number, number]>([initialMin, initialMax]);
 
   return (
     <ListItem disablePadding>
@@ -115,28 +119,39 @@ function PriceSlider({ minPrice, maxPrice }: FCProps<{ minPrice: number; maxPric
           <Box className="p-2 px-4">
             <Box className="flex items-center gap-2">
               <TextField
-                size="small"
+                {...textFieldProps}
                 label="min"
-                value={value[0]}
-                InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+                value={range[0]}
+                onChange={(event) => {
+                  setRange([clampValue(initialMin, Number(event.target.value), range[1]), range[1]]);
+                }}
               />
               <Typography>-</Typography>
               <TextField
-                size="small"
+                {...textFieldProps}
                 label="max"
-                value={value[1]}
-                InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+                value={range[1]}
+                onChange={(event) => {
+                  setRange([range[0], clampValue(range[0], Number(event.target.value), initialMax)]);
+                }}
               />
             </Box>
             <Box className="p-2">
               <Slider
-                // slotProps={{ root: { className: 'px-2' } }}
-                value={value}
+                value={range}
                 disableSwap
-                onChange={(_event, sliderValue) => Array.isArray(sliderValue) && void setValue(sliderValue)}
-                min={minPrice}
-                max={maxPrice}
-                step={0.01}
+                onChange={(_event, values) => {
+                  if (Array.isArray(values)) {
+                    const [min, max] = values;
+
+                    if (typeof min === 'number' && typeof max === 'number') {
+                      setRange([min, max]);
+                    }
+                  }
+                }}
+                min={initialMin}
+                max={initialMax}
+                step={step}
               />
             </Box>
           </Box>
@@ -171,19 +186,23 @@ export function AttributesPicker(): ReactNode {
           disablePadding
           dense
         >
-          <PriceSlider
-            minPrice={0}
-            maxPrice={99999}
-          />
           {error ? (
             <Alert severity="error">{error.message}</Alert>
           ) : (
-            data.attributes?.map((attribute) => (
-              <AttributeItem
-                key={attribute.key}
-                attribute={attribute}
-              />
-            ))
+            <>
+              {data.prices && (
+                <PriceSlider
+                  minPrice={data.prices.min}
+                  maxPrice={data.prices.max}
+                />
+              )}
+              {data.attributes?.map((attribute) => (
+                <AttributeItem
+                  key={attribute.key}
+                  attribute={attribute}
+                />
+              ))}
+            </>
           )}
         </List>
       </AccordionDetails>
