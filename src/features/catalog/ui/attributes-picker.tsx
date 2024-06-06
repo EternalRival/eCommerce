@@ -4,6 +4,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Collapse from '@mui/material/Collapse';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -54,7 +55,7 @@ function useSubListButton(defaultState = true): { isOpen: boolean; Button: FC<{ 
 type Attribute = NonNullable<QueryPizzaAttributesReturn['attributes']>[number];
 
 function AttributeItem({ attribute }: FCProps<{ attribute: Attribute }>): ReactNode {
-  const { isOpen, Button } = useSubListButton();
+  const { isOpen, Button: SublistButton } = useSubListButton();
 
   const { searchParams, updateUrl } = useSearchParams();
 
@@ -73,7 +74,7 @@ function AttributeItem({ attribute }: FCProps<{ attribute: Attribute }>): ReactN
       <ListItem disablePadding>
         <List
           className="w-full"
-          subheader={<Button label={attribute.label} />}
+          subheader={<SublistButton label={attribute.label} />}
         >
           <Collapse in={isOpen}>
             <Box className="flex flex-wrap gap-2 p-2 pl-4">
@@ -106,7 +107,7 @@ function PriceSlider({ minPrice, maxPrice }: FCProps<{ minPrice: number; maxPric
     InputProps: { startAdornment: <InputAdornment position="start">$</InputAdornment> },
   } as const;
 
-  const { isOpen, Button } = useSubListButton();
+  const { isOpen, Button: SublistButton } = useSubListButton();
   const [range, setRange] = useState<[number, number]>([initialMin, initialMax]);
   const { searchParams, updateUrl } = useSearchParams();
 
@@ -114,7 +115,7 @@ function PriceSlider({ minPrice, maxPrice }: FCProps<{ minPrice: number; maxPric
     <ListItem disablePadding>
       <List
         className="w-full"
-        subheader={<Button label="Price" />}
+        subheader={<SublistButton label="Price" />}
       >
         <Collapse in={isOpen}>
           <Box className="p-2 px-4">
@@ -167,6 +168,29 @@ function PriceSlider({ minPrice, maxPrice }: FCProps<{ minPrice: number; maxPric
   );
 }
 
+function FiltersResetButton(): ReactNode {
+  const { searchParams, updateUrl } = useSearchParams();
+  const token = useAuthStore((store) => store.access_token);
+  const { data } = usePizzaAttributesQuery({ token });
+
+  return (
+    <ListItem>
+      <Button
+        variant="outlined"
+        size="small"
+        fullWidth
+        onClick={() => {
+          data?.attributes?.forEach(({ key }) => void searchParams.delete(key));
+          ['priceFrom', 'priceTo'].forEach((key) => void searchParams.delete(key));
+          updateUrl({ method: 'replace', scroll: false }).catch(toastifyError);
+        }}
+      >
+        Reset filters
+      </Button>
+    </ListItem>
+  );
+}
+
 export function AttributesPicker(): ReactNode {
   const token = useAuthStore((store) => store.access_token);
 
@@ -196,6 +220,7 @@ export function AttributesPicker(): ReactNode {
             <Alert severity="error">{error.message}</Alert>
           ) : (
             <>
+              <FiltersResetButton />
               {data.prices && (
                 <PriceSlider
                   minPrice={data.prices.min}

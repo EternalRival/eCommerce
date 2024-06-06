@@ -1,5 +1,4 @@
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { useAuthStore } from '~/entities/auth-store';
@@ -68,11 +67,11 @@ export function ProductCardList(): ReactNode {
 
   if (productQuery.isPending) {
     return (
-      <Stack className="grow flex-row flex-wrap justify-center gap-8">
+      <Box className="grid grow content-start justify-items-center gap-8 px-4 lg:grid-cols-2 2xl:grid-cols-3">
         {Array.from({ length: 6 }, (_, i) => (
           <ProductCard key={i} />
         ))}
-      </Stack>
+      </Box>
     );
   }
 
@@ -83,7 +82,7 @@ export function ProductCardList(): ReactNode {
   return productQuery.data.products.length < 1 ? (
     <Typography>No products found</Typography>
   ) : (
-    <Box className="grid grow content-start justify-items-center gap-8 px-4 lg:grid-cols-2 2xl:grid-cols-3 ">
+    <Box className="grid grow content-start justify-items-center gap-8 px-4 lg:grid-cols-2 2xl:grid-cols-3">
       {productQuery.data.products.map((product) => (
         <ProductCard
           key={product.id}
