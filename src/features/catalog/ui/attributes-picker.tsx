@@ -29,12 +29,12 @@ import type { FC, ReactNode } from 'react';
 import type { QueryPizzaAttributesReturn } from '~/entities/pizza-attributes';
 import type { FCProps } from '~/shared/model/types';
 
-function useSubListButton(defaultState = true): { isOpen: boolean; Button: FC<{ label: ReactNode }> } {
+function useSubListButton(defaultState = true): { isOpen: boolean; SubListButton: FC<{ label: ReactNode }> } {
   const [isOpen, setIsOpen] = useState(defaultState);
 
   return {
     isOpen,
-    Button: ({ label }) => (
+    SubListButton: ({ label }) => (
       <ListItemButton
         className="pl-4 pr-2"
         onClick={() => void setIsOpen((state) => !state)}
@@ -55,7 +55,7 @@ function useSubListButton(defaultState = true): { isOpen: boolean; Button: FC<{ 
 type Attribute = NonNullable<QueryPizzaAttributesReturn['attributes']>[number];
 
 function AttributeItem({ attribute }: FCProps<{ attribute: Attribute }>): ReactNode {
-  const { isOpen, Button: SublistButton } = useSubListButton();
+  const { isOpen, SubListButton } = useSubListButton();
 
   const { searchParams, updateUrl } = useSearchParams();
 
@@ -74,7 +74,7 @@ function AttributeItem({ attribute }: FCProps<{ attribute: Attribute }>): ReactN
       <ListItem disablePadding>
         <List
           className="w-full"
-          subheader={<SublistButton label={attribute.label} />}
+          subheader={<SubListButton label={attribute.label} />}
         >
           <Collapse in={isOpen}>
             <Box className="flex flex-wrap gap-2 p-2 pl-4">
@@ -107,7 +107,7 @@ function PriceSlider({ minPrice, maxPrice }: FCProps<{ minPrice: number; maxPric
     InputProps: { startAdornment: <InputAdornment position="start">$</InputAdornment> },
   } as const;
 
-  const { isOpen, Button: SublistButton } = useSubListButton();
+  const { isOpen, SubListButton } = useSubListButton();
   const [range, setRange] = useState<[number, number]>([initialMin, initialMax]);
   const { searchParams, updateUrl } = useSearchParams();
 
@@ -115,7 +115,7 @@ function PriceSlider({ minPrice, maxPrice }: FCProps<{ minPrice: number; maxPric
     <ListItem disablePadding>
       <List
         className="w-full"
-        subheader={<SublistButton label="Price" />}
+        subheader={<SubListButton label="Price" />}
       >
         <Collapse in={isOpen}>
           <Box className="p-2 px-4">
