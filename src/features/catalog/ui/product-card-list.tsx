@@ -8,11 +8,13 @@ import {
   createCategoryFilter,
   createEnumAttributeFilter,
   createPriceFilter,
+  createSorts,
   useProductsQuery,
 } from '~/entities/products';
 import { useSearchParams } from '~/shared/lib/use-search-params';
 
 import { ProductCard } from './product-card';
+import { SortingSelect } from './sorting-select';
 
 import type { ReactNode } from 'react';
 import type { SearchFilterInput } from '~/entities/products';
@@ -50,10 +52,17 @@ function useParseFilters(): { isPending: boolean; filters: SearchFilterInput[] }
   return { isPending, filters };
 }
 
+function useParseSorts(): { sorts: string[] } {
+  const { searchParams } = useSearchParams();
+
+  return { sorts: createSorts(searchParams.getAll('sort')) };
+}
+
 export function ProductCardList(): ReactNode {
   const token = useAuthStore((store) => store.access_token);
 
   const { filters, isPending } = useParseFilters();
+  const { sorts } = useParseSorts();
 
   const productQuery = useProductsQuery({
     token,
@@ -61,6 +70,7 @@ export function ProductCardList(): ReactNode {
       limit: 500,
       offset: 0,
       filters,
+      sorts,
     },
     enabled: !isPending,
   });
@@ -82,13 +92,16 @@ export function ProductCardList(): ReactNode {
   return productQuery.data.products.length < 1 ? (
     <Typography>No products found</Typography>
   ) : (
-    <Box className="grid grow content-start justify-items-center gap-8 px-4 lg:grid-cols-2 2xl:grid-cols-3">
-      {productQuery.data.products.map((product) => (
-        <ProductCard
-          key={product.id}
-          productData={product}
-        />
-      ))}
+    <Box className="flex grow flex-col gap-2 px-2">
+      <SortingSelect />
+      <Box className="grid justify-evenly gap-x-4 gap-y-8 lg:grid-cols-[repeat(2,20rem)] 2xl:grid-cols-[repeat(3,20rem)]">
+        {productQuery.data.products.map((product) => (
+          <ProductCard
+            key={product.id}
+            productData={product}
+          />
+        ))}
+      </Box>
     </Box>
   );
 }
