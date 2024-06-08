@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { parseUrl } from './parse-url';
 
 export function useSearchParams(): {
+  isReady: boolean;
   searchParams: URLSearchParams;
   updateUrl: (options?: { method?: 'push' | 'replace'; scroll?: boolean }) => Promise<boolean>;
 } {
@@ -15,6 +16,7 @@ export function useSearchParams(): {
     const defaultUpdateFnOptions = { method: 'push', scroll: true } as const;
 
     return {
+      isReady: router.isReady,
       searchParams: params,
       updateUrl({
         method = defaultUpdateFnOptions.method,
