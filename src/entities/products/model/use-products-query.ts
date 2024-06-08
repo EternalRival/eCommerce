@@ -8,8 +8,8 @@ import type { UseQueryResult } from '@tanstack/react-query';
 const operationName = 'Products';
 
 const query = `
-query ${operationName}($limit: Int, $offset: Int, $filters: [SearchFilterInput!], $locale: Locale = "en", $currency: Currency = "USD") {
-  productProjectionSearch(limit: $limit, offset: $offset, filters: $filters) {
+query ${operationName}($limit: Int, $offset: Int, $sorts: [String!], $filters: [SearchFilterInput!], $locale: Locale = "en", $currency: Currency = "USD") {
+  productProjectionSearch(limit: $limit, offset: $offset, sorts: $sorts, filters: $filters) {
     results {
       id
       name(locale: $locale)
@@ -104,6 +104,7 @@ export type SearchFilterInput = { string: string };
 type Variables = {
   limit?: number;
   offset?: number;
+  sorts?: string[];
   filters?: SearchFilterInput[];
 };
 
@@ -129,6 +130,12 @@ export function createEnumAttributeFilter({ key, values }: { key: string; values
 
 export function createPriceFilter({ from, to }: { from: Maybe<string>; to: Maybe<string> }): SearchFilterInput {
   return { string: `variants.price.centAmount:range(${from ?? '0'} to ${to ?? '*'})` };
+}
+
+const sortsSchema = z.enum(['price asc', 'price desc', 'name.en asc', 'name.en desc']);
+
+export function createSorts(sorts: string[]): string[] {
+  return [sortsSchema.catch('price asc').parse(sorts[0])];
 }
 
 export function useProductsQuery({
