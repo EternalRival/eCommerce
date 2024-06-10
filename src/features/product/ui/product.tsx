@@ -9,7 +9,7 @@ export function Product(): ReactNode {
   const { param } = useParseQueryParam('slug');
   const [productSlug] = param;
 
-  const variables = {};
+  const variables = { key: productSlug };
 
   const productQuery = useProductQuery({
     token,
