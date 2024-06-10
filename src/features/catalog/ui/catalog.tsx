@@ -1,6 +1,6 @@
 import Stack from '@mui/material/Stack';
 
-import { AttributesPicker } from './attributes-picker';
+import { FiltersPicker } from './filters-picker';
 import { CategoryPicker } from './category-picker';
 import { ProductCardList } from './product-card-list';
 
@@ -11,7 +11,7 @@ export function Catalog(): ReactNode {
     <Stack className="gap-4 md:flex-row">
       <Stack className="shrink-0 md:w-[max(18rem,25%)]">
         <CategoryPicker />
-        <AttributesPicker />
+        <FiltersPicker />
       </Stack>
 
       <ProductCardList />
