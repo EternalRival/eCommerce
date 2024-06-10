@@ -1,3 +1,4 @@
+export type { PriceRange } from './get-product-price-range';
 export {
   createCategoryFilter,
   createEnumAttributeFilter,

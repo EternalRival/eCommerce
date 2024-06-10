@@ -1,3 +1,4 @@
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -12,8 +13,8 @@ import clsx from 'clsx';
 import { Route } from '~/shared/model/route.enum';
 
 import type { ReactNode } from 'react';
+import type { PriceRange, QueryProductsReturn } from '~/entities/products';
 import type { FCProps, FCPropsWC } from '~/shared/model/types';
-import type { QueryProductsReturn } from '~/entities/products';
 
 type Product = QueryProductsReturn['products'][number];
 
@@ -25,8 +26,6 @@ type MediaProps = FCProps<{
 }>;
 
 function Media({ name, image }: MediaProps): ReactNode {
-  // ? Image из next/image совместимо с CardMedia?
-
   return (
     <Tooltip
       title={name}
@@ -79,51 +78,43 @@ function Description({ description }: DescriptionProps): ReactNode {
   );
 }
 
-type BaseMoney = NonNullable<Product['price']>;
-
 type PricesProps = FCProps<{
-  price?: BaseMoney;
-  discountedPrice?: BaseMoney;
+  priceCurrencyCode: Product['priceCurrencyCode'];
+  priceRange: Nullable<PriceRange>;
+  discountedPriceRange: Nullable<PriceRange>;
 }>;
 
-function Prices({ price, discountedPrice }: PricesProps): ReactNode {
+function Prices({ priceCurrencyCode, priceRange, discountedPriceRange }: PricesProps): ReactNode {
   const currencyMap = { USD: '$' } as const;
-  const createPriceLabel = ({ centAmount, currencyCode, fractionDigits }: BaseMoney): string =>
-    `${currencyMap[currencyCode]}${(centAmount / 10 ** fractionDigits).toString()}`;
+  const currencyCode = currencyMap[priceCurrencyCode];
+
+  const createPriceLabel = (range: PriceRange): string =>
+    range.min === range.max
+      ? `${currencyCode}${range.min.toString()}`
+      : `${currencyCode}${range.min.toString()} - ${currencyCode}${range.max.toString()}`;
 
   return (
-    <Stack
-      direction="row"
-      justifyContent="center"
-      spacing={1.5}
-    >
-      {(Boolean(discountedPrice) || Boolean(price)) && (
-        <Stack
-          direction="row"
-          spacing={1}
+    <Box className="flex justify-center gap-2">
+      {discountedPriceRange && (
+        <Typography
+          color="primary"
+          sx={{ textShadow: '0 0 .6rem' }}
+          className="font-bold"
         >
-          {discountedPrice && (
-            <Typography
-              color="primary"
-              sx={{ textShadow: '0 0 .6rem' }}
-              className="font-bold"
-            >
-              {createPriceLabel(discountedPrice)}
-            </Typography>
-          )}
-          {price && (
-            <Typography
-              variant={discountedPrice && 'caption'}
-              color={discountedPrice ? 'error.light' : 'primary'}
-              sx={{ textShadow: discountedPrice && '0 0 .6rem' }}
-              className={clsx('font-medium', discountedPrice && 'line-through')}
-            >
-              {createPriceLabel(price)}
-            </Typography>
-          )}
-        </Stack>
+          {createPriceLabel(discountedPriceRange)}
+        </Typography>
       )}
-    </Stack>
+      {priceRange && (
+        <Typography
+          variant={discountedPriceRange ? 'caption' : 'body1'}
+          color={discountedPriceRange ? 'error.light' : 'primary'}
+          sx={{ textShadow: discountedPriceRange && '0 0 .6rem' }}
+          className={clsx('font-medium', discountedPriceRange && 'line-through')}
+        >
+          {createPriceLabel(priceRange)}
+        </Typography>
+      )}
+    </Box>
   );
 }
 
@@ -159,7 +150,7 @@ export function ProductCard({ productData }: Props): ReactNode {
     );
   }
 
-  const { slug, images, name, description, price, discountedPrice } = productData;
+  const { slug, images, name, description, priceCurrencyCode, priceRange, discountedPriceRange } = productData;
 
   return (
     <Card
@@ -181,8 +172,9 @@ export function ProductCard({ productData }: Props): ReactNode {
         <Description description={description} />
 
         <Prices
-          price={price}
-          discountedPrice={discountedPrice}
+          priceCurrencyCode={priceCurrencyCode}
+          priceRange={priceRange}
+          discountedPriceRange={discountedPriceRange}
         />
 
         <ViewDetails slug={slug} />

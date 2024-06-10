@@ -10,6 +10,7 @@ export {
   guestTokenScopes,
   mutateGetTokenInfo,
   type CountryCode,
+  type CurrencyCode,
   type GetTokenInfoResult,
   type Locale,
 } from './model';
