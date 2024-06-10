@@ -10,6 +10,9 @@ import { useId } from 'react';
 
 import { toastifyError } from '~/shared/lib/react-toastify';
 import { useSearchParams } from '~/shared/lib/use-search-params';
+import { SortOption, defaultSortOption } from '~/entities/products';
+
+import { ParamKey } from '../model';
 
 import type { ReactNode } from 'react';
 
@@ -17,7 +20,7 @@ export function SortingSelect(): ReactNode {
   const labelId = useId();
   const label = 'Sorting';
   const { searchParams, updateUrl } = useSearchParams();
-  const value = searchParams.get('sort') ?? 'price asc';
+  const value = searchParams.get(ParamKey.SORT) ?? defaultSortOption;
 
   return (
     <ListItem className="justify-end">
@@ -28,26 +31,26 @@ export function SortingSelect(): ReactNode {
           value={value}
           label={label}
           onChange={(event) => {
-            searchParams.set('sort', event.target.value);
+            searchParams.set(ParamKey.SORT, event.target.value);
             updateUrl().catch(toastifyError);
           }}
         >
-          <MenuItem value="price asc">
+          <MenuItem value={SortOption.PRICE_ASC}>
             <Typography>
               <ArrowUpwardIcon fontSize="inherit" /> Price (asc)
             </Typography>
           </MenuItem>
-          <MenuItem value="price desc">
+          <MenuItem value={SortOption.PRICE_DESC}>
             <Typography>
               <ArrowDownwardIcon fontSize="inherit" /> Price (desc)
             </Typography>
           </MenuItem>
-          <MenuItem value="name.en asc">
+          <MenuItem value={SortOption.NAME_ASC}>
             <Typography>
               <ArrowUpwardIcon fontSize="inherit" /> Name (asc)
             </Typography>
           </MenuItem>
-          <MenuItem value="name.en desc">
+          <MenuItem value={SortOption.NAME_DESC}>
             <Typography>
               <ArrowDownwardIcon fontSize="inherit" /> Name (desc)
             </Typography>

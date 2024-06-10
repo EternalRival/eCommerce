@@ -11,8 +11,8 @@ import type { UseQueryResult } from '@tanstack/react-query';
 const operationName = 'Products';
 
 const query = `
-query ${operationName}($limit: Int, $offset: Int, $sorts: [String!], $filters: [SearchFilterInput!], $locale: Locale = "en", $currency: Currency = "USD") {
-  productProjectionSearch(limit: $limit, offset: $offset, sorts: $sorts, filters: $filters) {
+query ${operationName}($limit: Int, $offset: Int, $search: String, $sorts: [String!], $filters: [SearchFilterInput!], $locale: Locale = "en", $currency: Currency = "USD") {
+  productProjectionSearch(limit: $limit, offset: $offset, locale: $locale, text: $search, fuzzy: true, sorts: $sorts, filters: $filters) {
     results {
       id
       name(locale: $locale)
@@ -111,6 +111,7 @@ export type SearchFilterInput = { string: string };
 type Variables = {
   limit?: number;
   offset?: number;
+  search?: string;
   sorts?: string[];
   filters?: SearchFilterInput[];
 };
@@ -139,10 +140,23 @@ export function createPriceFilter({ from, to }: { from: Maybe<string>; to: Maybe
   return { string: `variants.price.centAmount:range(${from ?? '0'} to ${to ?? '*'})` };
 }
 
-const sortsSchema = z.enum(['price asc', 'price desc', 'name.en asc', 'name.en desc']);
+export const enum SortOption {
+  PRICE_ASC = 'price asc',
+  PRICE_DESC = 'price desc',
+  NAME_ASC = 'name.en asc',
+  NAME_DESC = 'name.en desc',
+}
+
+export const defaultSortOption = SortOption.PRICE_ASC;
+
+const sortsSchema = z.enum([SortOption.PRICE_ASC, SortOption.PRICE_DESC, SortOption.NAME_ASC, SortOption.NAME_DESC]);
 
 export function createSorts(sorts: string[]): string[] {
-  return [sortsSchema.catch('price asc').parse(sorts[0])];
+  return [sortsSchema.catch(defaultSortOption).parse(sorts[0])];
+}
+
+export function createSearch(search: Maybe<string>): string {
+  return search ?? '';
 }
 
 export function useProductsQuery({
