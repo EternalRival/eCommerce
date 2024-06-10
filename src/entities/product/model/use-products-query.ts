@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { $http } from '~/shared/api/commercetools';
 
 import { getProductPriceRanges } from './get-product-price-range';
-import { priceSchema } from './price.schema';
+import { variantSchema } from './variant.schema';
 
 import type { UseQueryResult } from '@tanstack/react-query';
 
@@ -15,41 +15,32 @@ query ${operationName}($limit: Int, $offset: Int, $search: String, $sorts: [Stri
   productProjectionSearch(limit: $limit, offset: $offset, locale: $locale, text: $search, fuzzy: true, sorts: $sorts, filters: $filters) {
     results {
       id
+      key
       name(locale: $locale)
-      slug(locale: $locale)
       description(locale: $locale)
       masterVariant {
-        price(currency: $currency) {
-          value {
-            ...baseMoney
-          }
-          discounted {
-            value {
-              ...baseMoney
-            }
-          }
-        }
-        images {
-          url
-          dimensions {
-            width
-            height
-          }
-        }
+        ...variant
       }
       variants {
-        price(currency: $currency) {
-          value {
-            ...baseMoney
-          }
-          discounted {
-            value {
-              ...baseMoney
-            }
-          }
-        }
+        ...variant
       }
     }
+  }
+}
+
+fragment variant on ProductSearchVariant {
+  price(currency: $currency) {
+    value {
+      ...baseMoney
+    }
+    discounted {
+      value {
+        ...baseMoney
+      }
+    }
+  }
+  images {
+    url
   }
 }
 
@@ -66,26 +57,11 @@ const productsSchema = z
       results: z.array(
         z.object({
           id: z.string(),
-          slug: z.string().nullish(),
+          key: z.string().nullish(),
           name: z.string().nullish(),
           description: z.string().nullish(),
-          masterVariant: z.object({
-            price: priceSchema,
-            images: z.array(
-              z.object({
-                url: z.string(),
-                dimensions: z.object({
-                  width: z.number(),
-                  height: z.number(),
-                }),
-              })
-            ),
-          }),
-          variants: z.array(
-            z.object({
-              price: priceSchema,
-            })
-          ),
+          masterVariant: variantSchema,
+          variants: z.array(variantSchema),
         })
       ),
     }),
@@ -93,8 +69,8 @@ const productsSchema = z
   .transform((data) => ({
     products: data.productProjectionSearch.results.map((product) => ({
       id: product.id,
-      slug: product.slug,
-      images: product.masterVariant.images,
+      key: product.key,
+      masterImage: product.masterVariant.images.find(({ url }) => Boolean(url)),
       name: product.name,
       description: product.description,
       ...getProductPriceRanges({

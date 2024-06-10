@@ -13,7 +13,7 @@ import clsx from 'clsx';
 import { Route } from '~/shared/model/route.enum';
 
 import type { ReactNode } from 'react';
-import type { PriceRange, QueryProductsReturn } from '~/entities/products';
+import type { PriceRange, QueryProductsReturn } from '~/entities/product';
 import type { FCProps, FCPropsWC } from '~/shared/model/types';
 
 type Product = QueryProductsReturn['products'][number];
@@ -22,7 +22,7 @@ type Props = FCPropsWC<{ productData?: Product }>;
 
 type MediaProps = FCProps<{
   name: Product['name'];
-  image?: Product['images'][number];
+  image?: Product['masterImage'];
 }>;
 
 function Media({ name, image }: MediaProps): ReactNode {
@@ -118,15 +118,15 @@ function Prices({ priceCurrencyCode, priceRange, discountedPriceRange }: PricesP
   );
 }
 
-type ViewDetailsProps = FCProps<{ slug: Product['slug'] }>;
+type ViewDetailsProps = FCProps<{ productKey: Product['key'] }>;
 
-function ViewDetails({ slug }: ViewDetailsProps): ReactNode {
+function ViewDetails({ productKey }: ViewDetailsProps): ReactNode {
   const buttonText = 'View Details';
 
-  return slug ? (
+  return productKey ? (
     <Button
       variant="outlined"
-      href={`${Route.PRODUCT}/${slug}`}
+      href={`${Route.PRODUCT}/${productKey}`}
     >
       {buttonText}
     </Button>
@@ -150,7 +150,7 @@ export function ProductCard({ productData }: Props): ReactNode {
     );
   }
 
-  const { slug, images, name, description, priceCurrencyCode, priceRange, discountedPriceRange } = productData;
+  const { key, masterImage, name, description, priceCurrencyCode, priceRange, discountedPriceRange } = productData;
 
   return (
     <Card
@@ -164,7 +164,7 @@ export function ProductCard({ productData }: Props): ReactNode {
       >
         <Media
           name={name}
-          image={images.find(({ url }) => Boolean(url))}
+          image={masterImage}
         />
 
         <Name name={name} />
@@ -177,7 +177,7 @@ export function ProductCard({ productData }: Props): ReactNode {
           discountedPriceRange={discountedPriceRange}
         />
 
-        <ViewDetails slug={slug} />
+        <ViewDetails productKey={key} />
       </CardContent>
     </Card>
   );
