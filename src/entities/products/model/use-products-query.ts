@@ -1,7 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { z } from 'zod';
 
-import { $http, currencyCodeSchema } from '~/shared/api/commercetools';
+import { $http } from '~/shared/api/commercetools';
+
+import { getProductPriceRanges } from './get-product-price-range';
+import { priceSchema } from './price.schema';
 
 import type { UseQueryResult } from '@tanstack/react-query';
 
@@ -34,6 +37,18 @@ query ${operationName}($limit: Int, $offset: Int, $sorts: [String!], $filters: [
           }
         }
       }
+      variants {
+        price(currency: $currency) {
+          value {
+            ...baseMoney
+          }
+          discounted {
+            value {
+              ...baseMoney
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -45,12 +60,6 @@ fragment baseMoney on BaseMoney {
 }
 `;
 
-const baseMoneySchema = z.object({
-  currencyCode: currencyCodeSchema,
-  centAmount: z.number(),
-  fractionDigits: z.number(),
-});
-
 const productsSchema = z
   .object({
     productProjectionSearch: z.object({
@@ -61,16 +70,7 @@ const productsSchema = z
           name: z.string().nullish(),
           description: z.string().nullish(),
           masterVariant: z.object({
-            price: z
-              .object({
-                value: baseMoneySchema,
-                discounted: z
-                  .object({
-                    value: baseMoneySchema,
-                  })
-                  .nullish(),
-              })
-              .nullish(),
+            price: priceSchema,
             images: z.array(
               z.object({
                 url: z.string(),
@@ -81,6 +81,11 @@ const productsSchema = z
               })
             ),
           }),
+          variants: z.array(
+            z.object({
+              price: priceSchema,
+            })
+          ),
         })
       ),
     }),
@@ -92,8 +97,10 @@ const productsSchema = z
       images: product.masterVariant.images,
       name: product.name,
       description: product.description,
-      price: product.masterVariant.price?.value,
-      discountedPrice: product.masterVariant.price?.discounted?.value,
+      ...getProductPriceRanges({
+        currencyCode: product.masterVariant.price?.value.currencyCode,
+        variants: [product.masterVariant, ...product.variants],
+      }),
     })),
   }));
 

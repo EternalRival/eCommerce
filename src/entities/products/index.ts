@@ -4,6 +4,7 @@ export {
   createPriceFilter,
   createSorts,
   useProductsQuery,
+  type PriceRange,
   type QueryProductsReturn,
   type SearchFilterInput,
 } from './model';
