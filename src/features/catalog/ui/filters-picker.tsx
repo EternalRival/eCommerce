@@ -22,6 +22,7 @@ import { useSearchParams } from '~/shared/lib/use-search-params';
 
 import { PriceSlider } from './price-slider';
 import { ParamKey } from '../model';
+import { SearchInput } from './search-input';
 
 import type { ReactNode } from 'react';
 import type { QueryPizzaAttributesReturn } from '~/entities/pizza-attributes';
@@ -60,14 +61,14 @@ function CollapsibleListItem({
   );
 }
 
-type Attribute = NonNullable<QueryPizzaAttributesReturn['attributes']>[number];
+type PizzaAttribute = NonNullable<QueryPizzaAttributesReturn['attributes']>[number];
 
-function AttributeItem({ attribute }: FCProps<{ attribute: Attribute }>): ReactNode {
+function AttributeItem({ pizzaAttribute }: FCProps<{ pizzaAttribute: PizzaAttribute }>): ReactNode {
   const { searchParams, updateUrl } = useSearchParams();
 
-  const isActivated = (key: string): boolean => searchParams.has(attribute.key, key);
+  const isActivated = (key: string): boolean => searchParams.has(pizzaAttribute.key, key);
   const toggleValue = (key: string): void =>
-    void searchParams[isActivated(key) ? 'delete' : 'append'](attribute.key, key);
+    void searchParams[isActivated(key) ? 'delete' : 'append'](pizzaAttribute.key, key);
 
   const handleChipClick = (key: string): Promise<boolean> => {
     toggleValue(key);
@@ -76,10 +77,10 @@ function AttributeItem({ attribute }: FCProps<{ attribute: Attribute }>): ReactN
   };
 
   return (
-    attribute.values.length > 0 && (
-      <CollapsibleListItem label={attribute.label}>
+    pizzaAttribute.values.length > 0 && (
+      <CollapsibleListItem label={pizzaAttribute.label}>
         <Box className="flex flex-wrap gap-2 p-2 pl-4">
-          {attribute.values.map(({ key, label }) => (
+          {pizzaAttribute.values.map(({ key, label }) => (
             <Chip
               key={key}
               color="primary"
@@ -119,7 +120,7 @@ function FiltersResetButton(): ReactNode {
   );
 }
 
-export function AttributesPicker(): ReactNode {
+export function FiltersPicker(): ReactNode {
   const token = useAuthStore((store) => store.access_token);
 
   const { data, isPending, error } = usePizzaAttributesQuery({ token });
@@ -138,7 +139,7 @@ export function AttributesPicker(): ReactNode {
       disableGutters
       defaultExpanded
     >
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>Attributes</AccordionSummary>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>Filters</AccordionSummary>
       <AccordionDetails>
         <List
           disablePadding
@@ -148,6 +149,7 @@ export function AttributesPicker(): ReactNode {
             <Alert severity="error">{error.message}</Alert>
           ) : (
             <>
+              <SearchInput />
               <FiltersResetButton />
               {data.prices && (
                 <CollapsibleListItem label="Price">
@@ -160,7 +162,7 @@ export function AttributesPicker(): ReactNode {
               {data.attributes?.map((attribute) => (
                 <AttributeItem
                   key={attribute.key}
-                  attribute={attribute}
+                  pizzaAttribute={attribute}
                 />
               ))}
             </>
