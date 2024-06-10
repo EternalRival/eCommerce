@@ -21,6 +21,7 @@ import { toastifyError } from '~/shared/lib/react-toastify';
 import { useSearchParams } from '~/shared/lib/use-search-params';
 
 import { PriceSlider } from './price-slider';
+import { ParamKey } from '../model';
 
 import type { ReactNode } from 'react';
 import type { QueryPizzaAttributesReturn } from '~/entities/pizza-attributes';
@@ -108,7 +109,7 @@ function FiltersResetButton(): ReactNode {
         fullWidth
         onClick={() => {
           data?.attributes?.forEach(({ key }) => void searchParams.delete(key));
-          ['priceFrom', 'priceTo'].forEach((key) => void searchParams.delete(key));
+          [ParamKey.PRICE_MIN, ParamKey.PRICE_MAX].forEach((key) => void searchParams.delete(key));
           updateUrl({ method: 'replace', scroll: false }).catch(toastifyError);
         }}
       >

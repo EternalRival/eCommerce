@@ -10,6 +10,8 @@ import { clampValue } from '~/shared/lib/clamp-value';
 import { useSearchParams } from '~/shared/lib/use-search-params';
 import { toastifyError } from '~/shared/lib/react-toastify';
 
+import { ParamKey } from '../model';
+
 import type { ReactNode } from 'react';
 import type { FCProps } from '~/shared/model/types';
 
@@ -29,7 +31,7 @@ export function PriceSlider({ minPrice, maxPrice }: PriceSliderProps): ReactNode
   const [range, setRange] = useState<[number, number]>([minDollarPrice, maxDollarPrice]);
   const { searchParams, updateUrl } = useSearchParams();
 
-  const [paramsMin, paramsMax] = [searchParams.get('priceFrom'), searchParams.get('priceTo')];
+  const [paramsMin, paramsMax] = [searchParams.get(ParamKey.PRICE_MIN), searchParams.get(ParamKey.PRICE_MAX)];
   useEffect(() => {
     const newMin = paramsMin ? Number(paramsMin) : minDollarPrice;
     const newMax = paramsMax ? Number(paramsMax) : maxDollarPrice;
@@ -38,15 +40,15 @@ export function PriceSlider({ minPrice, maxPrice }: PriceSliderProps): ReactNode
 
   const debouncedUpdateUrl = useDebouncedCallback(() => {
     if (minDollarPrice === range[0]) {
-      searchParams.delete('priceFrom');
+      searchParams.delete(ParamKey.PRICE_MIN);
     } else {
-      searchParams.set('priceFrom', range[0].toString());
+      searchParams.set(ParamKey.PRICE_MIN, range[0].toString());
     }
 
     if (maxDollarPrice === range[1]) {
-      searchParams.delete('priceTo');
+      searchParams.delete(ParamKey.PRICE_MAX);
     } else {
-      searchParams.set('priceTo', range[1].toString());
+      searchParams.set(ParamKey.PRICE_MAX, range[1].toString());
     }
 
     updateUrl({ method: 'replace', scroll: false }).catch(toastifyError);

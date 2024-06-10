@@ -8,6 +8,7 @@ import {
   createCategoryFilter,
   createEnumAttributeFilter,
   createPriceFilter,
+  createSearch,
   createSorts,
   useProductsQuery,
 } from '~/entities/products';
@@ -15,6 +16,7 @@ import { useSearchParams } from '~/shared/lib/use-search-params';
 
 import { ProductCard } from './product-card';
 import { SortingSelect } from './sorting-select';
+import { ParamKey } from '../model';
 
 import type { ReactNode } from 'react';
 import type { SearchFilterInput } from '~/entities/products';
@@ -40,7 +42,7 @@ function useParseFilters(): { isPending: boolean; filters: SearchFilterInput[] }
     );
   });
 
-  const [priceFrom, priceTo] = [searchParams.get('priceFrom'), searchParams.get('priceTo')];
+  const [priceFrom, priceTo] = [searchParams.get(ParamKey.PRICE_MIN), searchParams.get(ParamKey.PRICE_MAX)];
 
   filters.push(
     createPriceFilter({
@@ -55,7 +57,13 @@ function useParseFilters(): { isPending: boolean; filters: SearchFilterInput[] }
 function useParseSorts(): { sorts: string[] } {
   const { searchParams } = useSearchParams();
 
-  return { sorts: createSorts(searchParams.getAll('sort')) };
+  return { sorts: createSorts(searchParams.getAll(ParamKey.SORT)) };
+}
+
+function useParseSearch(): string {
+  const { searchParams } = useSearchParams();
+
+  return createSearch(searchParams.get('q'));
 }
 
 export function ProductCardList(): ReactNode {
@@ -63,12 +71,14 @@ export function ProductCardList(): ReactNode {
 
   const { filters, isPending } = useParseFilters();
   const { sorts } = useParseSorts();
+  const search = useParseSearch();
 
   const productQuery = useProductsQuery({
     token,
     variables: {
       limit: 500,
       offset: 0,
+      search,
       filters,
       sorts,
     },
