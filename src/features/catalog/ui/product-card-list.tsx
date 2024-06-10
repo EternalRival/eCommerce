@@ -11,7 +11,7 @@ import {
   createSearch,
   createSorts,
   useProductsQuery,
-} from '~/entities/products';
+} from '~/entities/product';
 import { useSearchParams } from '~/shared/lib/use-search-params';
 
 import { ProductCard } from './product-card';
@@ -19,7 +19,7 @@ import { SortingSelect } from './sorting-select';
 import { ParamKey } from '../model';
 
 import type { ReactNode } from 'react';
-import type { SearchFilterInput } from '~/entities/products';
+import type { SearchFilterInput } from '~/entities/product';
 
 function useParseFilters(): { isPending: boolean; filters: SearchFilterInput[] } {
   const token = useAuthStore((store) => store.access_token);
@@ -63,7 +63,7 @@ function useParseSorts(): { sorts: string[] } {
 function useParseSearch(): string {
   const { searchParams } = useSearchParams();
 
-  return createSearch(searchParams.get('q'));
+  return createSearch(searchParams.get(ParamKey.SEARCH));
 }
 
 export function ProductCardList(): ReactNode {

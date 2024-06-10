@@ -1,3 +1,5 @@
+export type { PriceRange } from './get-product-price-range';
+export { useProductQuery } from './use-product-query';
 export {
   SortOption,
   createCategoryFilter,
@@ -7,7 +9,6 @@ export {
   createSorts,
   defaultSortOption,
   useProductsQuery,
-  type PriceRange,
   type QueryProductsReturn,
   type SearchFilterInput,
-} from './model';
+} from './use-products-query';

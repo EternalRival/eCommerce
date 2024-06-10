@@ -10,7 +10,7 @@ import { useId } from 'react';
 
 import { toastifyError } from '~/shared/lib/react-toastify';
 import { useSearchParams } from '~/shared/lib/use-search-params';
-import { SortOption, defaultSortOption } from '~/entities/products';
+import { SortOption, defaultSortOption } from '~/entities/product';
 
 import { ParamKey } from '../model';
 

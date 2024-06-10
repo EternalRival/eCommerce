@@ -1,7 +1,5 @@
 import type { CurrencyCode } from '~/shared/api/commercetools';
-import type { Price } from './price.schema';
-
-type Variant = { price?: Price };
+import type { Variant } from './variant.schema';
 
 export type PriceRange = { min: number; max: number };
 

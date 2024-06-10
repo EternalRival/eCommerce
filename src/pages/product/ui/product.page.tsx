@@ -1,9 +1,10 @@
-import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+
+import { Product } from '~/features/product';
 
 import type { ReactNode } from 'react';
 
-export function DetailedProductPage(): ReactNode {
+export function ProductPage(): ReactNode {
   return (
     <>
       <Typography
@@ -11,9 +12,10 @@ export function DetailedProductPage(): ReactNode {
         variant="h5"
         className="py-2"
       >
-        Detailed Product Page
+        Product Page
       </Typography>
-      <Stack className="self-start">123</Stack>
+
+      <Product />
     </>
   );
 }
