@@ -14,7 +14,7 @@ export function Product(): ReactNode {
   const productQuery = useProductQuery({
     token,
     variables,
-    enabled: !!productSlug,
+    enabled: Boolean(productSlug),
   });
 
   return JSON.stringify({ productSlug, data: productQuery.data });
