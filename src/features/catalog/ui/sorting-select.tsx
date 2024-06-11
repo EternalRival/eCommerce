@@ -32,7 +32,7 @@ export function SortingSelect(): ReactNode {
           label={label}
           onChange={(event) => {
             searchParams.set(ParamKey.SORT, event.target.value);
-            updateUrl().catch(toastifyError);
+            updateUrl({ method: 'replace', scroll: false }).catch(toastifyError);
           }}
         >
           <MenuItem value={SortOption.PRICE_ASC}>
