@@ -21,7 +21,7 @@ function createLinkProps({
 }: {
   baseUrl: string;
   slugList: string[];
-  categories?: QueryCategoriesReturn['categories'];
+  categories?: QueryCategoriesReturn['categories']['results'];
 }): { id: string; href: string; name: string }[] {
   const currentCategory = categories?.find((category) => category.slug === slugList[0]);
 
@@ -44,7 +44,7 @@ export function CategoryBreadcrumbs(): ReactNode {
   const { data, isPending } = useCategoriesQuery({ token });
   const { param: slugList } = useParseQueryParam(categoryParamKey);
 
-  const categories = data?.categories;
+  const categories = data?.categories.results;
   const linkProps = useMemo(() => createLinkProps({ baseUrl, categories, slugList }), [baseUrl, categories, slugList]);
 
   if (isPending) {
