@@ -2,6 +2,8 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import NextLink from 'next/link';
+import { Button } from '@mui/material';
+import { toast } from 'react-toastify';
 
 import { Route } from '~/shared/model/route.enum';
 
@@ -38,6 +40,15 @@ export function MainPage(): ReactNode {
         <MainPageLink href={Route.PROFILE}>Profile</MainPageLink>
         <MainPageLink href={Route.CART}>Cart</MainPageLink>
         <MainPageLink href={Route.ABOUT}>About</MainPageLink>
+        <Button
+          className="p-0 underline"
+          onClick={() => {
+            localStorage.clear();
+            toast.info('localStorage is clear');
+          }}
+        >
+          Clear LocalStorage
+        </Button>
       </Stack>
     </>
   );
