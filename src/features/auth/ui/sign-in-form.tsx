@@ -42,7 +42,7 @@ function useHandleSignInSubmit({
 
       toast.success('Successful sign in');
       authStore.setCustomerToken(customerToken);
-      customerStore.setCustomer(signInResult.customer);
+      customerStore.setCustomer(signInResult.customerSignMeIn.customer);
     } catch (error) {
       toastifyError(error);
     }

@@ -50,40 +50,22 @@ fragment baseMoney on BaseMoney {
 }
 `;
 
-const productSchema = z
-  .object({
-    product: z
-      .object({
-        masterData: z.object({
-          current: z
-            .object({
-              name: z.string().nullish(),
-              description: z.string().nullish(),
-              masterVariant: variantSchema,
-              variants: z.array(variantSchema),
-            })
-            .nullish(),
-        }),
-      })
-      .nullish(),
-  })
-  .transform((data) => {
-    const product = data.product?.masterData.current;
-
-    if (!product) {
-      return { product: null };
-    }
-
-    // TODO переписать под нужное
-    return {
-      product: {
-        name: product.name,
-        description: product.description,
-        masterVariant: product.masterVariant,
-        variants: product.variants,
-      },
-    };
-  });
+const productSchema = z.object({
+  product: z
+    .object({
+      masterData: z.object({
+        current: z
+          .object({
+            name: z.string().nullish(),
+            description: z.string().nullish(),
+            masterVariant: variantSchema,
+            variants: z.array(variantSchema),
+          })
+          .nullish(),
+      }),
+    })
+    .nullish(),
+});
 
 export type QueryProductReturn = z.infer<typeof productSchema>;
 
