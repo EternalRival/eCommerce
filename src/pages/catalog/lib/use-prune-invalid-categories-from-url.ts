@@ -17,7 +17,7 @@ export function usePruneInvalidCategoriesFromUrl(): void {
   const getExpectedEndpoint = useCallback(() => {
     let result: string = Route.CATALOG;
 
-    let categories = categoriesQuery.data?.categories;
+    let categories = categoriesQuery.data?.categories.results;
 
     const { length } = slugList;
     for (let i = 0; i < length; i += 1) {

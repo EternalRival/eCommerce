@@ -18,7 +18,7 @@ import type { ReactNode } from 'react';
 import type { QueryCategoriesReturn } from '~/entities/categories';
 import type { FCProps } from '~/shared/model/types';
 
-type Category = QueryCategoriesReturn['categories'][number];
+type Category = QueryCategoriesReturn['categories']['results'][number];
 
 function CategoryItem({
   category,
@@ -27,7 +27,7 @@ function CategoryItem({
   paddingLeft = 2,
 }: FCProps<{
   category: Category;
-  getCount: (id: string) => Nullable<string>;
+  getCount: (id: string) => Maybe<string>;
   endpoint: string;
   paddingLeft?: number;
 }>): ReactNode {
@@ -51,7 +51,7 @@ function CategoryItem({
         href={buttonEndpoint}
         selected={asPath.split('?')[0] === buttonEndpoint}
       >
-        <ListItemText primary={count === null ? name : `${name} (${count})`} />
+        <ListItemText primary={typeof count === 'string' ? `${name} (${count})` : name} />
       </ListItemButton>
       {children.map((child) => (
         <CategoryItem
@@ -82,6 +82,8 @@ export function CategoryPicker(): ReactNode {
 
   const rootCategory = { id: 'root', slug: Route.CATALOG.slice(1), name: 'All', children: [] };
 
+  const categoriesFacet = data?.productProjectionSearch.facets.find(({ facet }) => facet === 'categories')?.value.terms;
+
   return (
     <Accordion disableGutters>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>Categories</AccordionSummary>
@@ -93,21 +95,17 @@ export function CategoryPicker(): ReactNode {
           <CategoryItem
             key={rootCategory.id}
             category={rootCategory}
-            getCount={() =>
-              data?.categoriesFacet.reduce((acc, { productCount }) => acc + (productCount ?? 0), 0).toString() ?? null
-            }
+            getCount={() => categoriesFacet?.reduce((acc, { productCount }) => acc + (productCount ?? 0), 0).toString()}
             endpoint=""
           />
           {error ? (
             <Alert severity="error">{error.message}</Alert>
           ) : (
-            data.categories.map((category) => (
+            data.categories.results.map((category) => (
               <CategoryItem
                 key={category.id}
                 category={category}
-                getCount={(id) =>
-                  data.categoriesFacet.find(({ term }) => term === id)?.productCount?.toString() ?? null
-                }
+                getCount={(id) => categoriesFacet?.find(({ term }) => term === id)?.productCount?.toString()}
                 endpoint={Route.CATALOG}
               />
             ))
