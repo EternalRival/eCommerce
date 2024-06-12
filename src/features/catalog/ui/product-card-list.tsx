@@ -99,13 +99,13 @@ export function ProductCardList(): ReactNode {
     return <Typography>No products</Typography>;
   }
 
-  return productQuery.data.products.length < 1 ? (
+  return productQuery.data.productProjectionSearch.count < 1 ? (
     <Typography>No products found</Typography>
   ) : (
     <Box className="flex grow flex-col gap-2 px-2">
       <SortingSelect />
       <Box className="grid justify-evenly gap-x-4 gap-y-8 lg:grid-cols-[repeat(2,20rem)] 2xl:grid-cols-[repeat(3,20rem)]">
-        {productQuery.data.products.map((product) => (
+        {productQuery.data.productProjectionSearch.results.map((product) => (
           <ProductCard
             key={product.id}
             productData={product}

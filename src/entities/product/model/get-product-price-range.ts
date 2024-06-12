@@ -4,7 +4,6 @@ import type { Variant } from './variant.schema';
 export type PriceRange = { min: number; max: number };
 
 type GetProductPriceRangeReturn = {
-  priceCurrencyCode: CurrencyCode;
   priceRange: Nullable<PriceRange>;
   discountedPriceRange: Nullable<PriceRange>;
 };
@@ -46,7 +45,6 @@ export function getProductPriceRanges({
   });
 
   return {
-    priceCurrencyCode: currencyCode,
     priceRange: priceMin < initialMin && priceMax > initialMax ? { min: priceMin, max: priceMax } : null,
     discountedPriceRange:
       discountedPriceMin < initialMin && discountedPriceMax > initialMax

@@ -3,7 +3,6 @@ import { z } from 'zod';
 
 import { $http } from '~/shared/api/commercetools';
 
-import { getProductPriceRanges } from './get-product-price-range';
 import { variantSchema } from './variant.schema';
 
 import type { UseQueryResult } from '@tanstack/react-query';
@@ -13,6 +12,8 @@ const operationName = 'Products';
 const query = `
 query ${operationName}($limit: Int, $offset: Int, $search: String, $sorts: [String!], $filters: [SearchFilterInput!], $locale: Locale = "en", $currency: Currency = "USD") {
   productProjectionSearch(limit: $limit, offset: $offset, locale: $locale, text: $search, fuzzy: true, sorts: $sorts, filters: $filters) {
+    count
+    total
     results {
       id
       key
@@ -51,34 +52,22 @@ fragment baseMoney on BaseMoney {
 }
 `;
 
-const productsSchema = z
-  .object({
-    productProjectionSearch: z.object({
-      results: z.array(
-        z.object({
-          id: z.string(),
-          key: z.string().nullish(),
-          name: z.string().nullish(),
-          description: z.string().nullish(),
-          masterVariant: variantSchema,
-          variants: z.array(variantSchema),
-        })
-      ),
-    }),
-  })
-  .transform((data) => ({
-    products: data.productProjectionSearch.results.map((product) => ({
-      id: product.id,
-      key: product.key,
-      masterImage: product.masterVariant.images.find(({ url }) => Boolean(url)),
-      name: product.name,
-      description: product.description,
-      ...getProductPriceRanges({
-        currencyCode: product.masterVariant.price?.value.currencyCode,
-        variants: [product.masterVariant, ...product.variants],
-      }),
-    })),
-  }));
+const productsSchema = z.object({
+  productProjectionSearch: z.object({
+    count: z.number(),
+    total: z.number(),
+    results: z.array(
+      z.object({
+        id: z.string(),
+        key: z.string().nullish(),
+        name: z.string().nullish(),
+        description: z.string().nullish(),
+        masterVariant: variantSchema,
+        variants: z.array(variantSchema),
+      })
+    ),
+  }),
+});
 
 export type QueryProductsReturn = z.infer<typeof productsSchema>;
 
