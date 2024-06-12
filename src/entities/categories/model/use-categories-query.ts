@@ -71,32 +71,27 @@ const categorySchema: z.ZodType<Category> = baseCategorySchema.extend({
   children: z.lazy(() => categorySchema.array()),
 });
 
-const categoriesSchema = z
-  .object({
-    categories: z.object({
-      results: z.array(categorySchema),
-    }),
-    productProjectionSearch: z.object({
-      facets: z.array(
-        z.object({
-          facet: z.string(),
-          value: z.object({
-            terms: z.array(
-              z.object({
-                term: z.string(),
-                count: z.number(),
-                productCount: z.number().nullish(),
-              })
-            ),
-          }),
-        })
-      ),
-    }),
-  })
-  .transform((data) => ({
-    categories: data.categories.results,
-    categoriesFacet: data.productProjectionSearch.facets.find(({ facet }) => facet === 'categories')?.value.terms ?? [],
-  }));
+const categoriesSchema = z.object({
+  categories: z.object({
+    results: z.array(categorySchema),
+  }),
+  productProjectionSearch: z.object({
+    facets: z.array(
+      z.object({
+        facet: z.string(),
+        value: z.object({
+          terms: z.array(
+            z.object({
+              term: z.string(),
+              count: z.number(),
+              productCount: z.number().nullish(),
+            })
+          ),
+        }),
+      })
+    ),
+  }),
+});
 
 export type QueryCategoriesReturn = z.infer<typeof categoriesSchema>;
 

@@ -5,7 +5,7 @@ import { useCategoriesQuery } from './use-categories-query';
 
 import type { QueryCategoriesReturn } from './use-categories-query';
 
-type Category = QueryCategoriesReturn['categories'][number];
+type Category = QueryCategoriesReturn['categories']['results'][number];
 
 const getCurrentCategory = ({
   slugList,
@@ -29,7 +29,7 @@ export function useCurrentCategory({ token }: { token: Maybe<string> }): {
 } {
   const { isReady, param: slugList } = useParseQueryParam(categoryParamKey);
   const categoriesQuery = useCategoriesQuery({ token });
-  const categories = categoriesQuery.data?.categories;
+  const categories = categoriesQuery.data?.categories.results;
 
   return {
     isPending: !isReady || categoriesQuery.isPending,
