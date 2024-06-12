@@ -1,4 +1,4 @@
-export type { PriceRange } from './get-product-price-range';
+export { getProductPriceRanges, type PriceRange } from './get-product-price-range';
 export { useProductQuery } from './use-product-query';
 export {
   SortOption,
@@ -12,3 +12,4 @@ export {
   type QueryProductsReturn,
   type SearchFilterInput,
 } from './use-products-query';
+export type { Variant } from './variant.schema';

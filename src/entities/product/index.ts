@@ -6,9 +6,11 @@ export {
   createSearch,
   createSorts,
   defaultSortOption,
+  getProductPriceRanges,
   useProductQuery,
   useProductsQuery,
   type PriceRange,
   type QueryProductsReturn,
   type SearchFilterInput,
+  type Variant,
 } from './model';
