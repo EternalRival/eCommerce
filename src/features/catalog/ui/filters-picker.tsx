@@ -61,14 +61,14 @@ function CollapsibleListItem({
   );
 }
 
-type PizzaAttribute = NonNullable<QueryPizzaAttributesReturn['attributes']>[number];
+type PizzaAttribute = NonNullable<QueryPizzaAttributesReturn['productType']>['attributeDefinitions']['results'][number];
 
 function AttributeItem({ pizzaAttribute }: FCProps<{ pizzaAttribute: PizzaAttribute }>): ReactNode {
   const { searchParams, updateUrl } = useSearchParams();
 
-  const isActivated = (key: string): boolean => searchParams.has(pizzaAttribute.key, key);
+  const isActivated = (key: string): boolean => searchParams.has(pizzaAttribute.name, key);
   const toggleValue = (key: string): void =>
-    void searchParams[isActivated(key) ? 'delete' : 'append'](pizzaAttribute.key, key);
+    void searchParams[isActivated(key) ? 'delete' : 'append'](pizzaAttribute.name, key);
 
   const handleChipClick = (key: string): Promise<boolean> => {
     toggleValue(key);
@@ -77,10 +77,10 @@ function AttributeItem({ pizzaAttribute }: FCProps<{ pizzaAttribute: PizzaAttrib
   };
 
   return (
-    pizzaAttribute.values.length > 0 && (
+    pizzaAttribute.type.values.total > 0 && (
       <CollapsibleListItem label={pizzaAttribute.label}>
         <Box className="flex flex-wrap gap-2 p-2 pl-4">
-          {pizzaAttribute.values.map(({ key, label }) => (
+          {pizzaAttribute.type.values.results.map(({ key, label }) => (
             <Chip
               key={key}
               color="primary"
@@ -109,7 +109,7 @@ function FiltersResetButton(): ReactNode {
         size="small"
         fullWidth
         onClick={() => {
-          data?.attributes?.forEach(({ key }) => void searchParams.delete(key));
+          data?.productType?.attributeDefinitions.results.forEach(({ name }) => void searchParams.delete(name));
           [ParamKey.PRICE_MIN, ParamKey.PRICE_MAX].forEach((key) => void searchParams.delete(key));
           updateUrl({ method: 'replace', scroll: false }).catch(toastifyError);
         }}
@@ -134,6 +134,12 @@ export function FiltersPicker(): ReactNode {
     );
   }
 
+  const attributes = data?.productType?.attributeDefinitions.results;
+
+  const prices = data?.productProjectionSearch.facets
+    .find(({ facet }) => facet === 'prices')
+    ?.value.ranges.find(Boolean);
+
   return (
     <Accordion
       disableGutters
@@ -151,17 +157,17 @@ export function FiltersPicker(): ReactNode {
             <>
               <SearchInput />
               <FiltersResetButton />
-              {data.prices && (
+              {prices && (
                 <CollapsibleListItem label="Price">
                   <PriceSlider
-                    minPrice={data.prices.min}
-                    maxPrice={data.prices.max}
+                    minPrice={prices.min}
+                    maxPrice={prices.max}
                   />
                 </CollapsibleListItem>
               )}
-              {data.attributes?.map((attribute) => (
+              {attributes?.map((attribute) => (
                 <AttributeItem
-                  key={attribute.key}
+                  key={attribute.name}
                   pizzaAttribute={attribute}
                 />
               ))}

@@ -17,6 +17,7 @@ query ${operationName}($locale: Locale = "en", $productTypeKey: String = "pizza"
         type {
           ... on EnumAttributeDefinitionType {
             values {
+              total
               results {
                 key
                 label
@@ -45,56 +46,46 @@ query ${operationName}($locale: Locale = "en", $productTypeKey: String = "pizza"
 }
 `;
 
-const pizzaAttributesSchema = z
-  .object({
-    productType: z
-      .object({
-        attributeDefinitions: z.object({
-          results: z.array(
-            z.object({
-              name: z.string(),
-              label: z.string().nullish(),
-              type: z.object({
-                values: z.object({
-                  results: z.array(
-                    z.object({
-                      key: z.string(),
-                      label: z.string(),
-                    })
-                  ),
-                }),
+const pizzaAttributesSchema = z.object({
+  productType: z
+    .object({
+      attributeDefinitions: z.object({
+        results: z.array(
+          z.object({
+            name: z.string(),
+            label: z.string().nullish(),
+            type: z.object({
+              values: z.object({
+                total: z.number(),
+                results: z.array(
+                  z.object({
+                    key: z.string(),
+                    label: z.string(),
+                  })
+                ),
               }),
+            }),
+          })
+        ),
+      }),
+    })
+    .nullish(),
+  productProjectionSearch: z.object({
+    facets: z.array(
+      z.object({
+        facet: z.string(),
+        value: z.object({
+          ranges: z.array(
+            z.object({
+              min: z.number(),
+              max: z.number(),
             })
           ),
         }),
       })
-      .nullish(),
-    productProjectionSearch: z.object({
-      facets: z.array(
-        z.object({
-          facet: z.string(),
-          value: z.object({
-            ranges: z.array(
-              z.object({
-                min: z.number(),
-                max: z.number(),
-              })
-            ),
-          }),
-        })
-      ),
-    }),
-  })
-  .transform((data) => ({
-    attributes:
-      data.productType?.attributeDefinitions.results.map((attribute) => ({
-        key: attribute.name,
-        label: attribute.label ?? null,
-        values: attribute.type.values.results,
-      })) ?? null,
-    prices:
-      data.productProjectionSearch.facets.find(({ facet }) => facet === 'prices')?.value.ranges.find(Boolean) ?? null,
-  }));
+    ),
+  }),
+});
 
 export type QueryPizzaAttributesReturn = z.infer<typeof pizzaAttributesSchema>;
 

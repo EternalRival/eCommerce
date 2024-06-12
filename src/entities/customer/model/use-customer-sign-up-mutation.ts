@@ -19,16 +19,14 @@ mutation ${operationName}($draft: CustomerSignMeUpDraft!) {
 }
 `;
 
-const customerSignUpSchema = z
-  .object({
-    customerSignMeUp: z.object({
-      customer: z.object({
-        id: z.string(),
-        email: z.string(),
-      }),
+const customerSignUpSchema = z.object({
+  customerSignMeUp: z.object({
+    customer: z.object({
+      id: z.string(),
+      email: z.string(),
     }),
-  })
-  .transform((data) => data.customerSignMeUp);
+  }),
+});
 
 type MutateCustomerSignUpReturn = z.infer<typeof customerSignUpSchema>;
 
