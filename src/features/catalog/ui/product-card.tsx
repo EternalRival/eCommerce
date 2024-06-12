@@ -9,20 +9,22 @@ import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import clsx from 'clsx';
+import { useMemo } from 'react';
 
+import { getProductPriceRanges } from '~/entities/product';
 import { Route } from '~/shared/model/route.enum';
 
 import type { ReactNode } from 'react';
-import type { PriceRange, QueryProductsReturn } from '~/entities/product';
+import type { PriceRange, QueryProductsReturn, Variant } from '~/entities/product';
 import type { FCProps, FCPropsWC } from '~/shared/model/types';
 
-type Product = QueryProductsReturn['products'][number];
+type Product = QueryProductsReturn['productProjectionSearch']['results'][number];
 
 type Props = FCPropsWC<{ productData?: Product }>;
 
 type MediaProps = FCProps<{
   name: Product['name'];
-  image?: Product['masterImage'];
+  image?: Product['masterVariant']['images'][number];
 }>;
 
 function Media({ name, image }: MediaProps): ReactNode {
@@ -79,19 +81,23 @@ function Description({ description }: DescriptionProps): ReactNode {
 }
 
 type PricesProps = FCProps<{
-  priceCurrencyCode: Product['priceCurrencyCode'];
-  priceRange: Nullable<PriceRange>;
-  discountedPriceRange: Nullable<PriceRange>;
+  variants: Variant[];
 }>;
 
-function Prices({ priceCurrencyCode, priceRange, discountedPriceRange }: PricesProps): ReactNode {
+function Prices({ variants }: PricesProps): ReactNode {
   const currencyMap = { USD: '$' } as const;
-  const currencyCode = currencyMap[priceCurrencyCode];
+  const currencyCode = variants.find((variant) => variant.price?.value.currencyCode)?.price?.value.currencyCode;
+  const currencyCodeChar = currencyCode ? currencyMap[currencyCode] : '';
+
+  const { priceRange, discountedPriceRange } = useMemo(
+    () => getProductPriceRanges({ currencyCode, variants }),
+    [currencyCode, variants]
+  );
 
   const createPriceLabel = (range: PriceRange): string =>
     range.min === range.max
-      ? `${currencyCode}${range.min.toString()}`
-      : `${currencyCode}${range.min.toString()} - ${currencyCode}${range.max.toString()}`;
+      ? `${currencyCodeChar}${range.min.toString()}`
+      : `${currencyCodeChar}${range.min.toString()} - ${currencyCodeChar}${range.max.toString()}`;
 
   return (
     <Box className="flex justify-center gap-2">
@@ -150,8 +156,6 @@ export function ProductCard({ productData }: Props): ReactNode {
     );
   }
 
-  const { key, masterImage, name, description, priceCurrencyCode, priceRange, discountedPriceRange } = productData;
-
   return (
     <Card
       className="relative h-[30rem] w-80"
@@ -163,21 +167,17 @@ export function ProductCard({ productData }: Props): ReactNode {
         height="inherit"
       >
         <Media
-          name={name}
-          image={masterImage}
+          name={productData.name}
+          image={productData.masterVariant.images.find(({ url }) => Boolean(url))}
         />
 
-        <Name name={name} />
+        <Name name={productData.name} />
 
-        <Description description={description} />
+        <Description description={productData.description} />
 
-        <Prices
-          priceCurrencyCode={priceCurrencyCode}
-          priceRange={priceRange}
-          discountedPriceRange={discountedPriceRange}
-        />
+        <Prices variants={[productData.masterVariant, ...productData.variants]} />
 
-        <ViewDetails productKey={key} />
+        <ViewDetails productKey={productData.key} />
       </CardContent>
     </Card>
   );
