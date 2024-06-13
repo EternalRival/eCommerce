@@ -5,6 +5,7 @@ import '~/_app/globals.css';
 
 import { Layout, Providers } from '~/_app';
 import { siteTitle } from '~/shared/model/constants';
+import { InternalServerErrorPage } from '~/pages/internal-server-error';
 
 import type { AppProps } from 'next/app';
 import type { ReactNode } from 'react';
@@ -14,7 +15,7 @@ export default function App<T>(appProps: AppProps<PageProps<T>>): ReactNode {
   const { Component, pageProps } = appProps;
 
   return (
-    <ErrorBoundary fallback={<div>Something went wrong</div>}>
+    <ErrorBoundary fallback={<InternalServerErrorPage />}>
       <Providers appProps={appProps}>
         <Head>
           <meta
