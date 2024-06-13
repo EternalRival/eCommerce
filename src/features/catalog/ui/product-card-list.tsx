@@ -33,11 +33,13 @@ function useParseFilters(): { isPending: boolean; filters: SearchFilterInput[] }
     filters.push(createCategoryFilter({ id: currentCategory.id }));
   }
 
-  attributesQuery.data?.attributes?.forEach((attribute) => {
+  attributesQuery.data?.productType?.attributeDefinitions.results.forEach((attribute) => {
     filters.push(
       createEnumAttributeFilter({
-        key: attribute.key,
-        values: searchParams.getAll(attribute.key).filter((value) => attribute.values.find(({ key }) => key === value)),
+        key: attribute.name,
+        values: searchParams
+          .getAll(attribute.name)
+          .filter((value) => attribute.type.values.results.find(({ key }) => key === value)),
       })
     );
   });
