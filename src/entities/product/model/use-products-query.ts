@@ -42,6 +42,11 @@ fragment variant on ProductSearchVariant {
   }
   images {
     url
+    label
+    dimensions {
+      width
+      height
+    }
   }
 }
 
