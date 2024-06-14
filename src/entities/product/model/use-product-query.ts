@@ -40,6 +40,11 @@ fragment variant on ProductVariant {
   }
   images {
     url
+    label
+    dimensions {
+      width
+      height
+    }
   }
 }
 

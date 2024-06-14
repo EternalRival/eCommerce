@@ -9,6 +9,7 @@ import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import clsx from 'clsx';
+import Image from 'next/image';
 import { useMemo } from 'react';
 
 import { getProductPriceRanges } from '~/entities/product';
@@ -34,10 +35,15 @@ function Media({ name, image }: MediaProps): ReactNode {
       arrow
     >
       <Paper>
-        <CardMedia
-          className="h-56 w-auto bg-cover"
-          image={image?.url}
-        />
+        <CardMedia className="h-56">
+          <Image
+            src={image?.url ?? ''}
+            alt={image?.label ?? ''}
+            width={image?.dimensions.width}
+            height={image?.dimensions.height}
+            className="h-full w-auto"
+          />
+        </CardMedia>
       </Paper>
     </Tooltip>
   );

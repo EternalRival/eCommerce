@@ -7,6 +7,11 @@ export const variantSchema = z.object({
   images: z.array(
     z.object({
       url: z.string(),
+      label: z.string().nullish(),
+      dimensions: z.object({
+        width: z.number(),
+        height: z.number(),
+      }),
     })
   ),
 });
