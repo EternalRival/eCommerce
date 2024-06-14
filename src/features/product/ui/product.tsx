@@ -1,10 +1,17 @@
-import { Box, Grid, Paper, Typography } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import clsx from 'clsx';
+import NextLink from 'next/link';
 import { useMemo } from 'react';
 
 import { useAuthStore } from '~/entities/auth-store';
 import { getProductPriceRanges, useProductQuery } from '~/entities/product';
 import { useParseQueryParam } from '~/shared/lib/nextjs';
+import { Route } from '~/shared/model/route.enum';
 
 import { Images } from './images';
 
@@ -73,7 +80,14 @@ export function Product(): ReactNode {
 
   return (
     product && (
-      <Paper className="mx-auto max-w-screen-lg">
+      <Paper className="relative mx-auto max-w-screen-lg">
+        <IconButton
+          component={NextLink}
+          href={Route.CATALOG}
+          className="absolute right-0 top-0"
+        >
+          <CloseIcon />
+        </IconButton>
         <Grid
           container
           className="p-4"
