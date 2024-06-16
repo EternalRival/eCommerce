@@ -1,9 +1,7 @@
 import { postcodeValidator } from 'postcode-validator';
 import { z } from 'zod';
 
-import { findCountryByLabel, isAllowedCountryName } from '~/shared/api/commercetools';
-
-import { nameSchema } from './name.schema';
+import { findCountryByLabel, isAllowedCountryName, nameSchema } from '~/shared/api/commercetools';
 
 function assertPostCode(countryLabel: string, postCode: string): void {
   const country = findCountryByLabel(countryLabel);
