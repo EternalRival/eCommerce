@@ -1,22 +1,17 @@
-import dayjs from 'dayjs';
 import { z } from 'zod';
 
+import { dateOfBirthSchema, emailSchema, nameSchema, passwordSchema } from '~/shared/api/commercetools';
+
 import { billingAddressSchema, shippingAddressSchema } from './address.schema';
-import { nameSchema } from './name.schema';
-import { passwordSchema } from './password.schema';
 
 export const signUpDtoSchema = z
   .object({
-    email: z.string().email(),
+    email: emailSchema,
     password: passwordSchema,
 
     firstName: nameSchema,
     lastName: nameSchema,
-    dateOfBirth: z
-      .string()
-      .date('Required')
-      .refine((date) => dayjs().diff(dayjs(date), 'y') >= 13, 'Must be over the age of 13'),
-
+    dateOfBirth: dateOfBirthSchema,
     shippingCountry: z.string(),
     shippingPostalCode: z.string(),
     shippingCity: z.string(),

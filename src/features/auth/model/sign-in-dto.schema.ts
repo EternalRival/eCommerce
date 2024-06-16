@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
-import { passwordSchema } from './password.schema';
+import { emailSchema, passwordSchema } from '~/shared/api/commercetools';
 
 export const signInDtoSchema = z.object({
-  email: z.string().email(),
+  email: emailSchema,
   password: passwordSchema,
 });
 
