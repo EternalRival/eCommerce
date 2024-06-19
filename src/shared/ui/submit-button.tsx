@@ -4,15 +4,15 @@ import Button from '@mui/material/Button';
 import type { ReactNode } from 'react';
 import type { FCPropsWC } from '~/shared/model/types';
 
-type Props = FCPropsWC<{ isPending: boolean }>;
+type Props = FCPropsWC<{ isPending: boolean; isDisabled?: boolean }>;
 
-export function SubmitButton({ isPending }: Props): ReactNode {
+export function SubmitButton({ isPending, isDisabled }: Props): ReactNode {
   return (
     <Button
       fullWidth
       variant="contained"
       type="submit"
-      disabled={isPending}
+      disabled={isPending || isDisabled}
       className="my-2"
     >
       Submit

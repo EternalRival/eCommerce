@@ -2,10 +2,11 @@ import { useQuery } from '@tanstack/react-query';
 import { z } from 'zod';
 
 import { $http } from '~/shared/api/commercetools';
+import { QueryKey } from '~/shared/lib/tanstack-query';
 
 import type { UseQueryResult } from '@tanstack/react-query';
 
-const operationName = 'PizzaAttributes';
+const operationName = QueryKey.PIZZA_ATTRIBUTES;
 
 const query = `
 query ${operationName}($locale: Locale = "en", $productTypeKey: String = "pizza") {

@@ -3,20 +3,17 @@ import { toast } from 'react-toastify';
 
 import { useAuthStore } from '~/entities/auth-store';
 import { useGetTokenInfoByCredentialsMutation } from '~/entities/auth-token';
-import { useCustomerStore } from '~/entities/customer-store';
 import { useCustomerSignInMutation } from '~/entities/customer';
+import { useCustomerStore } from '~/entities/customer-store';
 import { toastifyError } from '~/shared/lib/react-toastify';
 import { Route } from '~/shared/model/route.enum';
+import { ControlledTextField, MuiForm, PasswordTextField, SubmitButton } from '~/shared/ui';
 
 import { useSignInForm } from '../lib';
-import { AuthForm } from './auth-form';
 import { ChangeFormLink } from './change-form-link';
-import { ControlledTextField } from './controlled-text-field';
-import { PasswordTextField } from './password-text-field';
-import { SubmitButton } from './submit-button';
 
-import type { ReactNode } from 'react';
 import type { SignInDto } from '../model';
+import type { ReactNode } from 'react';
 
 function useHandleSignInSubmit({
   getCustomerToken,
@@ -63,7 +60,7 @@ export function SignInForm(): ReactNode {
   const isPending = getTokenInfoByCredentialsMutation.isPending || customerSignInMutation.isPending;
 
   return (
-    <AuthForm onSubmit={(event) => void handleSubmit(handleSignInSubmit)(event)}>
+    <MuiForm onSubmit={(event) => void handleSubmit(handleSignInSubmit)(event)}>
       <Divider>Credentials</Divider>
       <ControlledTextField
         {...createProps('email')}
@@ -83,6 +80,6 @@ export function SignInForm(): ReactNode {
 
       <SubmitButton isPending={isPending} />
       <ChangeFormLink href={Route.AUTH_SIGN_UP}>Don&apos;t have an account? Sign Up</ChangeFormLink>
-    </AuthForm>
+    </MuiForm>
   );
 }

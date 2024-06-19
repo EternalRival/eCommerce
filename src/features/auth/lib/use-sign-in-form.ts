@@ -1,12 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
+import { createFieldPropsFactory } from '~/shared/lib/react-hook-form';
+
 import { signInDtoSchema } from '../model';
-import { createFieldPropsFactory } from './create-field-props-factory';
 
 import type { UseFormHandleSubmit } from 'react-hook-form';
+import type { CreateFieldProps } from '~/shared/lib/react-hook-form';
 import type { SignInDto } from '../model';
-import type { CreateFieldProps } from './create-field-props-factory';
 
 export function useSignInForm(): {
   createProps: CreateFieldProps<SignInDto>;

@@ -2,10 +2,11 @@ import { useQuery } from '@tanstack/react-query';
 import { z } from 'zod';
 
 import { $http } from '~/shared/api/commercetools';
+import { QueryKey } from '~/shared/lib/tanstack-query';
 
 import type { UseQueryResult } from '@tanstack/react-query';
 
-const operationName = 'Categories';
+const operationName = QueryKey.CATEGORIES;
 
 const query = `
 query ${operationName}($locale: Locale = "en") {
