@@ -2,11 +2,12 @@ import { useMutation } from '@tanstack/react-query';
 import { z } from 'zod';
 
 import { $http } from '~/shared/api/commercetools';
+import { QueryKey } from '~/shared/lib/tanstack-query';
 
 import type { UseMutationOptions, UseMutationResult } from '@tanstack/react-query';
 import type { CountryCode } from '~/shared/api/commercetools';
 
-const operationName = 'SignUp';
+const operationName = QueryKey.SIGN_UP;
 
 const query = `
 mutation ${operationName}($draft: CustomerSignMeUpDraft!) {

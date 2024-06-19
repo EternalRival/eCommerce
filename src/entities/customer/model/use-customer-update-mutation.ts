@@ -2,11 +2,12 @@ import { useMutation } from '@tanstack/react-query';
 import { z } from 'zod';
 
 import { $http } from '~/shared/api/commercetools';
+import { QueryKey } from '~/shared/lib/tanstack-query';
 
 import type { UseMutationOptions, UseMutationResult } from '@tanstack/react-query';
 import type { CountryCode, Locale } from '~/shared/api/commercetools';
 
-const operationName = 'CustomerUpdate';
+const operationName = QueryKey.CUSTOMER_UPDATE;
 
 const query = `
 mutation ${operationName}($version: Long!, $actions: [MyCustomerUpdateAction!]!) {
@@ -35,7 +36,7 @@ type AddressInput = {
 
 type AddressIdOrKey = { addressId: string } | { addressKey: string };
 
-type MyCustomerUpdateAction =
+export type MyCustomerUpdateAction =
   | { setLocale: { locale?: Locale } }
   | { changeEmail: { email: string } }
   | { setFirstName: { firstName?: string } }

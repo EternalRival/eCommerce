@@ -2,10 +2,11 @@ import { useMutation } from '@tanstack/react-query';
 import { z } from 'zod';
 
 import { $http } from '~/shared/api/commercetools';
+import { QueryKey } from '~/shared/lib/tanstack-query';
 
 import type { UseMutationOptions, UseMutationResult } from '@tanstack/react-query';
 
-const operationName = 'SignIn';
+const operationName = QueryKey.SIGN_IN;
 
 const query = `
 mutation ${operationName}($draft: CustomerSignMeInDraft!) {

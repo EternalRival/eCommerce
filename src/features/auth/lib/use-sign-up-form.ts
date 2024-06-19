@@ -4,14 +4,14 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { dateFormat } from '~/shared/lib/dayjs';
+import { createFieldPropsFactory } from '~/shared/lib/react-hook-form';
 import { toastifyError } from '~/shared/lib/react-toastify';
 
 import { signUpDtoSchema } from '../model';
-import { createFieldPropsFactory } from './create-field-props-factory';
 
 import type { Path, UseFormHandleSubmit, UseFormReturn, UseFormWatch } from 'react-hook-form';
+import type { CreateFieldProps } from '~/shared/lib/react-hook-form';
 import type { SignUpDto } from '../model';
-import type { CreateFieldProps } from './create-field-props-factory';
 
 function useRevalidateFactory({
   watch,
