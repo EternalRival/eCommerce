@@ -9,16 +9,18 @@ import { useCustomerStore } from '~/entities/customer-store';
 import { ALLOWED_COUNTRY_NAMES } from '~/shared/api/commercetools';
 import { toastifyError } from '~/shared/lib/react-toastify';
 import { Route } from '~/shared/model/route.enum';
+import {
+  ControlledCheckbox,
+  ControlledDatePicker,
+  ControlledStringAutocomplete,
+  ControlledTextField,
+  MuiForm,
+  PasswordTextField,
+  SubmitButton,
+} from '~/shared/ui';
 
 import { createCustomerSignUpDraft, useSignUpForm } from '../lib';
-import { AuthForm } from './auth-form';
 import { ChangeFormLink } from './change-form-link';
-import { ControlledCheckbox } from './controlled-checkbox';
-import { ControlledDatePicker } from './controlled-date-picker';
-import { ControlledStringAutocomplete } from './controlled-string-autocomplete';
-import { ControlledTextField } from './controlled-text-field';
-import { PasswordTextField } from './password-text-field';
-import { SubmitButton } from './submit-button';
 
 import type { ReactNode } from 'react';
 import type { SignUpDto } from '../model';
@@ -89,7 +91,7 @@ export function SignUpForm(): ReactNode {
     customerSignInMutation.isPending;
 
   return (
-    <AuthForm onSubmit={(event) => void handleSubmit(handleSignUpSubmit)(event)}>
+    <MuiForm onSubmit={(event) => void handleSubmit(handleSignUpSubmit)(event)}>
       <Divider>Credentials</Divider>
       <ControlledTextField
         {...createProps('email')}
@@ -166,6 +168,6 @@ export function SignUpForm(): ReactNode {
       </Collapse>
       <SubmitButton isPending={isPending} />
       <ChangeFormLink href={Route.AUTH_SIGN_IN}>Already have an account? Sign in</ChangeFormLink>
-    </AuthForm>
+    </MuiForm>
   );
 }

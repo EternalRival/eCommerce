@@ -1,1 +1,8 @@
-export { useCustomerSignInMutation, useCustomerSignUpMutation } from './model';
+export {
+  useCustomerQuery,
+  useCustomerSignInMutation,
+  useCustomerSignUpMutation,
+  useCustomerUpdateMutation,
+  type MyCustomerUpdateAction,
+  type QueryCustomerReturn,
+} from './model';

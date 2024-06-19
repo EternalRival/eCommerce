@@ -2,12 +2,13 @@ import { useQuery } from '@tanstack/react-query';
 import { z } from 'zod';
 
 import { $http } from '~/shared/api/commercetools';
+import { QueryKey } from '~/shared/lib/tanstack-query';
 
 import { variantSchema } from './variant.schema';
 
 import type { UseQueryResult } from '@tanstack/react-query';
 
-const operationName = 'Products';
+const operationName = QueryKey.PRODUCTS;
 
 const query = `
 query ${operationName}($limit: Int, $offset: Int, $search: String, $sorts: [String!], $filters: [SearchFilterInput!], $locale: Locale = "en", $currency: Currency = "USD") {
