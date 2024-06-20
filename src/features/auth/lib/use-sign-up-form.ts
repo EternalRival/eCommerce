@@ -1,37 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import dayjs from 'dayjs';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { dateFormat } from '~/shared/lib/dayjs';
-import { createFieldPropsFactory } from '~/shared/lib/react-hook-form';
-import { toastifyError } from '~/shared/lib/react-toastify';
+import { createFieldPropsFactory, useRevalidateFactory } from '~/shared/lib/react-hook-form';
 
 import { signUpDtoSchema } from '../model';
 
-import type { Path, UseFormHandleSubmit, UseFormReturn, UseFormWatch } from 'react-hook-form';
+import type { UseFormHandleSubmit, UseFormWatch } from 'react-hook-form';
 import type { CreateFieldProps } from '~/shared/lib/react-hook-form';
 import type { SignUpDto } from '../model';
-
-function useRevalidateFactory({
-  watch,
-  trigger,
-  getFieldState,
-}: Pick<UseFormReturn<SignUpDto>, 'watch' | 'trigger' | 'getFieldState'>) {
-  function revalidateIfDirty(e: Path<SignUpDto>): void {
-    if (getFieldState(e).isDirty) {
-      trigger(e).catch(toastifyError);
-    }
-  }
-
-  return function useRevalidate(publisher: Path<SignUpDto>, ...subscribers: Path<SignUpDto>[]): void {
-    const pubValue = watch(publisher);
-
-    useEffect(() => {
-      subscribers.forEach(revalidateIfDirty);
-    }, [pubValue, subscribers]);
-  };
-}
 
 export function useSignUpForm(): {
   createProps: CreateFieldProps<SignUpDto>;

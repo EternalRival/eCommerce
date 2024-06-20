@@ -19,20 +19,15 @@ const errorToErrorMessageSchema = z
   .transform(({ response: { data } }) => data.message);
 
 const gqlResponseSchema = z
-  .union([
-    z.object({
-      data: z.null(),
-      errors: z.array(errorSchema),
-    }),
-    z.object({
-      data: z.record(z.unknown()),
-    }),
-  ])
-  .transform((response) =>
-    response.data === null
-      ? { data: null, error: response.errors.find((error) => error.message)?.message ?? 'Internal Server Error' }
-      : response
-  );
+  .object({
+    data: z.record(z.unknown()).nullable(),
+    errors: z.array(errorSchema).optional(),
+  })
+  .transform((response) => {
+    const errorMessage = response.errors?.find((error) => error.message)?.message;
+
+    return errorMessage ? { data: null, error: errorMessage } : { data: response.data };
+  });
 
 type GqlResponse = z.infer<typeof gqlResponseSchema>;
 
