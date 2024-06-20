@@ -1,4 +1,5 @@
 export {
+  useChangePasswordMutation,
   useCustomerQuery,
   useCustomerSignInMutation,
   useCustomerSignUpMutation,

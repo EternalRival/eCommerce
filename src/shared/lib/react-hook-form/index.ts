@@ -1,1 +1,2 @@
-export { type CreateFieldProps, createFieldPropsFactory } from './create-field-props-factory';
+export { createFieldPropsFactory, type CreateFieldProps } from './create-field-props-factory';
+export { useRevalidateFactory } from './use-revalidate-factory';
