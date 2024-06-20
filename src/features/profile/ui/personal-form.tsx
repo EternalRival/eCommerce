@@ -22,14 +22,14 @@ import type { ReactNode } from 'react';
 import type { MyCustomerUpdateAction, QueryCustomerReturn } from '~/entities/customer';
 import type { FCProps } from '~/shared/model/types';
 
-const personalFormSchema = z.object({
+const personalFormDtoSchema = z.object({
   email: emailSchema,
   firstName: nameSchema,
   lastName: nameSchema,
   dateOfBirth: dateOfBirthSchema,
 });
 
-type PersonalFormDto = z.infer<typeof personalFormSchema>;
+type PersonalFormDto = z.infer<typeof personalFormDtoSchema>;
 
 export function PersonalForm({
   customer,
@@ -45,7 +45,7 @@ export function PersonalForm({
   };
 
   const { control, handleSubmit, reset, formState } = useForm<PersonalFormDto>({
-    resolver: zodResolver(personalFormSchema),
+    resolver: zodResolver(personalFormDtoSchema),
     mode: 'onChange',
     defaultValues,
   });
@@ -56,7 +56,7 @@ export function PersonalForm({
 
   const updateMutation = useCustomerUpdateMutation({
     onSuccess() {
-      toast(JSON.stringify('updated'));
+      toast.success(JSON.stringify('Personal data updated!'));
       queryClient.invalidateQueries({ queryKey: [QueryKey.CUSTOMER] }).catch(toastifyError);
       setIsEditMode((value) => !value);
       reset(defaultValues, { keepValues: true });

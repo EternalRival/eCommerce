@@ -7,4 +7,5 @@ export const enum QueryKey {
   PIZZA_ATTRIBUTES = 'PizzaAttributes',
   PRODUCT = 'Product',
   PRODUCTS = 'Products',
+  CHANGE_PASSWORD = 'ChangePassword',
 }

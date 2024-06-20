@@ -19,10 +19,12 @@ mutation ${operationName}($version: Long!, $actions: [MyCustomerUpdateAction!]!)
 `;
 
 const customerUpdateSchema = z.object({
-  updateMyCustomer: z.object({
-    id: z.string(),
-    email: z.string(),
-  }),
+  updateMyCustomer: z
+    .object({
+      id: z.string(),
+      email: z.string(),
+    })
+    .nullish(),
 });
 
 type MutateCustomerUpdateReturn = z.infer<typeof customerUpdateSchema>;
