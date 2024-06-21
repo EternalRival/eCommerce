@@ -1,10 +1,10 @@
-import { Box } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 
 import { useAuthStore } from '~/entities/auth-store';
 import { useCustomerQuery } from '~/entities/customer';
 
+import { Addresses } from './addresses';
 import { ChangePasswordForm } from './change-password-form';
 import { PersonalForm } from './personal-form';
 
@@ -20,13 +20,12 @@ export function Profile(): ReactNode {
   return (
     customer && (
       <Paper className="mx-auto w-full max-w-screen-lg">
-        <Box component="pre">{JSON.stringify(query.data, null, 2)}</Box>
         <Divider>Password</Divider>
         <ChangePasswordForm customer={customer} />
         <Divider>Personal</Divider>
         <PersonalForm customer={customer} />
         <Divider>Addresses</Divider>
-        Addresses
+        <Addresses customer={customer} />
       </Paper>
     )
   );
