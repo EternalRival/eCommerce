@@ -1,16 +1,18 @@
-import Backdrop from '@mui/material/Backdrop';
+import Modal from '@mui/material/Modal';
 import CircularProgress from '@mui/material/CircularProgress';
+import { Backdrop } from '@mui/material';
 
 import type { ReactNode } from 'react';
 
 export function PageSpinner(): ReactNode {
   return (
-    <Backdrop
-      open
-      sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      className="bg-transparent backdrop-blur-sm"
-    >
-      <CircularProgress />
-    </Backdrop>
+    <Modal open>
+      <Backdrop
+        open
+        sx={{ backdropFilter: 'blur(.25rem)', background: 'transparent' }}
+      >
+        <CircularProgress />
+      </Backdrop>
+    </Modal>
   );
 }

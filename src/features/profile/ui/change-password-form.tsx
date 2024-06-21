@@ -18,8 +18,8 @@ import { toastifyError } from '~/shared/lib/react-toastify';
 import { MuiForm, PasswordTextField, SubmitButton } from '~/shared/ui';
 
 import type { ReactNode } from 'react';
-import type { QueryCustomerReturn } from '~/entities/customer';
 import type { FCProps } from '~/shared/model/types';
+import type { Customer } from '../model';
 
 const changePasswordDtoSchema = z
   .object({
@@ -43,9 +43,7 @@ const changePasswordDtoSchema = z
 
 type ChangePasswordDto = z.infer<typeof changePasswordDtoSchema>;
 
-export function ChangePasswordForm({
-  customer,
-}: FCProps<{ customer: NonNullable<QueryCustomerReturn['me']>['customer'] }>): ReactNode {
+export function ChangePasswordForm({ customer }: FCProps<{ customer: Customer }>): ReactNode {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isBackdropEnabled, setIsBackdropEnabled] = useState(false);
   const authStore = useAuthStore((store) => store);
