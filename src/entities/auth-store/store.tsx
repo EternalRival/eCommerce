@@ -32,7 +32,6 @@ const stateSchema = z.discriminatedUnion('type', [emptyTokenSchema, guestTokenSc
 type State = z.infer<typeof stateSchema>;
 
 type Actions = {
-  reset: () => void;
   setGuestToken: (state: Pick<State, 'access_token'>) => void;
   setCustomerToken: (state: Pick<State, 'access_token' | 'refresh_token'>) => void;
 };
@@ -53,7 +52,6 @@ export const [AuthStoreProvider, useAuthStore] = createZustandStore({
         persist(
           (set) => ({
             ...EMPTY_STATE,
-            reset: (): void => void set(EMPTY_STATE),
             setGuestToken: (state): void => void set(guestTokenSchema.parse({ ...state, type: 'guest' })),
             setCustomerToken: (state): void => void set(customerTokenSchema.parse({ ...state, type: 'customer' })),
           }),

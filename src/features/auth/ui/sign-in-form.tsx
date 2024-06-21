@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 import { useAuthStore } from '~/entities/auth-store';
 import { useGetTokenInfoByCredentialsMutation } from '~/entities/auth-token';
 import { useCustomerSignInMutation } from '~/entities/customer';
-import { useCustomerStore } from '~/entities/customer-store';
 import { toastifyError } from '~/shared/lib/react-toastify';
 import { Route } from '~/shared/model/route.enum';
 import { ControlledTextField, MuiForm, PasswordTextField, SubmitButton } from '~/shared/ui';
@@ -23,7 +22,6 @@ function useHandleSignInSubmit({
   signIn: ReturnType<typeof useCustomerSignInMutation>['mutateAsync'];
 }) {
   const authStore = useAuthStore((store) => store);
-  const customerStore = useCustomerStore((store) => store);
 
   return async (signInDto: SignInDto): Promise<void> => {
     try {
@@ -32,14 +30,13 @@ function useHandleSignInSubmit({
         password: signInDto.password,
       });
 
-      const signInResult = await signIn({
+      await signIn({
         token: customerToken.access_token,
         variables: { draft: signInDto },
       });
 
       toast.success('Successful sign in');
       authStore.setCustomerToken(customerToken);
-      customerStore.setCustomer(signInResult.customerSignMeIn.customer);
     } catch (error) {
       toastifyError(error);
     }
