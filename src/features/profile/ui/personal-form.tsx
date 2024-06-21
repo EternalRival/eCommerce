@@ -19,8 +19,9 @@ import { QueryKey } from '~/shared/lib/tanstack-query';
 import { ControlledDatePicker, ControlledTextField, MuiForm, SubmitButton } from '~/shared/ui';
 
 import type { ReactNode } from 'react';
-import type { MyCustomerUpdateAction, QueryCustomerReturn } from '~/entities/customer';
+import type { MyCustomerUpdateAction } from '~/entities/customer';
 import type { FCProps } from '~/shared/model/types';
+import type { Customer } from '../model';
 
 const personalFormDtoSchema = z.object({
   email: emailSchema,
@@ -31,9 +32,7 @@ const personalFormDtoSchema = z.object({
 
 type PersonalFormDto = z.infer<typeof personalFormDtoSchema>;
 
-export function PersonalForm({
-  customer,
-}: FCProps<{ customer: NonNullable<QueryCustomerReturn['me']>['customer'] }>): ReactNode {
+export function PersonalForm({ customer }: FCProps<{ customer: Customer }>): ReactNode {
   const token = useAuthStore((store) => store.access_token);
   const [isEditMode, setIsEditMode] = useState(false);
 
