@@ -1,5 +1,4 @@
 import { AuthStoreProvider } from '~/entities/auth-store';
-import { CustomerStoreProvider } from '~/entities/customer-store';
 import { muiTheme } from '~/shared/model/mui-theme';
 
 import { MuiProvider } from './mui.provider';
@@ -18,9 +17,7 @@ export function Providers<T>({ children, appProps }: FCPropsWC<{ appProps: AppPr
     <ToastProvider>
       <QueryProvider dehydratedState={pageProps.dehydratedState}>
         <AuthStoreProvider>
-          <CustomerStoreProvider>
-            <MuiProvider {...{ appProps, theme: muiTheme }}>{children}</MuiProvider>
-          </CustomerStoreProvider>
+          <MuiProvider {...{ appProps, theme: muiTheme }}>{children}</MuiProvider>
         </AuthStoreProvider>
       </QueryProvider>
     </ToastProvider>

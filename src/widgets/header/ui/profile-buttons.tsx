@@ -8,6 +8,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { useRouter } from 'next/router';
 
 import { useAuthStore } from '~/entities/auth-store';
+import { PageSpinner } from '~/entities/page-spinner';
 import { useSignOut } from '~/features/auth';
 import { Route } from '~/shared/model/route.enum';
 
@@ -29,11 +30,12 @@ function ProfileButtonsSkeleton({ arrayLength }: FCProps<{ arrayLength: number }
 }
 
 export function ProfileButtons(): ReactNode {
-  const auth = useAuthStore(({ type }) => ({ isPending: type === 'empty', isGuest: type === 'guest' }));
-  const { signOut } = useSignOut();
+  const auth = useAuthStore((store) => store);
   const router = useRouter();
 
-  if (auth.isPending) {
+  const { signOut, isPending: isSignOutPending } = useSignOut();
+
+  if (auth.type === 'empty') {
     return <ProfileButtonsSkeleton arrayLength={2} />;
   }
 
@@ -41,25 +43,30 @@ export function ProfileButtons(): ReactNode {
 
   const customerButtonsProps = [
     ['Profile', createNavigate(Route.PROFILE), AccountCircleIcon],
-    ['Sign out', signOut, LogoutIcon],
+    ['Sign out', (): void => void signOut(), LogoutIcon],
   ] as const;
   const guestButtonsProps = [
     ['Sign up', createNavigate(Route.AUTH_SIGN_UP), PersonAddIcon],
     ['Sign in', createNavigate(Route.AUTH_SIGN_IN), LoginIcon],
   ] as const;
 
-  return (auth.isGuest ? guestButtonsProps : customerButtonsProps).map(([title, onClick, Icon]) => (
-    <Tooltip
-      key={title}
-      title={title}
-      arrow
-    >
-      <IconButton
-        color="inherit"
-        onClick={onClick}
-      >
-        <Icon />
-      </IconButton>
-    </Tooltip>
-  ));
+  return (
+    <>
+      {isSignOutPending && <PageSpinner />}
+      {(auth.type === 'guest' ? guestButtonsProps : customerButtonsProps).map(([title, onClick, Icon]) => (
+        <Tooltip
+          key={title}
+          title={title}
+          arrow
+        >
+          <IconButton
+            color="inherit"
+            onClick={onClick}
+          >
+            <Icon />
+          </IconButton>
+        </Tooltip>
+      ))}
+    </>
+  );
 }

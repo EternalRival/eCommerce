@@ -30,7 +30,7 @@ export function AuthGuard({ children, shouldBeSignedIn = false, redirectTo = Rou
     }
   }, [redirectTo, router, shouldRedirect]);
 
-  if (isPending || isCustomer) {
+  if (isPending || shouldRedirect) {
     return <PageSpinner />;
   }
 

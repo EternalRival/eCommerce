@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 import { useAuthStore } from '~/entities/auth-store';
 import { useGetTokenInfoByCredentialsMutation, useGetTokenInfoMutation } from '~/entities/auth-token';
 import { useCustomerSignInMutation, useCustomerSignUpMutation } from '~/entities/customer';
-import { useCustomerStore } from '~/entities/customer-store';
 import { ALLOWED_COUNTRY_NAMES } from '~/shared/api/commercetools';
 import { toastifyError } from '~/shared/lib/react-toastify';
 import { Route } from '~/shared/model/route.enum';
@@ -37,7 +36,6 @@ function useHandleSignUpSubmit({
   signIn: ReturnType<typeof useCustomerSignInMutation>['mutateAsync'];
 }) {
   const authStore = useAuthStore((store) => store);
-  const customerStore = useCustomerStore((store) => store);
 
   return async (signUpDto: SignUpDto): Promise<void> => {
     try {
@@ -53,7 +51,7 @@ function useHandleSignUpSubmit({
         password: signUpDto.password,
       });
 
-      const signInResult = await signIn({
+      await signIn({
         token: customerToken.access_token,
         variables: {
           draft: { email: signUpDto.email, password: signUpDto.password },
@@ -62,7 +60,6 @@ function useHandleSignUpSubmit({
 
       toast.success('Successful sign up');
       authStore.setCustomerToken(customerToken);
-      customerStore.setCustomer(signInResult.customerSignMeIn.customer);
     } catch (error) {
       toastifyError(error);
     }
