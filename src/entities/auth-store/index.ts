@@ -1,1 +1,1 @@
-export { AuthStoreProvider, useAuthStore, type AuthStateByType } from './store';
+export { AuthStoreProvider, useAuthStore, type AuthStateByType } from './auth.store';

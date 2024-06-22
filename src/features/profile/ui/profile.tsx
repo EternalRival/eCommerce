@@ -4,6 +4,7 @@ import Paper from '@mui/material/Paper';
 import { useAuthStore } from '~/entities/auth-store';
 import { useCustomerQuery } from '~/entities/customer';
 
+import { ProfileContextProvider } from '../model';
 import { Addresses } from './addresses';
 import { ChangePasswordForm } from './change-password-form';
 import { PersonalForm } from './personal-form';
@@ -19,14 +20,16 @@ export function Profile(): ReactNode {
 
   return (
     customer && (
-      <Paper className="mx-auto w-full max-w-screen-lg">
-        <Divider>Password</Divider>
-        <ChangePasswordForm customer={customer} />
-        <Divider>Personal</Divider>
-        <PersonalForm customer={customer} />
-        <Divider>Addresses</Divider>
-        <Addresses customer={customer} />
-      </Paper>
+      <ProfileContextProvider customer={customer}>
+        <Paper className="mx-auto w-full max-w-screen-lg">
+          <Divider>Password</Divider>
+          <ChangePasswordForm />
+          <Divider>Personal</Divider>
+          <PersonalForm />
+          <Divider>Addresses</Divider>
+          <Addresses />
+        </Paper>
+      </ProfileContextProvider>
     )
   );
 }

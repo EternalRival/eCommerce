@@ -11,7 +11,7 @@ import { ControlledTextField, MuiForm, PasswordTextField, SubmitButton } from '~
 import { useSignInForm } from '../lib';
 import { ChangeFormLink } from './change-form-link';
 
-import type { SignInDto } from '../model';
+import type { SignInFormData } from '../model';
 import type { ReactNode } from 'react';
 
 function useHandleSignInSubmit({
@@ -23,16 +23,16 @@ function useHandleSignInSubmit({
 }) {
   const authStore = useAuthStore((store) => store);
 
-  return async (signInDto: SignInDto): Promise<void> => {
+  return async (signInFormData: SignInFormData): Promise<void> => {
     try {
       const customerToken = await getCustomerToken({
-        username: signInDto.email,
-        password: signInDto.password,
+        username: signInFormData.email,
+        password: signInFormData.password,
       });
 
       await signIn({
         token: customerToken.access_token,
-        variables: { draft: signInDto },
+        variables: { draft: signInFormData },
       });
 
       toast.success('Successful sign in');

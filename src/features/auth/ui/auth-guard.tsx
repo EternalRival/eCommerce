@@ -25,10 +25,10 @@ export function AuthGuard({ children, shouldBeSignedIn = false, redirectTo = Rou
   const shouldRedirect = shouldBeSignedIn !== isCustomer;
 
   useEffect(() => {
-    if (shouldRedirect) {
+    if (!isPending && shouldRedirect) {
       router.replace(redirectTo).catch(toastifyError);
     }
-  }, [redirectTo, router, shouldRedirect]);
+  }, [isPending, redirectTo, router, shouldRedirect]);
 
   if (isPending || shouldRedirect) {
     return <PageSpinner />;

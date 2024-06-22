@@ -22,7 +22,7 @@ import { createCustomerSignUpDraft, useSignUpForm } from '../lib';
 import { ChangeFormLink } from './change-form-link';
 
 import type { ReactNode } from 'react';
-import type { SignUpDto } from '../model';
+import type { SignUpFormData } from '../model';
 
 function useHandleSignUpSubmit({
   getGuestToken,
@@ -37,24 +37,24 @@ function useHandleSignUpSubmit({
 }) {
   const authStore = useAuthStore((store) => store);
 
-  return async (signUpDto: SignUpDto): Promise<void> => {
+  return async (signUpFormData: SignUpFormData): Promise<void> => {
     try {
       const guestToken = authStore.type === 'guest' ? authStore : await getGuestToken({});
 
       await signUp({
         token: guestToken.access_token,
-        variables: { draft: createCustomerSignUpDraft(signUpDto) },
+        variables: { draft: createCustomerSignUpDraft(signUpFormData) },
       });
 
       const customerToken = await getCustomerToken({
-        username: signUpDto.email,
-        password: signUpDto.password,
+        username: signUpFormData.email,
+        password: signUpFormData.password,
       });
 
       await signIn({
         token: customerToken.access_token,
         variables: {
-          draft: { email: signUpDto.email, password: signUpDto.password },
+          draft: { email: signUpFormData.email, password: signUpFormData.password },
         },
       });
 

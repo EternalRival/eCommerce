@@ -7,34 +7,28 @@ import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { z } from 'zod';
 
 import { useAuthStore } from '~/entities/auth-store';
 import { useCustomerUpdateMutation } from '~/entities/customer';
-import { dateOfBirthSchema, emailSchema, nameSchema } from '~/shared/api/commercetools';
+import { PageSpinner } from '~/entities/page-spinner';
 import { dateFormat } from '~/shared/lib/dayjs';
 import { createFieldPropsFactory } from '~/shared/lib/react-hook-form';
 import { toastifyError } from '~/shared/lib/react-toastify';
 import { QueryKey } from '~/shared/lib/tanstack-query';
 import { ControlledDatePicker, ControlledTextField, MuiForm, SubmitButton } from '~/shared/ui';
 
+import { personalFormDataSchema, useProfileContext, useResetForm } from '../model';
+
 import type { ReactNode } from 'react';
 import type { MyCustomerUpdateAction } from '~/entities/customer';
-import type { FCProps } from '~/shared/model/types';
-import type { Customer } from '../model';
+import type { PersonalFormData } from '../model';
 
-const personalFormDtoSchema = z.object({
-  email: emailSchema,
-  firstName: nameSchema,
-  lastName: nameSchema,
-  dateOfBirth: dateOfBirthSchema,
-});
+export function PersonalForm(): ReactNode {
+  const { customer, editMode, setEditMode } = useProfileContext();
+  const isEditMode = editMode === 'Personal';
 
-type PersonalFormDto = z.infer<typeof personalFormDtoSchema>;
-
-export function PersonalForm({ customer }: FCProps<{ customer: Customer }>): ReactNode {
+  const [isPending, setIsPending] = useState(false);
   const token = useAuthStore((store) => store.access_token);
-  const [isEditMode, setIsEditMode] = useState(false);
 
   const defaultValues = {
     email: customer.email,
@@ -43,61 +37,74 @@ export function PersonalForm({ customer }: FCProps<{ customer: Customer }>): Rea
     dateOfBirth: customer.dateOfBirth ?? dayjs().format(dateFormat),
   };
 
-  const { control, handleSubmit, reset, formState } = useForm<PersonalFormDto>({
-    resolver: zodResolver(personalFormDtoSchema),
+  const { control, handleSubmit, reset, formState } = useForm<PersonalFormData>({
+    resolver: zodResolver(personalFormDataSchema),
     mode: 'onChange',
     defaultValues,
   });
-
   const createProps = createFieldPropsFactory(control);
 
   const queryClient = useQueryClient();
+  const updateMutation = useCustomerUpdateMutation();
 
-  const updateMutation = useCustomerUpdateMutation({
-    onSuccess() {
-      toast.success(JSON.stringify('Personal data updated!'));
-      queryClient.invalidateQueries({ queryKey: [QueryKey.CUSTOMER] }).catch(toastifyError);
-      setIsEditMode((value) => !value);
-      reset(defaultValues, { keepValues: true });
-    },
-  });
+  useResetForm({ shouldReset: !isEditMode, reset: () => void reset(defaultValues) });
+
+  function createCustomerUpdateActions({
+    email,
+    firstName,
+    lastName,
+    dateOfBirth,
+  }: PersonalFormData): MyCustomerUpdateAction[] {
+    const actions: MyCustomerUpdateAction[] = [];
+
+    if (email !== defaultValues.email) {
+      actions.push({ changeEmail: { email } });
+    }
+
+    if (firstName !== defaultValues.firstName) {
+      actions.push({ setFirstName: { firstName } });
+    }
+
+    if (lastName !== defaultValues.lastName) {
+      actions.push({ setLastName: { lastName } });
+    }
+
+    if (dateOfBirth !== defaultValues.dateOfBirth) {
+      actions.push({ setDateOfBirth: { dateOfBirth } });
+    }
+
+    return actions;
+  }
 
   return (
     <MuiForm
       className="mx-auto"
       onSubmit={(event) =>
-        void handleSubmit((formData) => {
-          const { email, firstName, lastName, dateOfBirth } = formData;
+        void handleSubmit(async (formData) => {
+          setIsPending(true);
 
-          const actions: MyCustomerUpdateAction[] = [];
+          try {
+            const actions = createCustomerUpdateActions(formData);
 
-          if (email !== defaultValues.email) {
-            actions.push({ changeEmail: { email } });
+            await updateMutation.mutateAsync({ token, variables: { version: customer.version, actions } });
+            await queryClient.invalidateQueries({ queryKey: [QueryKey.CUSTOMER] });
+            setEditMode(isEditMode ? 'None' : 'Personal');
+            toast.success(JSON.stringify('Personal data updated!'));
+          } catch (error) {
+            toastifyError(error);
           }
 
-          if (firstName !== defaultValues.firstName) {
-            actions.push({ setFirstName: { firstName } });
-          }
-
-          if (lastName !== defaultValues.lastName) {
-            actions.push({ setLastName: { lastName } });
-          }
-
-          if (dateOfBirth !== defaultValues.dateOfBirth) {
-            actions.push({ setDateOfBirth: { dateOfBirth } });
-          }
-
-          updateMutation.mutate({ token, variables: { version: customer.version, actions } });
+          setIsPending(false);
         })(event)
       }
     >
+      {isPending && <PageSpinner />}
       <FormControlLabel
         control={
           <Switch
             checked={isEditMode}
             onChange={() => {
-              setIsEditMode((value) => !value);
-              reset(defaultValues);
+              setEditMode(isEditMode ? 'None' : 'Personal');
             }}
           />
         }
@@ -123,7 +130,7 @@ export function PersonalForm({ customer }: FCProps<{ customer: Customer }>): Rea
       />
       <Collapse in={isEditMode}>
         <SubmitButton
-          isPending={updateMutation.isPending}
+          isPending={isPending}
           isDisabled={!formState.isDirty}
         />
       </Collapse>
