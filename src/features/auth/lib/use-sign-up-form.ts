@@ -5,19 +5,19 @@ import { useForm } from 'react-hook-form';
 import { dateFormat } from '~/shared/lib/dayjs';
 import { createFieldPropsFactory, useRevalidateFactory } from '~/shared/lib/react-hook-form';
 
-import { signUpDtoSchema } from '../model';
+import { signUpFormDataSchema } from '../model';
 
 import type { UseFormHandleSubmit, UseFormWatch } from 'react-hook-form';
 import type { CreateFieldProps } from '~/shared/lib/react-hook-form';
-import type { SignUpDto } from '../model';
+import type { SignUpFormData } from '../model';
 
 export function useSignUpForm(): {
-  createProps: CreateFieldProps<SignUpDto>;
-  handleSubmit: UseFormHandleSubmit<SignUpDto>;
-  watch: UseFormWatch<SignUpDto>;
+  createProps: CreateFieldProps<SignUpFormData>;
+  handleSubmit: UseFormHandleSubmit<SignUpFormData>;
+  watch: UseFormWatch<SignUpFormData>;
 } {
-  const { control, handleSubmit, watch, trigger, getFieldState } = useForm<SignUpDto>({
-    resolver: zodResolver(signUpDtoSchema),
+  const { control, handleSubmit, watch, trigger, getFieldState } = useForm<SignUpFormData>({
+    resolver: zodResolver(signUpFormDataSchema),
     mode: 'onChange',
     defaultValues: {
       email: '',

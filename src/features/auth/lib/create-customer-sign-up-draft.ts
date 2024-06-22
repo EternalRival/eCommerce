@@ -1,7 +1,7 @@
 import { findCountryByLabel } from '~/shared/api/commercetools';
 
 import type { useCustomerSignUpMutation } from '~/entities/customer';
-import type { SignUpDto } from '../model';
+import type { SignUpFormData } from '../model';
 
 type CustomerSignUpDraft = Parameters<
   ReturnType<typeof useCustomerSignUpMutation>['mutateAsync']
@@ -14,7 +14,7 @@ export function createCustomerSignUpDraft({
   lastName,
   dateOfBirth,
   ...addresses
-}: SignUpDto): CustomerSignUpDraft {
+}: SignUpFormData): CustomerSignUpDraft {
   const [shippingAddressIndex, billingAddressIndex] = [0, addresses.isSingleAddressMode ? 0 : 1];
 
   const customerSignMeUpDraft: CustomerSignUpDraft & Required<Pick<CustomerSignUpDraft, 'addresses'>> = {

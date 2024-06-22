@@ -4,7 +4,7 @@ import { dateOfBirthSchema, emailSchema, nameSchema, passwordSchema } from '~/sh
 
 import { billingAddressSchema, shippingAddressSchema } from './address.schema';
 
-export const signUpDtoSchema = z
+export const signUpFormDataSchema = z
   .object({
     email: emailSchema,
     password: passwordSchema,
@@ -48,4 +48,4 @@ export const signUpDtoSchema = z
     }
   });
 
-export type SignUpDto = z.infer<typeof signUpDtoSchema>;
+export type SignUpFormData = z.infer<typeof signUpFormDataSchema>;

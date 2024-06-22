@@ -6,60 +6,37 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { z } from 'zod';
 
 import { useAuthStore } from '~/entities/auth-store';
 import { useGetTokenInfoByCredentialsMutation } from '~/entities/auth-token';
 import { useChangePasswordMutation } from '~/entities/customer';
 import { PageSpinner } from '~/entities/page-spinner';
-import { passwordSchema } from '~/shared/api/commercetools';
 import { createFieldPropsFactory, useRevalidateFactory } from '~/shared/lib/react-hook-form';
 import { toastifyError } from '~/shared/lib/react-toastify';
 import { MuiForm, PasswordTextField, SubmitButton } from '~/shared/ui';
 
+import { changePasswordFormDataSchema, useProfileContext, useResetForm } from '../model';
+
+import type { ChangePasswordFormData } from '../model';
 import type { ReactNode } from 'react';
-import type { FCProps } from '~/shared/model/types';
-import type { Customer } from '../model';
 
-const changePasswordDtoSchema = z
-  .object({
-    currentPassword: passwordSchema,
-    newPassword: passwordSchema,
-    newPasswordConfirm: passwordSchema,
-  })
-  .superRefine(({ currentPassword, newPassword, newPasswordConfirm }, ctx) => {
-    if (currentPassword === newPassword) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'The new password must not match the old password',
-        path: ['newPassword'],
-      });
-    }
+export function ChangePasswordForm(): ReactNode {
+  const { customer, editMode, setEditMode } = useProfileContext();
+  const isEditMode = editMode === 'Password';
 
-    if (newPassword !== newPasswordConfirm) {
-      ctx.addIssue({ code: 'custom', message: 'Passwords must match', path: ['newPasswordConfirm'] });
-    }
-  });
-
-type ChangePasswordDto = z.infer<typeof changePasswordDtoSchema>;
-
-export function ChangePasswordForm({ customer }: FCProps<{ customer: Customer }>): ReactNode {
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [isBackdropEnabled, setIsBackdropEnabled] = useState(false);
+  const [isPending, setIsPending] = useState(false);
   const authStore = useAuthStore((store) => store);
 
-  const queryClient = useQueryClient();
-
   const defaultValues = { currentPassword: '', newPassword: '', newPasswordConfirm: '' };
-  const { control, handleSubmit, reset, formState, watch, trigger, getFieldState } = useForm<ChangePasswordDto>({
-    resolver: zodResolver(changePasswordDtoSchema),
+  const { control, handleSubmit, reset, formState, watch, trigger, getFieldState } = useForm<ChangePasswordFormData>({
+    resolver: zodResolver(changePasswordFormDataSchema),
     mode: 'onChange',
     defaultValues,
   });
   const createProps = createFieldPropsFactory(control);
 
+  const queryClient = useQueryClient();
   const changePasswordMutation = useChangePasswordMutation();
-
   const getTokenInfoByCredentialsMutation = useGetTokenInfoByCredentialsMutation();
 
   const passwordFieldBaseProps = {
@@ -69,16 +46,17 @@ export function ChangePasswordForm({ customer }: FCProps<{ customer: Customer }>
   };
 
   const useRevalidate = useRevalidateFactory({ watch, trigger, getFieldState });
-
   useRevalidate('currentPassword', 'newPassword');
   useRevalidate('newPassword', 'newPasswordConfirm');
+
+  useResetForm({ shouldReset: !isEditMode, reset: () => void reset(defaultValues) });
 
   return (
     <MuiForm
       className="mx-auto"
       onSubmit={(event) =>
         void handleSubmit(async (formData) => {
-          setIsBackdropEnabled(true);
+          setIsPending(true);
 
           try {
             const { currentPassword, newPassword } = formData;
@@ -101,18 +79,17 @@ export function ChangePasswordForm({ customer }: FCProps<{ customer: Customer }>
             toastifyError(error);
           }
 
-          setIsBackdropEnabled(false);
+          setIsPending(false);
         })(event)
       }
     >
-      {isBackdropEnabled && <PageSpinner />}
+      {isPending && <PageSpinner />}
       <FormControlLabel
         control={
           <Switch
             checked={isEditMode}
             onChange={() => {
-              setIsEditMode((value) => !value);
-              reset(defaultValues);
+              setEditMode(isEditMode ? 'None' : 'Password');
             }}
           />
         }
@@ -133,7 +110,7 @@ export function ChangePasswordForm({ customer }: FCProps<{ customer: Customer }>
       />
       <Collapse in={isEditMode}>
         <SubmitButton
-          isPending={changePasswordMutation.isPending}
+          isPending={isPending}
           isDisabled={!formState.isDirty}
         />
       </Collapse>
