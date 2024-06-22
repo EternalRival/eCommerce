@@ -3,7 +3,7 @@ import Collapse from '@mui/material/Collapse';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -15,10 +15,10 @@ import { createFieldPropsFactory, useRevalidateFactory } from '~/shared/lib/reac
 import { toastifyError } from '~/shared/lib/react-toastify';
 import { MuiForm, PasswordTextField, SubmitButton } from '~/shared/ui';
 
-import { changePasswordFormDataSchema, useProfileContext, useResetForm } from '../model';
+import { changePasswordFormDataSchema, useProfileContext } from '../model';
 
-import type { ChangePasswordFormData } from '../model';
 import type { ReactNode } from 'react';
+import type { ChangePasswordFormData } from '../model';
 
 export function ChangePasswordForm(): ReactNode {
   const { customer, editMode, setEditMode } = useProfileContext();
@@ -27,7 +27,7 @@ export function ChangePasswordForm(): ReactNode {
   const [isPending, setIsPending] = useState(false);
   const authStore = useAuthStore((store) => store);
 
-  const defaultValues = { currentPassword: '', newPassword: '', newPasswordConfirm: '' };
+  const defaultValues = useMemo(() => ({ currentPassword: '', newPassword: '', newPasswordConfirm: '' }), []);
   const { control, handleSubmit, reset, formState, watch, trigger, getFieldState } = useForm<ChangePasswordFormData>({
     resolver: zodResolver(changePasswordFormDataSchema),
     mode: 'onChange',
@@ -49,7 +49,11 @@ export function ChangePasswordForm(): ReactNode {
   useRevalidate('currentPassword', 'newPassword');
   useRevalidate('newPassword', 'newPasswordConfirm');
 
-  useResetForm({ shouldReset: !isEditMode, reset: () => void reset(defaultValues) });
+  useEffect(() => {
+    if (!isEditMode) {
+      reset(defaultValues);
+    }
+  }, [defaultValues, isEditMode, reset]);
 
   return (
     <MuiForm
