@@ -3,18 +3,18 @@ import { useForm } from 'react-hook-form';
 
 import { createFieldPropsFactory } from '~/shared/lib/react-hook-form';
 
-import { signInDtoSchema } from '../model';
+import { signInFormDataSchema } from '../model';
 
 import type { UseFormHandleSubmit } from 'react-hook-form';
 import type { CreateFieldProps } from '~/shared/lib/react-hook-form';
-import type { SignInDto } from '../model';
+import type { SignInFormData } from '../model';
 
 export function useSignInForm(): {
-  createProps: CreateFieldProps<SignInDto>;
-  handleSubmit: UseFormHandleSubmit<SignInDto>;
+  createProps: CreateFieldProps<SignInFormData>;
+  handleSubmit: UseFormHandleSubmit<SignInFormData>;
 } {
-  const { control, handleSubmit } = useForm<SignInDto>({
-    resolver: zodResolver(signInDtoSchema),
+  const { control, handleSubmit } = useForm<SignInFormData>({
+    resolver: zodResolver(signInFormDataSchema),
     mode: 'onChange',
     defaultValues: { email: '', password: '' },
   });

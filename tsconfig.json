@@ -63,7 +63,9 @@
     "lint-staged.config.mjs",
     "next-env.d.ts",
     ".next/types/**/*.ts",
-    "vitest.config.mts"
+    "vitest.config.mts",
+    "src/features/auth/model/sign-up-form-data.schema.ts",
+    "src/features/auth/model/sign-up-form-data.schema.ts"
   ],
   "exclude": ["node_modules"]
 }

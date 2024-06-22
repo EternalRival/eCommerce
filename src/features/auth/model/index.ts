@@ -1,2 +1,2 @@
-export { signInDtoSchema, type SignInDto } from './sign-in-dto.schema';
-export { signUpDtoSchema, type SignUpDto } from './sign-up-dto.schema';
+export { signInFormDataSchema, type SignInFormData } from './sign-in-form-data.schema';
+export { signUpFormDataSchema, type SignUpFormData } from './sign-up-form-data.schema';
