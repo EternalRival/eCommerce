@@ -4,7 +4,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -17,7 +17,7 @@ import { toastifyError } from '~/shared/lib/react-toastify';
 import { QueryKey } from '~/shared/lib/tanstack-query';
 import { ControlledDatePicker, ControlledTextField, MuiForm, SubmitButton } from '~/shared/ui';
 
-import { personalFormDataSchema, useProfileContext, useResetForm } from '../model';
+import { personalFormDataSchema, useProfileContext } from '../model';
 
 import type { ReactNode } from 'react';
 import type { MyCustomerUpdateAction } from '~/entities/customer';
@@ -30,12 +30,15 @@ export function PersonalForm(): ReactNode {
   const [isPending, setIsPending] = useState(false);
   const token = useAuthStore((store) => store.access_token);
 
-  const defaultValues = {
-    email: customer.email,
-    firstName: customer.firstName ?? '',
-    lastName: customer.lastName ?? '',
-    dateOfBirth: customer.dateOfBirth ?? dayjs().format(dateFormat),
-  };
+  const defaultValues = useMemo(
+    () => ({
+      email: customer.email,
+      firstName: customer.firstName ?? '',
+      lastName: customer.lastName ?? '',
+      dateOfBirth: customer.dateOfBirth ?? dayjs().format(dateFormat),
+    }),
+    [customer.dateOfBirth, customer.email, customer.firstName, customer.lastName]
+  );
 
   const { control, handleSubmit, reset, formState } = useForm<PersonalFormData>({
     resolver: zodResolver(personalFormDataSchema),
@@ -47,7 +50,11 @@ export function PersonalForm(): ReactNode {
   const queryClient = useQueryClient();
   const updateMutation = useCustomerUpdateMutation();
 
-  useResetForm({ shouldReset: !isEditMode, reset: () => void reset(defaultValues) });
+  useEffect(() => {
+    if (!isEditMode) {
+      reset(defaultValues);
+    }
+  }, [defaultValues, isEditMode, reset]);
 
   function createCustomerUpdateActions({
     email,
