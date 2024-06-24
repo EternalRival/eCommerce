@@ -1,8 +1,9 @@
-export { findCountryByLabel, isAllowedCountryName } from './lib';
+export { findCountryByCode, findCountryByLabel, isAllowedCountryName } from './lib';
 export {
   $http,
   ALLOWED_COUNTRY_NAMES,
   CTP_PROJECT_KEY,
+  countryCodeSchema,
   createScope,
   createStoreScope,
   currencyCodeSchema,

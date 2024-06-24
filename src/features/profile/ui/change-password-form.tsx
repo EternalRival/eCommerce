@@ -23,6 +23,7 @@ import type { ChangePasswordFormData } from '../model';
 export function ChangePasswordForm(): ReactNode {
   const { customer, editMode, setEditMode } = useProfileContext();
   const isEditMode = editMode === 'Password';
+  const toggleEditMode = (): void => void setEditMode(isEditMode ? 'None' : 'Password');
 
   const [isPending, setIsPending] = useState(false);
   const authStore = useAuthStore((store) => store);
@@ -57,7 +58,7 @@ export function ChangePasswordForm(): ReactNode {
 
   return (
     <MuiForm
-      className="mx-auto"
+      className="mx-auto p-4"
       onSubmit={(event) =>
         void handleSubmit(async (formData) => {
           setIsPending(true);
@@ -92,9 +93,7 @@ export function ChangePasswordForm(): ReactNode {
         control={
           <Switch
             checked={isEditMode}
-            onChange={() => {
-              setEditMode(isEditMode ? 'None' : 'Password');
-            }}
+            onChange={() => void toggleEditMode()}
           />
         }
         label="Edit mode"

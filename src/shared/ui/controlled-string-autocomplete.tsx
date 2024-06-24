@@ -26,7 +26,9 @@ export function ControlledStringAutocomplete<T extends FieldValues>({
       control={control}
       render={({ field, fieldState: { error, invalid } }) => (
         <Autocomplete
+          value={field.value}
           options={options}
+          disabled={fieldProps?.disabled}
           renderInput={(params) => (
             <TextField
               required

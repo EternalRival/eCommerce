@@ -13,15 +13,9 @@ type Props<T extends FieldValues> = FCProps<{
   control: Control<T>;
   name: Path<T>;
   fieldProps?: Omit<TextFieldProps, 'name'>;
-  disabled?: boolean;
 }>;
 
-export function ControlledDatePicker<T extends FieldValues>({
-  name,
-  control,
-  fieldProps,
-  disabled,
-}: Props<T>): ReactNode {
+export function ControlledDatePicker<T extends FieldValues>({ name, control, fieldProps }: Props<T>): ReactNode {
   return (
     <Controller
       name={name}
@@ -33,7 +27,7 @@ export function ControlledDatePicker<T extends FieldValues>({
           format={dateFormat}
           value={dayjs(value)}
           onChange={(date) => void onChange(date?.format(dateFormat) ?? null)}
-          disabled={disabled}
+          disabled={fieldProps?.disabled}
           slotProps={{
             textField: {
               required: true,
