@@ -26,6 +26,7 @@ import type { PersonalFormData } from '../model';
 export function PersonalForm(): ReactNode {
   const { customer, editMode, setEditMode } = useProfileContext();
   const isEditMode = editMode === 'Personal';
+  const toggleEditMode = (): void => void setEditMode(isEditMode ? 'None' : 'Personal');
 
   const [isPending, setIsPending] = useState(false);
   const token = useAuthStore((store) => store.access_token);
@@ -40,7 +41,7 @@ export function PersonalForm(): ReactNode {
     [customer.dateOfBirth, customer.email, customer.firstName, customer.lastName]
   );
 
-  const { control, handleSubmit, reset, formState } = useForm<PersonalFormData>({
+  const { control, handleSubmit, formState, reset } = useForm<PersonalFormData>({
     resolver: zodResolver(personalFormDataSchema),
     mode: 'onChange',
     defaultValues,
@@ -85,7 +86,7 @@ export function PersonalForm(): ReactNode {
 
   return (
     <MuiForm
-      className="mx-auto"
+      className="mx-auto p-4"
       onSubmit={(event) =>
         void handleSubmit(async (formData) => {
           setIsPending(true);
@@ -95,7 +96,7 @@ export function PersonalForm(): ReactNode {
 
             await updateMutation.mutateAsync({ token, variables: { version: customer.version, actions } });
             await queryClient.invalidateQueries({ queryKey: [QueryKey.CUSTOMER] });
-            setEditMode(isEditMode ? 'None' : 'Personal');
+            toggleEditMode();
             toast.success(JSON.stringify('Personal data updated!'));
           } catch (error) {
             toastifyError(error);
@@ -110,9 +111,7 @@ export function PersonalForm(): ReactNode {
         control={
           <Switch
             checked={isEditMode}
-            onChange={() => {
-              setEditMode(isEditMode ? 'None' : 'Personal');
-            }}
+            onChange={() => void toggleEditMode()}
           />
         }
         label="Edit mode"
@@ -132,8 +131,7 @@ export function PersonalForm(): ReactNode {
       />
       <ControlledDatePicker
         {...createProps('dateOfBirth')}
-        fieldProps={{ label: 'Date of birth' }}
-        disabled={!isEditMode}
+        fieldProps={{ label: 'Date of birth', disabled: !isEditMode }}
       />
       <Collapse in={isEditMode}>
         <SubmitButton

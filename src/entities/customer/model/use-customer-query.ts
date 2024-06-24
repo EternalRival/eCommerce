@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { z } from 'zod';
 
-import { $http } from '~/shared/api/commercetools';
+import { $http, countryCodeSchema } from '~/shared/api/commercetools';
 import { QueryKey } from '~/shared/lib/tanstack-query';
 
 import type { UseQueryResult } from '@tanstack/react-query';
@@ -17,6 +17,17 @@ query ${operationName}{
       firstName
       lastName
       dateOfBirth
+      addresses {
+        id
+        country
+        postalCode
+        city
+        streetName
+      }
+      billingAddressIds
+      defaultBillingAddressId
+      shippingAddressIds
+      defaultShippingAddressId
     }
   }
 }
@@ -31,6 +42,19 @@ const customerSchema = z.object({
         firstName: z.string().nullish(),
         lastName: z.string().nullish(),
         dateOfBirth: z.string().nullish(),
+        addresses: z.array(
+          z.object({
+            id: z.string().nullish(),
+            country: countryCodeSchema,
+            postalCode: z.string().nullish(),
+            city: z.string().nullish(),
+            streetName: z.string().nullish(),
+          })
+        ),
+        billingAddressIds: z.array(z.string()),
+        defaultBillingAddressId: z.string().nullish(),
+        shippingAddressIds: z.array(z.string()),
+        defaultShippingAddressId: z.string().nullish(),
       }),
     })
     .nullish(),

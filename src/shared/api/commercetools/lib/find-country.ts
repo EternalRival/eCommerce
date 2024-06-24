@@ -11,3 +11,13 @@ export function findCountryByLabel(name: string): Country {
 
   return country;
 }
+
+export function findCountryByCode(countryCode: string): Country {
+  const country = ALLOWED_COUNTRIES.find(({ code }) => code === countryCode);
+
+  if (!country) {
+    throw new Error('Country not found');
+  }
+
+  return country;
+}
