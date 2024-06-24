@@ -21,7 +21,7 @@ export function Profile(): ReactNode {
   return (
     customer && (
       <ProfileContextProvider customer={customer}>
-        <Paper className="mx-auto w-full max-w-screen-lg">
+        <Paper className="mx-auto w-full max-w-screen-lg p-2">
           <Divider>Password</Divider>
           <ChangePasswordForm />
           <Divider>Personal</Divider>
