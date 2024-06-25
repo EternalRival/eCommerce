@@ -1,15 +1,6 @@
-import { postcodeValidator } from 'postcode-validator';
 import { z } from 'zod';
 
-import { findCountryByLabel, isAllowedCountryName, nameSchema } from '~/shared/api/commercetools';
-
-function assertPostCode(countryLabel: string, postCode: string): void {
-  const country = findCountryByLabel(countryLabel);
-
-  if (!postcodeValidator(postCode, country.code)) {
-    throw new Error(`Post code must follow country format (e.g. ${country.format})`);
-  }
-}
+import { assertPostCode, isAllowedCountryName, nameSchema } from '~/shared/api/commercetools';
 
 export const shippingAddressSchema = z
   .object({
