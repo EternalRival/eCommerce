@@ -1,34 +1,26 @@
 import { z } from 'zod';
 
-export const addressFormDataSchema = z.object({
-  country: z.string(), // TODO заменить согласно ТЗ
-  postalCode: z.string().nullish(), // TODO заменить согласно ТЗ
-  city: z.string().nullish(), // TODO заменить согласно ТЗ
-  street: z.string().nullish(), // TODO заменить согласно ТЗ
-  isBilling: z.boolean(),
-  isDefaultBilling: z.boolean(),
-  isShipping: z.boolean(),
-  isDefaultShipping: z.boolean(),
-});
+import { assertPostCode, isAllowedCountryName, nameSchema } from '~/shared/api/commercetools';
 
-/* export const addressFormDataSchema = z
+export const addressFormDataSchema = z
   .object({
-    currentPassword: passwordSchema,
-    newPassword: passwordSchema,
-    newPasswordConfirm: passwordSchema,
+    country: z.string().refine(isAllowedCountryName, 'Must be one of the proposed countries'),
+    postalCode: z.string(),
+    city: nameSchema,
+    street: z.string().min(1, 'Must contain at least one character'),
+    isBilling: z.boolean(),
+    isDefaultBilling: z.boolean(),
+    isShipping: z.boolean(),
+    isDefaultShipping: z.boolean(),
   })
-  .superRefine(({ currentPassword, newPassword, newPasswordConfirm }, ctx) => {
-    if (currentPassword === newPassword) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'The new password must not match the old password',
-        path: ['newPassword'],
-      });
+  .superRefine(({ country, postalCode }, ctx) => {
+    try {
+      assertPostCode(country, postalCode);
+    } catch (error) {
+      if (error instanceof Error) {
+        ctx.addIssue({ code: 'custom', message: error.message, path: ['postalCode'] });
+      }
     }
-
-    if (newPassword !== newPasswordConfirm) {
-      ctx.addIssue({ code: 'custom', message: 'Passwords must match', path: ['newPasswordConfirm'] });
-    }
-  }); */
+  });
 
 export type AddressFormData = z.infer<typeof addressFormDataSchema>;

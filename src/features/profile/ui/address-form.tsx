@@ -5,12 +5,12 @@ import Collapse from '@mui/material/Collapse';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Paper from '@mui/material/Paper';
 import Switch from '@mui/material/Switch';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import { PageSpinner } from '~/entities/page-spinner';
-import { ALLOWED_COUNTRY_NAMES, findCountryByCode } from '~/shared/api/commercetools';
+import { ALLOWED_COUNTRY_NAMES } from '~/shared/api/commercetools';
 import { createFieldPropsFactory } from '~/shared/lib/react-hook-form';
 import { toastifyError } from '~/shared/lib/react-toastify';
 import {
@@ -21,53 +21,24 @@ import {
   SubmitButton,
 } from '~/shared/ui';
 
-import { addressFormDataSchema, useProfileContext } from '../model';
+import { addressFormDataSchema } from '../model';
 
-import type { Dispatch, ReactNode, SetStateAction } from 'react';
+import type { ReactNode } from 'react';
 import type { FCProps } from '~/shared/model/types';
-import type { AddressFormData, Customer } from '../model';
+import type { AddressFormData } from '../model';
 
 export function AddressForm({
-  address,
-  currentAddress,
-  setCurrentAddress,
+  addressFormData,
+  isEditMode,
+  toggleEditMode,
 }: FCProps<{
-  address: Customer['addresses'][number] & { id: string };
-  currentAddress: Nullable<string>;
-  setCurrentAddress: Dispatch<SetStateAction<Nullable<string>>>;
+  addressFormData: AddressFormData;
+  isEditMode: boolean;
+  toggleEditMode: () => void;
 }>): ReactNode {
-  const { customer, editMode, setEditMode } = useProfileContext();
-  const isEditMode = editMode === 'Addresses' && currentAddress === address.id;
-  const toggleEditMode = (): void => {
-    setEditMode(isEditMode ? 'None' : 'Addresses');
-    setCurrentAddress(isEditMode ? null : address.id);
-  };
-
   const [isPending, setIsPending] = useState(false);
 
-  const defaultValues = useMemo(
-    () => ({
-      country: findCountryByCode(address.country).label,
-      postalCode: address.postalCode,
-      city: address.city,
-      street: address.streetName,
-      isBilling: customer.billingAddressIds.includes(address.id),
-      isDefaultBilling: customer.defaultBillingAddressId === address.id,
-      isShipping: customer.shippingAddressIds.includes(address.id),
-      isDefaultShipping: customer.defaultShippingAddressId === address.id,
-    }),
-    [
-      address.city,
-      address.country,
-      address.id,
-      address.postalCode,
-      address.streetName,
-      customer.billingAddressIds,
-      customer.defaultBillingAddressId,
-      customer.defaultShippingAddressId,
-      customer.shippingAddressIds,
-    ]
-  );
+  const defaultValues = addressFormData;
   const { control, handleSubmit, formState, reset } = useForm<AddressFormData>({
     resolver: zodResolver(addressFormDataSchema),
     mode: 'onChange',
