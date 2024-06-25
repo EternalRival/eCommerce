@@ -1,4 +1,4 @@
-export { findCountryByCode, findCountryByLabel, isAllowedCountryName } from './lib';
+export { assertPostCode, findCountryByCode, findCountryByLabel, isAllowedCountryName } from './lib';
 export {
   $http,
   ALLOWED_COUNTRY_NAMES,
