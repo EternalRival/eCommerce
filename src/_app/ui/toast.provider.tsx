@@ -1,10 +1,10 @@
 import { ToastContainer } from 'react-toastify';
 
-import type { PropsWithChildren, ReactNode } from 'react';
+import type { PropsWithChildren } from 'react';
 
-type Props = Readonly<PropsWithChildren>;
+type ToastProviderProps = Readonly<PropsWithChildren>;
 
-export function ToastProvider({ children }: Props): ReactNode {
+export function ToastProvider({ children }: ToastProviderProps): JSX.Element {
   return (
     <>
       {children}

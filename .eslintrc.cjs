@@ -79,6 +79,7 @@ const overrides = [
       '@typescript-eslint/no-misused-promises': 'error',
       'react/jsx-props-no-spreading': 'off',
       'react/function-component-definition': ['error', { unnamedComponents: 'arrow-function' }],
+      'react/no-array-index-key': 'off',
       'curly': ['error', 'all'],
       'consistent-return': ['error', { treatUndefinedAsUnspecified: true }],
       'import/no-cycle': 'error',

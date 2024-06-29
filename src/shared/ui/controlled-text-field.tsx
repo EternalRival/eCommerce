@@ -2,17 +2,19 @@ import TextField from '@mui/material/TextField';
 import { Controller } from 'react-hook-form';
 
 import type { TextFieldProps } from '@mui/material/TextField';
-import type { ReactNode } from 'react';
 import type { Control, FieldValues, Path } from 'react-hook-form';
-import type { FCProps } from '~/shared/model/types';
 
-type Props<T extends FieldValues> = FCProps<{
+type ControlledTextFieldProps<T extends FieldValues> = Readonly<{
   control: Control<T>;
   name: Path<T>;
   fieldProps?: Omit<TextFieldProps, 'name'>;
 }>;
 
-export function ControlledTextField<T extends FieldValues>({ name, control, fieldProps }: Props<T>): ReactNode {
+export function ControlledTextField<T extends FieldValues>({
+  name,
+  control,
+  fieldProps,
+}: ControlledTextFieldProps<T>): JSX.Element {
   return (
     <Controller
       name={name}

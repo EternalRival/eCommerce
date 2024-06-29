@@ -1,1 +1,1 @@
-export { PageSpinner } from './page-spinner';
+export { PageSpinner } from './ui';
