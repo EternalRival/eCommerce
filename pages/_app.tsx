@@ -5,13 +5,12 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import { Layout, Providers } from '~/_app';
 import '~/_app/globals.css';
 import { InternalServerErrorPage } from '~/pages/internal-server-error';
-import { siteTitle } from '~/shared/model/constants';
+import { SITE_TITLE } from '~/shared/model/constants';
 
 import type { AppProps } from 'next/app';
-import type { ReactNode } from 'react';
 import type { PageProps } from '~/_app';
 
-export default function App<T>(appProps: AppProps<PageProps<T>>): ReactNode {
+export default function App<T>(appProps: AppProps<PageProps<T>>): JSX.Element {
   const { Component, pageProps } = appProps;
 
   return (
@@ -22,7 +21,7 @@ export default function App<T>(appProps: AppProps<PageProps<T>>): ReactNode {
             name="viewport"
             content="initial-scale=1, width=device-width"
           />
-          <title>{siteTitle}</title>
+          <title>{SITE_TITLE}</title>
         </Head>
         <Layout>
           <Component {...pageProps} />

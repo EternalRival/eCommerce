@@ -1,1 +1,0 @@
-export const categoryParamKey = 'slug';

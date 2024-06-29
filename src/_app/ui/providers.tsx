@@ -1,4 +1,4 @@
-import { AuthStoreProvider } from '~/entities/auth-store';
+import { UserStoreProvider } from '~/entities/user';
 import { muiTheme } from '~/shared/model/mui-theme';
 
 import { MuiProvider } from './mui.provider';
@@ -6,19 +6,20 @@ import { QueryProvider } from './query.provider';
 import { ToastProvider } from './toast.provider';
 
 import type { AppProps } from 'next/app';
-import type { ReactNode } from 'react';
-import type { FCPropsWC } from '~/shared/model/types';
+import type { PropsWithChildren } from 'react';
 import type { PageProps } from '../model';
 
-export function Providers<T>({ children, appProps }: FCPropsWC<{ appProps: AppProps<PageProps<T>> }>): ReactNode {
+type ProvidersProps<T> = Readonly<PropsWithChildren<{ appProps: AppProps<PageProps<T>> }>>;
+
+export function Providers<T>({ children, appProps }: ProvidersProps<T>): JSX.Element {
   const { pageProps } = appProps;
 
   return (
     <ToastProvider>
       <QueryProvider dehydratedState={pageProps.dehydratedState}>
-        <AuthStoreProvider>
+        <UserStoreProvider>
           <MuiProvider {...{ appProps, theme: muiTheme }}>{children}</MuiProvider>
-        </AuthStoreProvider>
+        </UserStoreProvider>
       </QueryProvider>
     </ToastProvider>
   );

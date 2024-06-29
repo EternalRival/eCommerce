@@ -1,12 +1,11 @@
 import Box from '@mui/material/Box';
 import clsx from 'clsx';
 
-import type { ComponentProps, ReactNode } from 'react';
-import type { FCProps } from '~/shared/model/types';
+import type { ComponentProps, PropsWithChildren } from 'react';
 
-type Props = FCProps<Pick<ComponentProps<'form'>, 'className' | 'children' | 'onSubmit'>>;
+type MuiFormProps = Readonly<PropsWithChildren<Pick<ComponentProps<'form'>, 'className' | 'onSubmit'>>>;
 
-export function MuiForm({ children, className, onSubmit }: Props): ReactNode {
+export function MuiForm({ children, className, onSubmit }: MuiFormProps): JSX.Element {
   return (
     <Box
       component="form"

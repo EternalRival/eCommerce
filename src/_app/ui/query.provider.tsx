@@ -3,12 +3,11 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState } from 'react';
 
 import type { DehydratedState, QueryClientConfig } from '@tanstack/react-query';
-import type { ReactNode } from 'react';
-import type { FCPropsWC } from '~/shared/model/types';
+import type { PropsWithChildren } from 'react';
 
 export type DehydratedStateProps = { dehydratedState?: DehydratedState };
 
-type Props = FCPropsWC<DehydratedStateProps>;
+type QueryProviderProps = Readonly<PropsWithChildren<DehydratedStateProps>>;
 
 const QUERY_CLIENT_CONFIG: QueryClientConfig = {
   defaultOptions: {
@@ -18,7 +17,7 @@ const QUERY_CLIENT_CONFIG: QueryClientConfig = {
   },
 };
 
-export function QueryProvider({ children, dehydratedState }: Props): ReactNode {
+export function QueryProvider({ children, dehydratedState }: QueryProviderProps): JSX.Element {
   const [queryClient] = useState(() => new QueryClient(QUERY_CLIENT_CONFIG));
 
   return (
