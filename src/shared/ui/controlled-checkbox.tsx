@@ -3,17 +3,19 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { Controller } from 'react-hook-form';
 
 import type { FormControlLabelProps } from '@mui/material/FormControlLabel';
-import type { ReactNode } from 'react';
 import type { Control, FieldValues, Path } from 'react-hook-form';
-import type { FCProps } from '~/shared/model/types';
 
-type Props<T extends FieldValues> = FCProps<{
+type ControlledCheckboxProps<T extends FieldValues> = Readonly<{
   control: Control<T>;
   name: Path<T>;
   labelProps: Omit<FormControlLabelProps, 'name' | 'control'>;
 }>;
 
-export function ControlledCheckbox<T extends FieldValues>({ name, control, labelProps }: Props<T>): ReactNode {
+export function ControlledCheckbox<T extends FieldValues>({
+  name,
+  control,
+  labelProps,
+}: ControlledCheckboxProps<T>): JSX.Element {
   return (
     <Controller
       name={name}

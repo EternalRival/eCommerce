@@ -5,17 +5,19 @@ import { Controller } from 'react-hook-form';
 import { dateFormat } from '~/shared/lib/dayjs';
 
 import type { TextFieldProps } from '@mui/material/TextField';
-import type { ReactNode } from 'react';
 import type { Control, FieldValues, Path } from 'react-hook-form';
-import type { FCProps } from '~/shared/model/types';
 
-type Props<T extends FieldValues> = FCProps<{
+type ControlledDatePickerProps<T extends FieldValues> = Readonly<{
   control: Control<T>;
   name: Path<T>;
   fieldProps?: Omit<TextFieldProps, 'name'>;
 }>;
 
-export function ControlledDatePicker<T extends FieldValues>({ name, control, fieldProps }: Props<T>): ReactNode {
+export function ControlledDatePicker<T extends FieldValues>({
+  name,
+  control,
+  fieldProps,
+}: ControlledDatePickerProps<T>): JSX.Element {
   return (
     <Controller
       name={name}

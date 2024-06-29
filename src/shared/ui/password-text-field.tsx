@@ -7,17 +7,19 @@ import { useState } from 'react';
 import { ControlledTextField } from './controlled-text-field';
 
 import type { TextFieldProps } from '@mui/material/TextField';
-import type { ReactNode } from 'react';
 import type { Control, FieldValues, Path } from 'react-hook-form';
-import type { FCProps } from '~/shared/model/types';
 
-type Props<T extends FieldValues> = FCProps<{
+type PasswordTextFieldProps<T extends FieldValues> = Readonly<{
   control: Control<T>;
   name: Path<T>;
   fieldProps?: Omit<TextFieldProps, 'name'>;
 }>;
 
-export function PasswordTextField<T extends FieldValues>({ control, name, fieldProps }: Props<T>): ReactNode {
+export function PasswordTextField<T extends FieldValues>({
+  control,
+  name,
+  fieldProps,
+}: PasswordTextFieldProps<T>): JSX.Element {
   const [hidePassword, setHidePassword] = useState(true);
 
   return (

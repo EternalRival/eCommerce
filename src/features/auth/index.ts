@@ -1,2 +1,3 @@
-export { useSignOut } from './lib';
-export { AuthGuard, SignInForm, SignUpForm } from './ui';
+export { getCustomerToken, getGuestToken, signIn, signUp } from './api';
+export { useSignOut } from './model';
+export { AuthGuard } from './ui';

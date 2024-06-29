@@ -3,10 +3,11 @@ import Stack from '@mui/material/Stack';
 
 import { Header } from '~/widgets/header';
 
-import type { ReactNode } from 'react';
-import type { FCPropsWC } from '~/shared/model/types';
+import type { PropsWithChildren } from 'react';
 
-export function Layout({ children }: FCPropsWC): ReactNode {
+type LayoutProps = Readonly<PropsWithChildren>;
+
+export function Layout({ children }: LayoutProps): JSX.Element {
   return (
     <Stack className="min-h-dvh">
       <Header />
