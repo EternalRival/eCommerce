@@ -1,1 +1,1 @@
-export { SignInPage } from './ui';
+export { SignInPage } from './sign-in.page';

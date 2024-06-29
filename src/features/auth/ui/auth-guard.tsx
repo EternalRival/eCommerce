@@ -1,23 +1,28 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-import { useAuthStore } from '~/entities/auth-store';
 import { PageSpinner } from '~/entities/page-spinner';
+import { useUserStore } from '~/entities/user';
 import { toastifyError } from '~/shared/lib/react-toastify';
 import { Route } from '~/shared/model/route.enum';
 
-import type { ReactNode } from 'react';
-import type { FCPropsWC } from '~/shared/model/types';
+import type { PropsWithChildren } from 'react';
 
-type Props = FCPropsWC<{
-  shouldBeSignedIn?: boolean;
-  redirectTo?: Route;
-}>;
+type AuthGuardProps = Readonly<
+  PropsWithChildren<{
+    shouldBeSignedIn?: boolean;
+    redirectTo?: Route;
+  }>
+>;
 
-export function AuthGuard({ children, shouldBeSignedIn = false, redirectTo = Route.ROOT }: Props): ReactNode {
-  const { isPending, isCustomer } = useAuthStore(({ type }) => ({
-    isPending: type === 'empty',
-    isCustomer: type === 'customer',
+export function AuthGuard({
+  children,
+  shouldBeSignedIn = false,
+  redirectTo = Route.ROOT,
+}: AuthGuardProps): JSX.Element {
+  const { isEmpty, isCustomer } = useUserStore(({ token }) => ({
+    isEmpty: token.type === 'empty',
+    isCustomer: token.type === 'customer',
   }));
 
   const router = useRouter();
@@ -25,14 +30,17 @@ export function AuthGuard({ children, shouldBeSignedIn = false, redirectTo = Rou
   const shouldRedirect = shouldBeSignedIn !== isCustomer;
 
   useEffect(() => {
-    if (!isPending && shouldRedirect) {
+    if (!isEmpty && shouldRedirect) {
       router.replace(redirectTo).catch(toastifyError);
     }
-  }, [isPending, redirectTo, router, shouldRedirect]);
+  }, [isEmpty, redirectTo, router, shouldRedirect]);
 
-  if (isPending || shouldRedirect) {
-    return <PageSpinner />;
-  }
+  const isAllowed = !isEmpty && !shouldRedirect;
 
-  return children;
+  return (
+    <>
+      <PageSpinner isEnabled={!isAllowed} />
+      {isAllowed && children}
+    </>
+  );
 }
