@@ -4,7 +4,7 @@ import Collapse from '@mui/material/Collapse';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -20,6 +20,12 @@ import { changePasswordFormDataSchema } from '../model';
 
 import type { ChangePasswordFormData, CustomerProfileFormProps } from '../model';
 
+const defaultValues = {
+  currentPassword: '',
+  newPassword: '',
+  newPasswordConfirm: '',
+};
+
 export function ChangePasswordForm({ customer, editMode, setEditMode }: CustomerProfileFormProps): JSX.Element {
   const isEditMode = editMode === 'Password';
   const toggleEditMode = (): void => void setEditMode(editMode === 'Password' ? 'None' : 'Password');
@@ -28,7 +34,6 @@ export function ChangePasswordForm({ customer, editMode, setEditMode }: Customer
 
   const [isPending, setIsPending] = useState(false);
 
-  const defaultValues = useMemo(() => ({ currentPassword: '', newPassword: '', newPasswordConfirm: '' }), []);
   const { control, handleSubmit, reset, formState, watch, trigger, getFieldState } = useForm<ChangePasswordFormData>({
     resolver: zodResolver(changePasswordFormDataSchema),
     mode: 'onChange',
@@ -58,7 +63,7 @@ export function ChangePasswordForm({ customer, editMode, setEditMode }: Customer
     if (!isEditMode) {
       reset(defaultValues);
     }
-  }, [defaultValues, isEditMode, reset]);
+  }, [isEditMode, reset]);
 
   return (
     <MuiForm
