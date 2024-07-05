@@ -5,7 +5,7 @@ import { QueryKey } from '~/shared/lib/tanstack-query';
 
 import { categorySchema } from '../model';
 
-export const operationName = QueryKey.CATEGORIES;
+const operationName = QueryKey.CATEGORIES;
 
 const query = `
 query ${operationName}($locale: Locale = "en") {

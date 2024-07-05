@@ -5,7 +5,7 @@ import { QueryKey } from '~/shared/lib/tanstack-query';
 
 import { variantSchema } from '../model';
 
-export const operationName = QueryKey.PRODUCT;
+const operationName = QueryKey.PRODUCT;
 
 const query = `
 query ${operationName}($key: String, $locale: Locale = "en", $currency: Currency = "USD") {
