@@ -24,19 +24,19 @@ type AddNewAddressModalProps = Readonly<{
   setOpen: Dispatch<SetStateAction<boolean>>;
 }>;
 
+const defaultValues = {
+  country: '',
+  postalCode: '',
+  city: '',
+  street: '',
+  isBilling: false,
+  isDefaultBilling: false,
+  isShipping: false,
+  isDefaultShipping: false,
+};
+
 export function AddNewAddressModal({ open, setOpen }: AddNewAddressModalProps): JSX.Element {
   const [isPending, setIsPending] = useState(false);
-
-  const defaultValues = {
-    country: '',
-    postalCode: '',
-    city: '',
-    street: '',
-    isBilling: false,
-    isDefaultBilling: false,
-    isShipping: false,
-    isDefaultShipping: false,
-  };
 
   const { control, handleSubmit } = useForm<AddressFormData>({
     resolver: zodResolver(addressFormDataSchema),

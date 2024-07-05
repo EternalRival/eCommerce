@@ -23,6 +23,11 @@ import { signInFormDataSchema } from '../model';
 
 import type { SignInFormData } from '../model';
 
+const defaultValues = {
+  email: '',
+  password: '',
+};
+
 export function SignInForm(): JSX.Element {
   const [isPending, setIsPending] = useState(false);
   const userStore = useUserStore((store) => store);
@@ -30,7 +35,7 @@ export function SignInForm(): JSX.Element {
   const { control, handleSubmit } = useForm<SignInFormData>({
     resolver: zodResolver(signInFormDataSchema),
     mode: 'onChange',
-    defaultValues: { email: '', password: '' },
+    defaultValues,
   });
   const createProps = createFieldPropsFactory(control);
 
