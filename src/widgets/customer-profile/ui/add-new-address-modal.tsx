@@ -114,7 +114,6 @@ export function AddNewAddressModal({ open, setOpen }: AddNewAddressModalProps): 
               <Button
                 type="submit"
                 variant="contained"
-                fullWidth
                 className="my-2"
                 disabled={isPending}
               >
