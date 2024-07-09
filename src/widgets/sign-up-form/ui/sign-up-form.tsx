@@ -33,6 +33,7 @@ import { toastifyError } from '~/shared/lib/react-toastify';
 import { signUpFormDataSchema } from '../model';
 import { createSignUpDraft } from '../lib';
 
+import type { JSX } from 'react';
 import type { SignUpFormData } from '../model';
 
 export function SignUpForm(): JSX.Element {

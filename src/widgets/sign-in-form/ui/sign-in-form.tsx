@@ -21,6 +21,7 @@ import { ControlledTextField, MuiForm, PasswordTextField } from '~/shared/ui';
 
 import { signInFormDataSchema } from '../model';
 
+import type { JSX } from 'react';
 import type { SignInFormData } from '../model';
 
 const defaultValues = {

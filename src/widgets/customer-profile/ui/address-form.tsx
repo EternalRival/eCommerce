@@ -17,6 +17,7 @@ import { ControlledCheckbox, ControlledStringAutocomplete, ControlledTextField, 
 
 import { addressFormDataSchema } from '../model';
 
+import type { JSX } from 'react';
 import type { AddressFormData } from '../model';
 
 type AddressFormProps = Readonly<{

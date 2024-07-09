@@ -18,6 +18,7 @@ import { MuiForm, PasswordTextField } from '~/shared/ui';
 
 import { changePasswordFormDataSchema } from '../model';
 
+import type { JSX } from 'react';
 import type { ChangePasswordFormData, CustomerProfileFormProps } from '../model';
 
 const defaultValues = {

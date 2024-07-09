@@ -2,7 +2,7 @@ import { useRef } from 'react';
 
 import { UserStoreContext, createStore } from '../model';
 
-import type { PropsWithChildren } from 'react';
+import type { JSX, PropsWithChildren } from 'react';
 import type { State } from '../model';
 
 type AuthStoreProviderProps = Readonly<PropsWithChildren>;

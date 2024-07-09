@@ -6,6 +6,8 @@ import Toolbar from '@mui/material/Toolbar';
 import { Logo } from './logo';
 import { NavMenu } from './nav-menu';
 
+import type { JSX } from 'react';
+
 export function Header(): JSX.Element {
   return (
     <AppBar className="sticky">

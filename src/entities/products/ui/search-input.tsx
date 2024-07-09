@@ -13,6 +13,8 @@ import { useSearchParams } from '~/shared/lib/use-search-params';
 
 import { ParamKey } from '../model';
 
+import type { JSX } from 'react';
+
 const initialSearchValue = '';
 
 export function SearchInput(): JSX.Element {

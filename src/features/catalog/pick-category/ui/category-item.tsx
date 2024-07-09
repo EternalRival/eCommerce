@@ -3,6 +3,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+import type { JSX } from 'react';
 import type { Category } from '~/entities/products';
 
 export function CategoryItem({

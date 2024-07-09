@@ -8,6 +8,7 @@ import { addressFormDataSchema } from '../model';
 import { AddNewAddressModal } from './add-new-address-modal';
 import { AddressForm } from './address-form';
 
+import type { JSX } from 'react';
 import type { CustomerProfileFormProps } from '../model';
 
 export function Addresses({ customer, editMode, setEditMode }: CustomerProfileFormProps): JSX.Element {

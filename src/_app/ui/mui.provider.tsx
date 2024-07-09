@@ -6,7 +6,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import type { ThemeProviderProps } from '@mui/material/styles/ThemeProvider';
 import type { AppProps } from 'next/app';
-import type { PropsWithChildren } from 'react';
+import type { JSX, PropsWithChildren } from 'react';
 
 type MuiProviderProps = Readonly<PropsWithChildren<{ appProps: AppProps } & ThemeProviderProps>>;
 

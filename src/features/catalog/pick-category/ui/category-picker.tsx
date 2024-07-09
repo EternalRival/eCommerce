@@ -14,6 +14,8 @@ import { Route } from '~/shared/model/route.enum';
 
 import { CategoryItem } from './category-item';
 
+import type { JSX } from 'react';
+
 export function CategoryPicker(): JSX.Element {
   const token = useUserStore((store) => store.token.access_token);
 

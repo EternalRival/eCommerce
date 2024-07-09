@@ -5,6 +5,7 @@ import { Controller } from 'react-hook-form';
 import { dateFormat } from '~/shared/lib/dayjs';
 
 import type { TextFieldProps } from '@mui/material/TextField';
+import type { JSX } from 'react';
 import type { Control, FieldValues, Path } from 'react-hook-form';
 
 type ControlledDatePickerProps<T extends FieldValues> = Readonly<{

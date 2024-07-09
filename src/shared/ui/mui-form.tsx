@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import clsx from 'clsx';
 
-import type { ComponentProps, PropsWithChildren } from 'react';
+import type { ComponentProps, JSX, PropsWithChildren } from 'react';
 
 type MuiFormProps = Readonly<PropsWithChildren<Pick<ComponentProps<'form'>, 'className' | 'onSubmit'>>>;
 

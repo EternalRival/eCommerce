@@ -8,6 +8,8 @@ import { ProductList } from '~/widgets/product-list';
 
 import { usePruneInvalidCategoriesFromUrl } from '../model';
 
+import type { JSX } from 'react';
+
 export function CatalogPage(): JSX.Element {
   usePruneInvalidCategoriesFromUrl();
 
