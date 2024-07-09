@@ -6,7 +6,7 @@ import { useUserStore } from '~/entities/user';
 import { toastifyError } from '~/shared/lib/react-toastify';
 import { Route } from '~/shared/model/route.enum';
 
-import type { PropsWithChildren } from 'react';
+import type { JSX, PropsWithChildren } from 'react';
 
 type AuthGuardProps = Readonly<
   PropsWithChildren<{

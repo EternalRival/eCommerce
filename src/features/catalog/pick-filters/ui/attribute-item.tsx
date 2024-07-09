@@ -5,6 +5,7 @@ import { toastifyError } from '~/shared/lib/react-toastify';
 import { useSearchParams } from '~/shared/lib/use-search-params';
 import { CollapsibleListItem } from '~/shared/ui/collapsible-list-item';
 
+import type { JSX } from 'react';
 import type { GetPizzaAttributesReturn } from '~/entities/products';
 
 type AttributeItemProps = Readonly<{

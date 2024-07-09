@@ -2,6 +2,8 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import Modal from '@mui/material/Modal';
 
+import type { JSX } from 'react';
+
 type PageSpinnerProps = Readonly<{
   isEnabled?: boolean;
 }>;

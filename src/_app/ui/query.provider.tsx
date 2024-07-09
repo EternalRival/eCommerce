@@ -2,8 +2,8 @@ import { HydrationBoundary, QueryClient, QueryClientProvider } from '@tanstack/r
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState } from 'react';
 
+import type { JSX, PropsWithChildren } from 'react';
 import type { DehydratedState, QueryClientConfig } from '@tanstack/react-query';
-import type { PropsWithChildren } from 'react';
 
 export type DehydratedStateProps = { dehydratedState?: DehydratedState };
 

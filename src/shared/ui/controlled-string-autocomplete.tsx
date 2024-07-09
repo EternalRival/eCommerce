@@ -3,6 +3,7 @@ import TextField from '@mui/material/TextField';
 import { Controller } from 'react-hook-form';
 
 import type { TextFieldProps } from '@mui/material/TextField';
+import type { JSX } from 'react';
 import type { Control, FieldValues, Path } from 'react-hook-form';
 
 type ControlledStringAutocompleteProps<T extends FieldValues> = Readonly<{

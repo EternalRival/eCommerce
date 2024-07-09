@@ -4,6 +4,8 @@ import { AuthGuard } from '~/features/auth';
 import { Route } from '~/shared/model/route.enum';
 import { CustomerProfile } from '~/widgets/customer-profile';
 
+import type { JSX } from 'react';
+
 export function ProfilePage(): JSX.Element {
   return (
     <AuthGuard

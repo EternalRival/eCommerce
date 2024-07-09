@@ -8,6 +8,7 @@ import { InternalServerErrorPage } from '~/pages/internal-server-error';
 import { SITE_TITLE } from '~/shared/model/constants';
 
 import type { AppProps } from 'next/app';
+import type { JSX } from 'react';
 import type { PageProps } from '~/_app';
 
 export default function App<T>(appProps: AppProps<PageProps<T>>): JSX.Element {

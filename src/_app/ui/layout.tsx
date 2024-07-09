@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack';
 
 import { Header } from '~/widgets/header';
 
-import type { PropsWithChildren } from 'react';
+import type { JSX, PropsWithChildren } from 'react';
 
 type LayoutProps = Readonly<PropsWithChildren>;
 

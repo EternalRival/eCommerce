@@ -12,6 +12,8 @@ import { useSearchParams } from '~/shared/lib/use-search-params';
 
 import { ParamKey } from '../model';
 
+import type { JSX } from 'react';
+
 type PriceSliderProps = Readonly<{ minPrice: number; maxPrice: number }>;
 
 export function PriceSlider({ minPrice, maxPrice }: PriceSliderProps): JSX.Element {

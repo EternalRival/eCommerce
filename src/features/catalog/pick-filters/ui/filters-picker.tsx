@@ -15,6 +15,8 @@ import { CollapsibleListItem } from '~/shared/ui';
 import { FiltersResetButton } from './filters-reset-button';
 import { AttributeItem } from './attribute-item';
 
+import type { JSX } from 'react';
+
 export function FiltersPicker(): JSX.Element {
   const token = useUserStore((store) => store.token.access_token);
 

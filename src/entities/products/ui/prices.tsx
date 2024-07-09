@@ -4,6 +4,7 @@ import clsx from 'clsx';
 
 import { getProductPriceRanges } from '../lib';
 
+import type { JSX } from 'react';
 import type { PriceRange } from '../lib';
 import type { Variant } from '../model';
 

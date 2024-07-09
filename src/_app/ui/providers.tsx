@@ -6,7 +6,7 @@ import { QueryProvider } from './query.provider';
 import { ToastProvider } from './toast.provider';
 
 import type { AppProps } from 'next/app';
-import type { PropsWithChildren } from 'react';
+import type { JSX, PropsWithChildren } from 'react';
 import type { PageProps } from '../model';
 
 type ProvidersProps<T> = Readonly<PropsWithChildren<{ appProps: AppProps<PageProps<T>> }>>;

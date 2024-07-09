@@ -13,6 +13,7 @@ import { Addresses } from './addresses';
 import { ChangePasswordForm } from './change-password-form';
 import { PersonalForm } from './personal-form';
 
+import type { JSX } from 'react';
 import type { EditMode } from '../model';
 
 export function CustomerProfile(): JSX.Element {

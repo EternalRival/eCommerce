@@ -11,6 +11,7 @@ import 'swiper/css/thumbs';
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import type { JSX } from 'react';
 import type { SwiperClass } from 'swiper/react';
 import type { Variant } from '~/entities/products';
 
@@ -44,9 +45,7 @@ export function Images({ variants }: ImagesProps): JSX.Element {
     >
       <Dialog
         open={modalSlide >= 0}
-        onClose={() => {
-          setModalSlide(-1);
-        }}
+        onClose={() => void setModalSlide(-1)}
         sx={{ '--swiper-theme-color': 'auto' }}
       >
         <IconButton
@@ -96,9 +95,7 @@ export function Images({ variants }: ImagesProps): JSX.Element {
               height={image.dimensions.height}
               className="h-full w-full object-cover"
               priority
-              onClick={() => {
-                setModalSlide(index);
-              }}
+              onClick={() => void setModalSlide(index)}
             />
           </SwiperSlide>
         ))}

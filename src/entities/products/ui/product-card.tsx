@@ -14,6 +14,7 @@ import { Route } from '~/shared/model/route.enum';
 
 import { Prices } from './prices';
 
+import type { JSX } from 'react';
 import type { GetProductsReturn } from '../api';
 
 type ProductCardProps = Readonly<{
