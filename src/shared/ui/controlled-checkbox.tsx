@@ -3,6 +3,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { Controller } from 'react-hook-form';
 
 import type { FormControlLabelProps } from '@mui/material/FormControlLabel';
+import type { JSX } from 'react';
 import type { Control, FieldValues, Path } from 'react-hook-form';
 
 type ControlledCheckboxProps<T extends FieldValues> = Readonly<{

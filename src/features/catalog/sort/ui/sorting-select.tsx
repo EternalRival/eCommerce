@@ -12,6 +12,8 @@ import { ParamKey, SortOption, defaultSortOption } from '~/entities/products';
 import { toastifyError } from '~/shared/lib/react-toastify';
 import { useSearchParams } from '~/shared/lib/use-search-params';
 
+import type { JSX } from 'react';
+
 export function SortingSelect(): JSX.Element {
   const labelId = useId();
   const label = 'Sorting';

@@ -5,6 +5,8 @@ import NextLink from 'next/link';
 
 import { Route } from '~/shared/model/route.enum';
 
+import type { JSX } from 'react';
+
 export function MainPage(): JSX.Element {
   const linkPropsList = [
     { href: Route.AUTH_SIGN_IN, label: 'Sign in' },

@@ -16,7 +16,7 @@ import { ControlledCheckbox, ControlledStringAutocomplete, ControlledTextField, 
 
 import { addressFormDataSchema } from '../model';
 
-import type { Dispatch, SetStateAction } from 'react';
+import type { Dispatch, JSX, SetStateAction } from 'react';
 import type { AddressFormData } from '../model';
 
 type AddNewAddressModalProps = Readonly<{
@@ -38,7 +38,7 @@ const defaultValues = {
 export function AddNewAddressModal({ open, setOpen }: AddNewAddressModalProps): JSX.Element {
   const [isPending, setIsPending] = useState(false);
 
-  const { control, handleSubmit } = useForm<AddressFormData>({
+  const { control, handleSubmit /* reset */ } = useForm<AddressFormData>({
     resolver: zodResolver(addressFormDataSchema),
     mode: 'onChange',
     defaultValues,
@@ -48,8 +48,11 @@ export function AddNewAddressModal({ open, setOpen }: AddNewAddressModalProps): 
 
   return (
     <Modal open={open}>
-      <Backdrop open={open}>
-        <Paper className="p-4">
+      <Backdrop
+        open={open}
+        sx={{ padding: 1 }}
+      >
+        <Paper sx={{ padding: 2 }}>
           <Typography variant="h6">Add new address</Typography>
           <MuiForm
             onSubmit={(event) =>
@@ -84,38 +87,40 @@ export function AddNewAddressModal({ open, setOpen }: AddNewAddressModalProps): 
               fieldProps={{ label: 'Street' }}
             />
 
-            <Box className="grid grid-cols-2">
+            <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }}>
               <ControlledCheckbox
                 {...createProps('isBilling')}
-                labelProps={{ label: 'Billing' }}
+                labelProps={{ label: 'Billing', sx: { marginInline: 0 } }}
               />
               <ControlledCheckbox
                 {...createProps('isDefaultBilling')}
-                labelProps={{ label: 'Default' }}
+                labelProps={{ label: 'Default', sx: { marginInline: 0 } }}
               />
 
               <ControlledCheckbox
                 {...createProps('isShipping')}
-                labelProps={{ label: 'Shipping' }}
+                labelProps={{ label: 'Shipping', sx: { marginInline: 0 } }}
               />
               <ControlledCheckbox
                 {...createProps('isDefaultShipping')}
-                labelProps={{ label: 'Default' }}
+                labelProps={{ label: 'Default', sx: { marginInline: 0 } }}
               />
             </Box>
-            <Box className="grid grid-cols-2 gap-2">
+
+            <Box sx={{ marginY: 1, display: 'grid', gap: 1, gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }}>
               <Button
                 variant="contained"
-                className="my-2"
                 onClick={() => void setOpen(false)}
+                sx={{ fontSize: { xs: 'small', sm: 'medium' } }}
               >
                 Close
               </Button>
+
               <Button
                 type="submit"
                 variant="contained"
-                className="my-2"
                 disabled={isPending}
+                sx={{ fontSize: { xs: 'small', sm: 'medium' } }}
               >
                 Add new address
               </Button>

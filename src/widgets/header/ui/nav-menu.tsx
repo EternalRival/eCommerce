@@ -16,7 +16,7 @@ import { useUserStore } from '~/entities/user';
 import { useSignOut } from '~/features/auth';
 import { Route } from '~/shared/model/route.enum';
 
-import type { FC } from 'react';
+import type { FC, JSX } from 'react';
 
 export function NavMenu(): JSX.Element {
   const { type } = useUserStore((store) => ({ type: store.token.type }));

@@ -8,6 +8,8 @@ import { useParseFilters, useParseSearch, useParseSorts } from '~/features/catal
 import { SortingSelect } from '~/features/catalog/sort';
 import { QueryKey } from '~/shared/lib/tanstack-query';
 
+import type { JSX } from 'react';
+
 export function ProductList(): JSX.Element {
   const token = useUserStore((store) => store.token.access_token);
 

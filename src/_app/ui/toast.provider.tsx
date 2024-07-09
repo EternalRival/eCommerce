@@ -1,6 +1,6 @@
 import { ToastContainer } from 'react-toastify';
 
-import type { PropsWithChildren } from 'react';
+import type { JSX, PropsWithChildren } from 'react';
 
 type ToastProviderProps = Readonly<PropsWithChildren>;
 

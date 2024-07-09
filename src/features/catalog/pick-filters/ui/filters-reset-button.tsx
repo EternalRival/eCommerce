@@ -8,6 +8,8 @@ import { toastifyError } from '~/shared/lib/react-toastify';
 import { QueryKey } from '~/shared/lib/tanstack-query';
 import { useSearchParams } from '~/shared/lib/use-search-params';
 
+import type { JSX } from 'react';
+
 export function FiltersResetButton(): JSX.Element {
   const { searchParams, updateUrl } = useSearchParams();
   const token = useUserStore((store) => store.token.access_token);

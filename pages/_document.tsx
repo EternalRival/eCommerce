@@ -7,6 +7,7 @@ import { roboto } from '~/shared/model/next-fonts';
 
 import type { DocumentHeadTagsProps } from '@mui/material-nextjs/v14-pagesRouter';
 import type { DocumentContext, DocumentProps } from 'next/document';
+import type { JSX } from 'react';
 
 const metaDescription = `eCommerce app by ${AUTHOR_GITHUB_URL}`;
 const metadata = [

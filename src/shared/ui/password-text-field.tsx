@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { ControlledTextField } from './controlled-text-field';
 
 import type { TextFieldProps } from '@mui/material/TextField';
+import type { JSX } from 'react';
 import type { Control, FieldValues, Path } from 'react-hook-form';
 
 type PasswordTextFieldProps<T extends FieldValues> = Readonly<{

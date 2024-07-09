@@ -14,6 +14,8 @@ import { Route } from '~/shared/model/route.enum';
 
 import { createLinkProps } from '../lib';
 
+import type { JSX } from 'react';
+
 export function CategoryBreadcrumbs(): JSX.Element {
   const baseUrl = Route.CATALOG;
   const token = useUserStore((store) => store.token.access_token);

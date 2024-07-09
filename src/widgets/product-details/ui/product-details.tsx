@@ -15,6 +15,8 @@ import { Route } from '~/shared/model/route.enum';
 
 import { Images } from './images';
 
+import type { JSX } from 'react';
+
 export function ProductDetails(): JSX.Element {
   const token = useUserStore((store) => store.token.access_token);
   const { param } = useParseQueryParam('slug');

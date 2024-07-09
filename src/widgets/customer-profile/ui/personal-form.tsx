@@ -21,6 +21,7 @@ import { ControlledDatePicker, ControlledTextField, MuiForm } from '~/shared/ui'
 import { createCustomerUpdateActions } from '../lib';
 import { personalFormDataSchema } from '../model';
 
+import type { JSX } from 'react';
 import type { CustomerProfileFormProps, PersonalFormData } from '../model';
 
 export function PersonalForm({ customer, editMode, setEditMode }: CustomerProfileFormProps): JSX.Element {

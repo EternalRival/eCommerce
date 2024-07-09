@@ -3,6 +3,8 @@ import NextLink from 'next/link';
 
 import { Route } from '~/shared/model/route.enum';
 
+import type { JSX } from 'react';
+
 export function Logo(): JSX.Element {
   return (
     <Link

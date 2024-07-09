@@ -5,6 +5,8 @@ import NextLink from 'next/link';
 
 import { Route } from '~/shared/model/route.enum';
 
+import type { JSX } from 'react';
+
 export function NotFoundPage(): JSX.Element {
   return (
     <Stack className="grow items-center justify-center">
