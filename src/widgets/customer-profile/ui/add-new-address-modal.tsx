@@ -38,7 +38,7 @@ const defaultValues = {
 export function AddNewAddressModal({ open, setOpen }: AddNewAddressModalProps): JSX.Element {
   const [isPending, setIsPending] = useState(false);
 
-  const { control, handleSubmit /* reset */ } = useForm<AddressFormData>({
+  const { control, handleSubmit, reset } = useForm<AddressFormData>({
     resolver: zodResolver(addressFormDataSchema),
     mode: 'onChange',
     defaultValues,
@@ -110,7 +110,10 @@ export function AddNewAddressModal({ open, setOpen }: AddNewAddressModalProps): 
             <Box sx={{ marginY: 1, display: 'grid', gap: 1, gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }}>
               <Button
                 variant="contained"
-                onClick={() => void setOpen(false)}
+                onClick={() => {
+                  setOpen(false);
+                  reset();
+                }}
                 sx={{ fontSize: { xs: 'small', sm: 'medium' } }}
               >
                 Close
