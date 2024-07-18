@@ -69,6 +69,7 @@ export function Addresses({ customer, editMode, setEditMode }: CustomerProfileFo
           Add new address
         </Button>
         <AddNewAddressModal
+          customerVersion={customer.version}
           open={isNewAddressOpened}
           setOpen={setIsNewAddressOpened}
         />
