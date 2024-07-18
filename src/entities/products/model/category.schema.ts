@@ -4,6 +4,7 @@ const baseCategorySchema = z.object({
   id: z.string(),
   slug: z.string().nullish(),
   name: z.string().nullish(),
+  orderHint: z.string(),
   parent: z
     .object({
       slug: z.string().nullish(),

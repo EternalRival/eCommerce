@@ -3,6 +3,8 @@ import ListItemText from '@mui/material/ListItemText';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+import { getSortedCategories } from '../lib';
+
 import type { JSX } from 'react';
 import type { Category } from '~/entities/products';
 
@@ -39,7 +41,7 @@ export function CategoryItem({
       >
         <ListItemText primary={typeof count === 'string' ? `${name} (${count})` : name} />
       </ListItemButton>
-      {children.map((child) => (
+      {getSortedCategories(children).map((child) => (
         <CategoryItem
           key={child.id}
           category={child}
