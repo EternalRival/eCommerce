@@ -5,22 +5,27 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
+import { useUserStore } from '~/entities/user';
+import { updateCustomer } from '~/features/customer/update';
 import { ALLOWED_COUNTRY_NAMES } from '~/shared/api/commercetools';
 import { createFieldPropsFactory } from '~/shared/lib/react-hook-form';
 import { toastifyError } from '~/shared/lib/react-toastify';
+import { QueryKey } from '~/shared/lib/tanstack-query';
 import { ControlledCheckbox, ControlledStringAutocomplete, ControlledTextField, MuiForm } from '~/shared/ui';
 
+import { createAddAddressActions, useSyncAddressStateFactory } from '../lib';
 import { addressFormDataSchema } from '../model';
-import { useSyncAddressStateFactory } from '../lib';
 
 import type { Dispatch, JSX, SetStateAction } from 'react';
 import type { AddressFormData } from '../model';
 
 type AddNewAddressModalProps = Readonly<{
+  customerVersion: number;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }>;
@@ -36,13 +41,19 @@ const defaultValues = {
   isDefaultShipping: false,
 };
 
-export function AddNewAddressModal({ open, setOpen }: AddNewAddressModalProps): JSX.Element {
+export function AddNewAddressModal({ customerVersion, open, setOpen }: AddNewAddressModalProps): JSX.Element {
   const [isPending, setIsPending] = useState(false);
+  const token = useUserStore((store) => store.token.access_token);
 
   const { control, handleSubmit, reset, watch, setValue } = useForm<AddressFormData>({
     resolver: zodResolver(addressFormDataSchema),
     mode: 'onChange',
     defaultValues,
+  });
+
+  const queryClient = useQueryClient();
+  const updateMutation = useMutation({
+    mutationFn: updateCustomer,
   });
 
   const useSyncAddressState = useSyncAddressStateFactory({ setValue, watch });
@@ -61,10 +72,20 @@ export function AddNewAddressModal({ open, setOpen }: AddNewAddressModalProps): 
           <Typography variant="h6">Add new address</Typography>
           <MuiForm
             onSubmit={(event) =>
-              void handleSubmit((formData) => {
+              void handleSubmit(async (formData) => {
                 setIsPending(true);
 
                 try {
+                  const updatedCustomer = await updateMutation.mutateAsync({
+                    token,
+                    variables: {
+                      actions: createAddAddressActions(formData),
+                      version: customerVersion,
+                    },
+                  });
+                  void updatedCustomer; // TODO
+
+                  await queryClient.invalidateQueries({ queryKey: [QueryKey.CUSTOMER] });
                   toast(JSON.stringify(formData));
                 } catch (error) {
                   toastifyError(error);

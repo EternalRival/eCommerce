@@ -1,7 +1,7 @@
 import type { MyCustomerUpdateAction } from '~/features/customer/update';
 import type { PersonalFormData } from '../model';
 
-export function createCustomerUpdateActions(
+export function createUpdatePersonalActions(
   { email, firstName, lastName, dateOfBirth }: PersonalFormData,
   defaultValues: PersonalFormData
 ): MyCustomerUpdateAction[] {

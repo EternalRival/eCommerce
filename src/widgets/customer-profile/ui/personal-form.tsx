@@ -18,7 +18,7 @@ import { toastifyError } from '~/shared/lib/react-toastify';
 import { QueryKey } from '~/shared/lib/tanstack-query';
 import { ControlledDatePicker, ControlledTextField, MuiForm } from '~/shared/ui';
 
-import { createCustomerUpdateActions } from '../lib';
+import { createUpdatePersonalActions } from '../lib';
 import { personalFormDataSchema } from '../model';
 
 import type { JSX } from 'react';
@@ -68,7 +68,7 @@ export function PersonalForm({ customer, editMode, setEditMode }: CustomerProfil
           setIsPending(true);
 
           try {
-            const actions = createCustomerUpdateActions(formData, defaultValues);
+            const actions = createUpdatePersonalActions(formData, defaultValues);
 
             await updateMutation.mutateAsync({ token, variables: { version: customer.version, actions } });
             await queryClient.invalidateQueries({ queryKey: [QueryKey.CUSTOMER] });
