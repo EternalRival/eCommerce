@@ -46,6 +46,7 @@ fragment category on Category {
   id
   slug(locale: $locale)
   name(locale: $locale)
+  orderHint
   parent {
     slug(locale: $locale)
   }
