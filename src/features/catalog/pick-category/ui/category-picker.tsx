@@ -13,6 +13,7 @@ import { QueryKey } from '~/shared/lib/tanstack-query';
 import { Route } from '~/shared/model/route.enum';
 
 import { CategoryItem } from './category-item';
+import { getSortedCategories } from '../lib';
 
 import type { JSX } from 'react';
 
@@ -35,7 +36,7 @@ export function CategoryPicker(): JSX.Element {
     );
   }
 
-  const rootCategory = { id: 'root', slug: Route.CATALOG.slice(1), name: 'All', children: [] };
+  const rootCategory = { id: 'root', orderHint: '0', slug: Route.CATALOG.slice(1), name: 'All', children: [] };
 
   const categoriesFacet = getCategoriesQuery.data?.productProjectionSearch.facets.find(
     ({ facet }) => facet === 'categories'
@@ -58,7 +59,7 @@ export function CategoryPicker(): JSX.Element {
           {getCategoriesQuery.error ? (
             <Alert severity="error">{getCategoriesQuery.error.message}</Alert>
           ) : (
-            getCategoriesQuery.data.categories.results.map((category) => (
+            getSortedCategories(getCategoriesQuery.data.categories.results).map((category) => (
               <CategoryItem
                 key={category.id}
                 category={category}

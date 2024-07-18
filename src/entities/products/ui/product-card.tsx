@@ -55,6 +55,7 @@ export function ProductCard({ productData }: ProductCardProps): JSX.Element {
                 width={imageProps?.dimensions.width}
                 height={imageProps?.dimensions.height}
                 className="h-full w-auto"
+                priority
               />
             </CardMedia>
           </Paper>

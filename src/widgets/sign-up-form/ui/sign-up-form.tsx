@@ -91,43 +91,48 @@ export function SignUpForm(): JSX.Element {
 
       <MuiForm
         onSubmit={(event) =>
-          void handleSubmit(async (formData) => {
-            setIsPending(true);
+          void handleSubmit(
+            async (formData) => {
+              setIsPending(true);
 
-            try {
-              const guestToken =
-                userStore.token.type === 'guest' ? userStore.token : await getGuestTokenMutation.mutateAsync();
+              try {
+                const guestToken =
+                  userStore.token.type === 'guest' ? userStore.token : await getGuestTokenMutation.mutateAsync();
 
-              await signUpMutation.mutateAsync({
-                token: guestToken.access_token,
-                variables: {
-                  draft: createSignUpDraft(formData),
-                },
-              });
-
-              const customerToken = await getCustomerTokenMutation.mutateAsync({
-                username: formData.email,
-                password: formData.password,
-              });
-
-              await signInMutation.mutateAsync({
-                token: customerToken.access_token,
-                variables: {
-                  draft: {
-                    email: formData.email,
-                    password: formData.password,
+                await signUpMutation.mutateAsync({
+                  token: guestToken.access_token,
+                  variables: {
+                    draft: createSignUpDraft(formData),
                   },
-                },
-              });
+                });
 
-              userStore.setCustomerToken(customerToken);
-              toast.success('Successful sign up');
-            } catch (error) {
-              toastifyError(error);
+                const customerToken = await getCustomerTokenMutation.mutateAsync({
+                  username: formData.email,
+                  password: formData.password,
+                });
+
+                await signInMutation.mutateAsync({
+                  token: customerToken.access_token,
+                  variables: {
+                    draft: {
+                      email: formData.email,
+                      password: formData.password,
+                    },
+                  },
+                });
+
+                userStore.setCustomerToken(customerToken);
+                toast.success('Successful sign up');
+              } catch (error) {
+                toastifyError(error);
+              }
+
+              setIsPending(false);
+            },
+            () => {
+              toast.error('Please double-check entered data.');
             }
-
-            setIsPending(false);
-          })(event)
+          )(event)
         }
       >
         <Divider className="mt-2">Credentials</Divider>
