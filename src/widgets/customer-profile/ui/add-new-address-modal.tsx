@@ -15,6 +15,7 @@ import { toastifyError } from '~/shared/lib/react-toastify';
 import { ControlledCheckbox, ControlledStringAutocomplete, ControlledTextField, MuiForm } from '~/shared/ui';
 
 import { addressFormDataSchema } from '../model';
+import { useSyncAddressStateFactory } from '../lib';
 
 import type { Dispatch, JSX, SetStateAction } from 'react';
 import type { AddressFormData } from '../model';
@@ -38,11 +39,15 @@ const defaultValues = {
 export function AddNewAddressModal({ open, setOpen }: AddNewAddressModalProps): JSX.Element {
   const [isPending, setIsPending] = useState(false);
 
-  const { control, handleSubmit, reset } = useForm<AddressFormData>({
+  const { control, handleSubmit, reset, watch, setValue } = useForm<AddressFormData>({
     resolver: zodResolver(addressFormDataSchema),
     mode: 'onChange',
     defaultValues,
   });
+
+  const useSyncAddressState = useSyncAddressStateFactory({ setValue, watch });
+  useSyncAddressState('isBilling', 'isDefaultBilling');
+  useSyncAddressState('isShipping', 'isDefaultShipping');
 
   const createProps = createFieldPropsFactory(control);
 
@@ -52,7 +57,7 @@ export function AddNewAddressModal({ open, setOpen }: AddNewAddressModalProps): 
         open={open}
         sx={{ padding: 1 }}
       >
-        <Paper sx={{ padding: 2 }}>
+        <Paper sx={{ padding: 2, maxWidth: '28rem' }}>
           <Typography variant="h6">Add new address</Typography>
           <MuiForm
             onSubmit={(event) =>
