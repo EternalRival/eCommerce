@@ -16,6 +16,7 @@ import { toastifyError } from '~/shared/lib/react-toastify';
 import { ControlledCheckbox, ControlledStringAutocomplete, ControlledTextField, MuiForm } from '~/shared/ui';
 
 import { addressFormDataSchema } from '../model';
+import { useSyncAddressStateFactory } from '../lib';
 
 import type { JSX } from 'react';
 import type { AddressFormData } from '../model';
@@ -30,7 +31,7 @@ export function AddressForm({ addressFormData, isEditMode, toggleEditMode }: Add
   const [isPending, setIsPending] = useState(false);
 
   const defaultValues = addressFormData;
-  const { control, handleSubmit, formState, reset } = useForm<AddressFormData>({
+  const { control, handleSubmit, formState, reset, setValue, watch } = useForm<AddressFormData>({
     resolver: zodResolver(addressFormDataSchema),
     mode: 'onChange',
     defaultValues,
@@ -39,6 +40,11 @@ export function AddressForm({ addressFormData, isEditMode, toggleEditMode }: Add
 
   // const queryClient = useQueryClient();
   // const updateMutation = useCustomerUpdateMutation();
+
+  const useSyncAddressState = useSyncAddressStateFactory({ setValue, watch });
+
+  useSyncAddressState('isBilling', 'isDefaultBilling');
+  useSyncAddressState('isShipping', 'isDefaultShipping');
 
   useEffect(() => {
     if (!isEditMode) {
