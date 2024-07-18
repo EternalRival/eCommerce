@@ -9,6 +9,7 @@ const query = `
 query ${operationName}{
   me {
     customer {
+      id
       email
       version
       firstName
@@ -34,6 +35,7 @@ const customerSchema = z.object({
   me: z
     .object({
       customer: z.object({
+        id: z.string(),
         email: z.string(),
         version: z.number(),
         firstName: z.string().nullish(),

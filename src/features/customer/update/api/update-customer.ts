@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { $http } from '~/shared/api/commercetools';
+import { $http, countryCodeSchema } from '~/shared/api/commercetools';
 import { QueryKey } from '~/shared/lib/tanstack-query';
 
 import type { CountryCode, Locale } from '~/shared/api/commercetools';
@@ -12,6 +12,21 @@ mutation ${operationName}($version: Long!, $actions: [MyCustomerUpdateAction!]!)
   updateMyCustomer(version: $version, actions: $actions) {
     id
     email
+    version
+    firstName
+    lastName
+    dateOfBirth
+    addresses {
+      id
+      country
+      postalCode
+      city
+      streetName
+    }
+    billingAddressIds
+    defaultBillingAddressId
+    shippingAddressIds
+    defaultShippingAddressId
   }
 }
 `;
@@ -21,6 +36,23 @@ const updateCustomerSchema = z.object({
     .object({
       id: z.string(),
       email: z.string(),
+      version: z.number(),
+      firstName: z.string().nullish(),
+      lastName: z.string().nullish(),
+      dateOfBirth: z.string().nullish(),
+      addresses: z.array(
+        z.object({
+          id: z.string().nullish(),
+          country: countryCodeSchema,
+          postalCode: z.string().nullish(),
+          city: z.string().nullish(),
+          streetName: z.string().nullish(),
+        })
+      ),
+      billingAddressIds: z.array(z.string()),
+      defaultBillingAddressId: z.string().nullish(),
+      shippingAddressIds: z.array(z.string()),
+      defaultShippingAddressId: z.string().nullish(),
     })
     .nullish(),
 });
