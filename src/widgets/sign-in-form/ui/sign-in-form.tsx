@@ -62,9 +62,9 @@ export function SignInForm(): JSX.Element {
       <MuiForm
         onSubmit={(event) =>
           void handleSubmit(async (formData) => {
-            setIsPending(true);
-
             try {
+              setIsPending(true);
+
               const customerToken = await getCustomerTokenMutation.mutateAsync({
                 username: formData.email,
                 password: formData.password,
@@ -80,9 +80,9 @@ export function SignInForm(): JSX.Element {
               toast.success('Successful sign in');
             } catch (error) {
               toastifyError(error);
+            } finally {
+              setIsPending(false);
             }
-
-            setIsPending(false);
           })(event)
         }
       >
