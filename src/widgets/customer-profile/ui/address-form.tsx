@@ -5,30 +5,43 @@ import Collapse from '@mui/material/Collapse';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Paper from '@mui/material/Paper';
 import Switch from '@mui/material/Switch';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import { PageSpinner } from '~/entities/page-spinner';
+import { useUserStore } from '~/entities/user';
+import { updateCustomer } from '~/features/customer/update';
 import { ALLOWED_COUNTRY_NAMES } from '~/shared/api/commercetools';
 import { createFieldPropsFactory } from '~/shared/lib/react-hook-form';
 import { toastifyError } from '~/shared/lib/react-toastify';
+import { QueryKey } from '~/shared/lib/tanstack-query';
 import { ControlledCheckbox, ControlledStringAutocomplete, ControlledTextField, MuiForm } from '~/shared/ui';
 
+import { createDeleteAddressActions, useSyncAddressStateFactory } from '../lib';
 import { addressFormDataSchema } from '../model';
-import { useSyncAddressStateFactory } from '../lib';
 
 import type { JSX } from 'react';
 import type { AddressFormData } from '../model';
 
 type AddressFormProps = Readonly<{
+  id: string;
+  customerVersion: number;
   addressFormData: AddressFormData;
   isEditMode: boolean;
   toggleEditMode: () => void;
 }>;
 
-export function AddressForm({ addressFormData, isEditMode, toggleEditMode }: AddressFormProps): JSX.Element {
+export function AddressForm({
+  id,
+  customerVersion,
+  addressFormData,
+  isEditMode,
+  toggleEditMode,
+}: AddressFormProps): JSX.Element {
   const [isPending, setIsPending] = useState(false);
+  const token = useUserStore((store) => store.token.access_token);
 
   const defaultValues = addressFormData;
   const { control, handleSubmit, formState, reset, setValue, watch } = useForm<AddressFormData>({
@@ -38,8 +51,10 @@ export function AddressForm({ addressFormData, isEditMode, toggleEditMode }: Add
   });
   const createProps = createFieldPropsFactory(control);
 
-  // const queryClient = useQueryClient();
-  // const updateMutation = useCustomerUpdateMutation();
+  const queryClient = useQueryClient();
+  const updateMutation = useMutation({
+    mutationFn: updateCustomer,
+  });
 
   const useSyncAddressState = useSyncAddressStateFactory({ setValue, watch });
 
@@ -126,6 +141,21 @@ export function AddressForm({ addressFormData, isEditMode, toggleEditMode }: Add
               variant="outlined"
               fullWidth
               color="error"
+              onClick={() => {
+                setIsPending(true);
+                updateMutation
+                  .mutateAsync({
+                    token,
+                    variables: {
+                      actions: createDeleteAddressActions(id),
+                      version: customerVersion,
+                    },
+                  })
+                  .then(() => queryClient.invalidateQueries({ queryKey: [QueryKey.CUSTOMER] }))
+                  .then(() => void toast.success('Address successfully deleted!'))
+                  .catch(toastifyError)
+                  .finally(() => void setIsPending(false));
+              }}
             >
               Delete address
             </Button>
@@ -145,37 +175,3 @@ export function AddressForm({ addressFormData, isEditMode, toggleEditMode }: Add
     </MuiForm>
   );
 }
-
-/* 
-{
-  "email": "customer@example.com",
-  "version": 1,
-  "firstName": "John",
-  "lastName": "Doe",
-  "dateOfBirth": "2000-11-11",
-  "addresses": [
-    {
-      "id": "DASw3kl0",
-      "country": "KZ",
-      "postalCode": "123123",
-      "city": "CitS",
-      "streetName": "StreS"
-    },
-    {
-      "id": "v7dvwnCk",
-      "country": "PL",
-      "postalCode": "12-123",
-      "city": "CitB",
-      "streetName": "StreB"
-    }
-  ],
-  "billingAddressIds": [
-    "v7dvwnCk"
-  ],
-  "defaultBillingAddressId": "v7dvwnCk",
-  "shippingAddressIds": [
-    "DASw3kl0"
-  ],
-  "defaultShippingAddressId": null
-}
-*/

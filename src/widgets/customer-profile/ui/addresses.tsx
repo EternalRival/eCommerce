@@ -51,6 +51,8 @@ export function Addresses({ customer, editMode, setEditMode }: CustomerProfileFo
           addressFormData && (
             <AddressForm
               key={id}
+              id={id}
+              customerVersion={customer.version}
               addressFormData={addressFormData}
               isEditMode={isEditMode}
               toggleEditMode={toggleEditMode}
