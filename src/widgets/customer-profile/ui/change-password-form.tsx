@@ -71,9 +71,9 @@ export function ChangePasswordForm({ customer, editMode, setEditMode }: Customer
       className="mx-auto p-4"
       onSubmit={(event) =>
         void handleSubmit(async (formData) => {
-          setIsPending(true);
-
           try {
+            setIsPending(true);
+
             const { currentPassword, newPassword } = formData;
 
             const { version, email } = customer;
@@ -95,9 +95,9 @@ export function ChangePasswordForm({ customer, editMode, setEditMode }: Customer
             toast.success('Password updated!');
           } catch (error) {
             toastifyError(error);
+          } finally {
+            setIsPending(false);
           }
-
-          setIsPending(false);
         })(event)
       }
     >

@@ -18,7 +18,7 @@ import { toastifyError } from '~/shared/lib/react-toastify';
 import { QueryKey } from '~/shared/lib/tanstack-query';
 import { ControlledCheckbox, ControlledStringAutocomplete, ControlledTextField, MuiForm } from '~/shared/ui';
 
-import { createAddAddressActions, useSyncAddressStateFactory } from '../lib';
+import { createAddAddressActions, createSetAddressTypesActions, useSyncAddressStateFactory } from '../lib';
 import { addressFormDataSchema } from '../model';
 
 import type { Dispatch, JSX, SetStateAction } from 'react';
@@ -73,25 +73,45 @@ export function AddNewAddressModal({ customerVersion, open, setOpen }: AddNewAdd
           <MuiForm
             onSubmit={(event) =>
               void handleSubmit(async (formData) => {
-                setIsPending(true);
-
                 try {
-                  const updatedCustomer = await updateMutation.mutateAsync({
+                  setIsPending(true);
+
+                  const updateMutationResponse = await updateMutation.mutateAsync({
                     token,
                     variables: {
                       actions: createAddAddressActions(formData),
                       version: customerVersion,
                     },
                   });
-                  void updatedCustomer; // TODO
+
+                  const updatedCustomer = updateMutationResponse.updateMyCustomer;
+
+                  if (!updatedCustomer) {
+                    throw new Error('Updated customer data not found');
+                  }
+
+                  const lastAddressId = updateMutationResponse.updateMyCustomer?.addresses.at(-1)?.id;
+
+                  if (!lastAddressId) {
+                    throw new Error('Last address id not found');
+                  }
+
+                  await updateMutation.mutateAsync({
+                    token,
+                    variables: {
+                      actions: createSetAddressTypesActions(formData, lastAddressId),
+                      version: updatedCustomer.version,
+                    },
+                  });
 
                   await queryClient.invalidateQueries({ queryKey: [QueryKey.CUSTOMER] });
-                  toast(JSON.stringify(formData));
+                  toast.success('New address successfully added!');
+                  setOpen(false);
                 } catch (error) {
                   toastifyError(error);
+                } finally {
+                  setIsPending(false);
                 }
-
-                setIsPending(false);
               })(event)
             }
           >

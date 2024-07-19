@@ -93,9 +93,9 @@ export function SignUpForm(): JSX.Element {
         onSubmit={(event) =>
           void handleSubmit(
             async (formData) => {
-              setIsPending(true);
-
               try {
+                setIsPending(true);
+
                 const guestToken =
                   userStore.token.type === 'guest' ? userStore.token : await getGuestTokenMutation.mutateAsync();
 
@@ -125,9 +125,9 @@ export function SignUpForm(): JSX.Element {
                 toast.success('Successful sign up');
               } catch (error) {
                 toastifyError(error);
+              } finally {
+                setIsPending(false);
               }
-
-              setIsPending(false);
             },
             () => {
               toast.error('Please double-check entered data.');

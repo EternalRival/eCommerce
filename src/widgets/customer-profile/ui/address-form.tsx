@@ -57,15 +57,15 @@ export function AddressForm({ addressFormData, isEditMode, toggleEditMode }: Add
       className="mx-auto"
       onSubmit={(event) =>
         void handleSubmit(async (formData) => {
-          setIsPending(true);
-
           try {
+            setIsPending(true);
+
             toast(JSON.stringify(formData, null, 2));
           } catch (error) {
             toastifyError(error);
+          } finally {
+            setIsPending(false);
           }
-
-          setIsPending(false);
         })(event)
       }
     >
