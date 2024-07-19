@@ -65,9 +65,9 @@ export function PersonalForm({ customer, editMode, setEditMode }: CustomerProfil
       className="mx-auto p-4"
       onSubmit={(event) =>
         void handleSubmit(async (formData) => {
-          setIsPending(true);
-
           try {
+            setIsPending(true);
+
             const actions = createUpdatePersonalActions(formData, defaultValues);
 
             await updateMutation.mutateAsync({ token, variables: { version: customer.version, actions } });
@@ -76,9 +76,9 @@ export function PersonalForm({ customer, editMode, setEditMode }: CustomerProfil
             toast.success(JSON.stringify('Personal data updated!'));
           } catch (error) {
             toastifyError(error);
+          } finally {
+            setIsPending(false);
           }
-
-          setIsPending(false);
         })(event)
       }
     >
