@@ -7,7 +7,7 @@ export const addressFormDataSchema = z
     country: z.string().refine(isAllowedCountryName, 'Must be one of the proposed countries'),
     postalCode: z.string(),
     city: nameSchema,
-    street: z.string().min(1, 'Must contain at least one character'),
+    streetName: z.string().min(1, 'Must contain at least one character'),
     isBilling: z.boolean(),
     isDefaultBilling: z.boolean(),
     isShipping: z.boolean(),

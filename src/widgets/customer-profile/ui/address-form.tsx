@@ -19,7 +19,7 @@ import { toastifyError } from '~/shared/lib/react-toastify';
 import { QueryKey } from '~/shared/lib/tanstack-query';
 import { ControlledCheckbox, ControlledStringAutocomplete, ControlledTextField, MuiForm } from '~/shared/ui';
 
-import { createDeleteAddressActions, useSyncAddressStateFactory } from '../lib';
+import { createDeleteAddressActions, createUpdateAddressActions, useSyncAddressStateFactory } from '../lib';
 import { addressFormDataSchema } from '../model';
 
 import type { JSX } from 'react';
@@ -75,7 +75,17 @@ export function AddressForm({
           try {
             setIsPending(true);
 
-            toast(JSON.stringify(formData, null, 2));
+            await updateMutation.mutateAsync({
+              token,
+              variables: {
+                actions: createUpdateAddressActions(formData, defaultValues, id),
+                version: customerVersion,
+              },
+            });
+
+            await queryClient.invalidateQueries({ queryKey: [QueryKey.CUSTOMER] });
+            toggleEditMode();
+            toast.success('Address successfully updated!');
           } catch (error) {
             toastifyError(error);
           } finally {
@@ -112,7 +122,7 @@ export function AddressForm({
           fieldProps={{ label: 'City', disabled: !isEditMode }}
         />
         <ControlledTextField
-          {...createProps('street')}
+          {...createProps('streetName')}
           fieldProps={{ label: 'Street', disabled: !isEditMode }}
         />
 
