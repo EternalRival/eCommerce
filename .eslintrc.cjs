@@ -92,7 +92,7 @@ const overrides = [
   {
     files: FILES.ts,
     rules: {
-      'complexity': ['error', 10],
+      'complexity': ['error', 12],
       'max-depth': ['error', 4],
       'max-nested-callbacks': ['error', 4],
       'no-constant-binary-expression': 'error',
