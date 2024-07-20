@@ -129,7 +129,7 @@ export function AddNewAddressModal({ customerVersion, open, setOpen }: AddNewAdd
               fieldProps={{ label: 'City' }}
             />
             <ControlledTextField
-              {...createProps('street')}
+              {...createProps('streetName')}
               fieldProps={{ label: 'Street' }}
             />
 

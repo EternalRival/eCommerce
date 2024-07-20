@@ -7,7 +7,7 @@ export function createAddAddressActions({
   country,
   city,
   postalCode,
-  street,
+  streetName,
 }: AddressFormData): MyCustomerUpdateAction[] {
   return [
     {
@@ -16,7 +16,7 @@ export function createAddAddressActions({
           country: findCountryByLabel(country).code,
           city,
           postalCode,
-          streetName: street,
+          streetName,
         },
       },
     },

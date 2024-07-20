@@ -34,7 +34,7 @@ export function Addresses({ customer, editMode, setEditMode }: CustomerProfileFo
             country: findCountryByCode(address.country).label,
             postalCode: address.postalCode,
             city: address.city,
-            street: address.streetName,
+            streetName: address.streetName,
             isBilling: customer.billingAddressIds.includes(id),
             isDefaultBilling: customer.defaultBillingAddressId === id,
             isShipping: customer.shippingAddressIds.includes(id),
