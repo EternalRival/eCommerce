@@ -8,19 +8,15 @@ export function createSetAddressTypesActions(
   const actions: MyCustomerUpdateAction[] = [];
 
   if (isBilling) {
-    if (isDefaultBilling) {
-      actions.push({ setDefaultBillingAddress: { addressId } });
-    } else {
-      actions.push({ addBillingAddressId: { addressId } });
-    }
+    actions.push(
+      isDefaultBilling ? { setDefaultBillingAddress: { addressId } } : { addBillingAddressId: { addressId } }
+    );
   }
 
   if (isShipping) {
-    if (isDefaultShipping) {
-      actions.push({ setDefaultShippingAddress: { addressId } });
-    } else {
-      actions.push({ addShippingAddressId: { addressId } });
-    }
+    actions.push(
+      isDefaultShipping ? { setDefaultShippingAddress: { addressId } } : { addShippingAddressId: { addressId } }
+    );
   }
 
   return actions;
