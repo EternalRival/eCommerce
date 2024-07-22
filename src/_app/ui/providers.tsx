@@ -16,7 +16,10 @@ export function Providers<T>({ children, appProps }: ProvidersProps<T>): JSX.Ele
 
   return (
     <ToastProvider>
-      <QueryProvider dehydratedState={pageProps.dehydratedState}>
+      <QueryProvider
+        dehydratedState={pageProps.dehydratedState}
+        withDevTools
+      >
         <UserStoreProvider>
           <MuiProvider {...{ appProps, theme: muiTheme }}>{children}</MuiProvider>
         </UserStoreProvider>

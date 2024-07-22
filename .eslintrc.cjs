@@ -1,6 +1,6 @@
 // @ts-check
 const FILES = {
-  configs: '**/*{rc,.config}.{js,cjs,mjs,ts,cts,mts}',
+  configs: ['**/*{rc,.config}.{js,cjs,mjs,ts,cts,mts}', 'src/tests/**/*'],
   test: '{app,pages,src}/**/*.{spec,test}.{js,jsx,ts,tsx}',
   js: '**/*.{js,cjs,mjs}',
   tsSrc: 'src/**/*.{ts,tsx}',
@@ -182,7 +182,7 @@ const overrides = [
 
   /** disable specific rules for config files */
   {
-    files: [FILES.configs, 'src/tests/setup.ts'],
+    files: FILES.configs,
     rules: {
       'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     },
