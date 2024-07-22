@@ -182,7 +182,7 @@ const overrides = [
 
   /** disable specific rules for config files */
   {
-    files: FILES.configs,
+    files: [FILES.configs, 'src/tests/setup.ts'],
     rules: {
       'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     },
